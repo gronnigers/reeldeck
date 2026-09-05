@@ -210,12 +210,11 @@ button{font-family:inherit; cursor:pointer;}
 <script>
 /* ================= CONFIG ================= */
 const CONFIG = {
-  // Reusing your GameTrack Entra app is fine — just add THIS page's URL as a
-  // redirect URI (SPA) in that app registration. Or paste a new app's client id.
-  CLIENT_ID: "0a13f6da-4f64-4e75-ba3b-0f35954bc40b",
+  // Dedicated Reel Deck Entra app (single-tenant, SPA platform).
+  CLIENT_ID: "991ae1db-ae76-4a9e-a07c-beccaba8da07",
   TENANT:    "0ae860f2-b1e0-4222-b0e1-37314eddf4df",
   SCOPES:    "Files.ReadWrite offline_access",
-  WORKER:    "https://reel-deck-tmdb.YOURNAME.workers.dev"   // <-- set after deploying the Worker
+  WORKER:    "https://reel-deck-tmdb.gronniger.workers.dev"   // your deployed Worker
 };
 const REDIRECT_URI = location.origin + location.pathname;
 const LIB_PATH  = "/me/drive/root:/0 - Data/AI/Life OS/Movies/app/library.json";
