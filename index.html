@@ -152,6 +152,15 @@ button{font-family:inherit;cursor:pointer;} .hidden{display:none!important;} img
 .spanel h3{font-family:"Archivo";font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 12px;}
 .gbar{display:flex;align-items:center;gap:9px;margin-bottom:9px;font-size:11.5px;} .gbar .gn{width:72px;color:#c9d1d9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .gbar .gt{flex:1;height:9px;background:#23252e;border-radius:5px;overflow:hidden;} .gbar .gf{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:5px;} .gbar .gv{width:26px;text-align:right;font-family:"Archivo";font-weight:800;color:var(--muted);}
 .decbars{display:flex;align-items:flex-end;gap:6px;height:96px;} .decbars .dc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:100%;} .decbars .db{width:100%;background:linear-gradient(180deg,var(--blue),#2a4a6b);border-radius:4px 4px 0 0;min-height:3px;} .decbars .dl{font-size:8.5px;color:var(--faint);} .decbars .dv{font-size:9px;color:var(--muted);font-weight:700;}
+.gbar .gt{display:block;position:relative;} .gbar .gf{display:block;}
+.topseg{display:inline-flex;gap:4px;} .topseg button{background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:7px;padding:4px 9px;font-size:11px;font-weight:700;} .topseg button.on{background:var(--red);color:#fff;border-color:transparent;}
+.trow{display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid var(--line);} .trow:last-child{border-bottom:none;}
+.trow .tn{width:24px;text-align:center;font-family:"Archivo";font-weight:900;font-size:14px;color:var(--gold);font-variant-numeric:tabular-nums;} .trow.empty .tn{color:var(--faint);}
+.trow .tp{width:32px;height:48px;border-radius:5px;background-size:cover;background-position:center;background:#1c1c24;flex:0 0 auto;} .trow.empty .tp{border:1px dashed var(--line);background:transparent;}
+.trow .tt{flex:1;min-width:0;} .trow .tt b{font-size:13px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .trow .tt small{font-size:10.5px;color:var(--faint);} .trow.empty .tt b{color:var(--faint);font-weight:400;}
+.trow .te{font-family:"Archivo";font-weight:800;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;} .trow.empty .te{color:var(--faint);}
+.soontile .chk-badge{position:absolute;top:8px;right:8px;z-index:2;background:var(--green);color:#04140a;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.5);}
+.wlbar{justify-content:space-between;align-items:center;} .wlbar .grp{display:flex;gap:9px;align-items:center;flex-wrap:wrap;} .wlbar .grp.right{margin-left:auto;}
 
 /* trailer / now showing / choose / search */
 .tmodal{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:16px;}
@@ -210,11 +219,9 @@ button{font-family:inherit;cursor:pointer;} .hidden{display:none!important;} img
       <section class="view on" id="v-watch">
         <div id="hero" class="hero"></div>
         <div class="sec-h"><h2>Your Watchlist</h2><span class="see" id="wl-count"></span></div>
-        <div class="toolbar">
-          <label>Sort <select id="wl-sort" onchange="WL.sort=this.value;renderWatch()"><option value="added">Recently added</option><option value="title">A–Z</option><option value="release">Release date</option></select></label>
-          <label>Genre <select id="wl-genre" onchange="WL.genre=this.value;renderWatch()"></select></label>
-          <label class="chk"><input type="checkbox" id="wl-hideup" onchange="WL.hideUnreleased=this.checked;renderWatch()"> Hide upcoming</label>
-          <button class="seg" id="wl-view" onclick="WL.view=WL.view==='grid'?'list':'grid';renderWatch()">List view</button>
+        <div class="toolbar wlbar">
+          <div class="grp"><label>Sort <select id="wl-sort" onchange="WL.sort=this.value;renderWatch()"><option value="added">Recently added</option><option value="title">A–Z</option><option value="release">Release date</option></select></label><label>Genre <select id="wl-genre" onchange="WL.genre=this.value;renderWatch()"></select></label></div>
+          <div class="grp right"><button class="seg" id="wl-view" onclick="WL.view=WL.view==='grid'?'list':'grid';renderWatch()">List view</button><label class="chk"><input type="checkbox" id="wl-hideup" onchange="WL.hideUnreleased=this.checked;renderWatch()"> Hide upcoming</label></div>
         </div>
         <div id="wl-body"></div>
       </section>
@@ -234,7 +241,10 @@ button{font-family:inherit;cursor:pointer;} .hidden{display:none!important;} img
 
       <section class="view" id="v-can">
         <div class="sec-h" style="margin-top:8px"><h2>In the Can</h2><span class="see" id="can-count"></span></div>
-        <div class="toolbar"><button class="seg" id="can-order" onclick="CAN.order=CAN.order==='recent'?'oldest':'recent';renderCan()">Recently watched ⇅</button><button class="seg" id="can-view" onclick="CAN.view=CAN.view==='grid'?'list':'grid';renderCan()">List view</button></div>
+        <div class="toolbar wlbar">
+          <div class="grp"><label>Sort <select id="can-sort" onchange="CAN.sort=this.value;renderCan()"><option value="recent">Recently watched</option><option value="oldest">Oldest first</option><option value="az">A–Z</option></select></label></div>
+          <div class="grp right"><button class="seg" id="can-view" onclick="CAN.view=CAN.view==='grid'?'list':'grid';renderCan()">List view</button></div>
+        </div>
         <div id="can-body"></div>
       </section>
 
@@ -377,12 +387,13 @@ const BP={
 2023:["Oppenheimer","American Fiction","Anatomy of a Fall","Barbie","The Holdovers","Killers of the Flower Moon","Maestro","Past Lives","Poor Things","The Zone of Interest"],
 2024:["Anora","The Brutalist","A Complete Unknown","Conclave","Dune: Part Two","Emilia Pérez","I'm Still Here","Nickel Boys","The Substance","Wicked"]
 };
-const OYEARS=Object.keys(BP).map(Number).sort((a,b)=>a-b);
+const OYEARS=Object.keys(BP).map(Number).sort((a,b)=>b-a);
 let accessToken=null,LIB=blankLib(),DISCOVER=[],currentPair=null,REV=[false,false],saveTimer,hintEl,DETAIL=null,ACTOR_BACK=null,NS_MOVIE=null,savedScroll=0,DISC_MODE='foryou';
-let WL={sort:'added',genre:'all',view:'grid',hideUnreleased:false},CAN={order:'recent',view:'grid'};
+let WL={sort:'added',genre:'all',view:'grid',hideUnreleased:false},CAN={sort:'recent',view:'grid'},STATS={topN:10};
 function blankLib(){return {version:1,updated:null,movies:[],seen:[],hidden:[],log:[]};}
 const todayStr=()=>new Date().toISOString().slice(0,10);
-function isReleased(m){if(m.rel)return m.rel<=todayStr();if(m.year){const y=+m.year,cy=new Date().getFullYear();if(y<cy)return true;if(y>cy)return false;return true;}return true;}
+function isReleased(m){if(m.rel)return m.rel<=todayStr();const y=+m.year,cy=new Date().getFullYear();if(!y)return true;return y<cy;}
+function relLabel(m){if(m&&m.rel){const d=new Date(m.rel);return `${MONL[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;}return (m&&m.year)||'';}
 
 /* AUTH */
 function b64u(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
@@ -483,14 +494,15 @@ function renderWatch(){
 }
 function renderCan(){
   const list=watchedMovies().slice();const val=d=>d?Date.parse(d):-8640000000000;
-  list.sort((a,b)=>CAN.order==='recent'?val(b.watchedDate)-val(a.watchedDate):val(a.watchedDate)-val(b.watchedDate));
+  if(CAN.sort==='az')list.sort((a,b)=>(a.title||'').localeCompare(b.title||''));
+  else list.sort((a,b)=>CAN.sort==='oldest'?val(a.watchedDate)-val(b.watchedDate):val(b.watchedDate)-val(a.watchedDate));
   document.getElementById('can-count').textContent=`${list.length} watched`;
-  document.getElementById('can-order').textContent=(CAN.order==='recent'?'Recently watched':'Oldest first')+' ⇅';
+  document.getElementById('can-sort').value=CAN.sort;
   document.getElementById('can-view').textContent=CAN.view==='grid'?'List view':'Gallery view';
   const body=document.getElementById('can-body');
   if(!list.length){body.innerHTML=`<div class="empty">No watched movies yet. Mark films watched and they'll land here.</div>`;return;}
-  if(CAN.view==='list')body.innerHTML=`<div class="listwrap">`+list.map(m=>listRow(m,{sub:m.watchedDate?fmtWatched(m.watchedDate):'seen before'})).join('')+`</div>`;
-  else body.innerHTML=`<div class="grid">`+list.map(m=>posterEl(m,{wb:m.watchedDate?fmtWatched(m.watchedDate).split(',')[0]:'seen before'})).join('')+`</div>`;
+  if(CAN.view==='list')body.innerHTML=`<div class="listwrap">`+list.map(m=>listRow(m,{sub:m.watchedDate?'watched '+fmtWatched(m.watchedDate):'watched'})).join('')+`</div>`;
+  else body.innerHTML=`<div class="grid">`+list.map(m=>posterEl(m,{wb:m.watchedDate?fmtWatched(m.watchedDate).split(',')[0]:'watched'})).join('')+`</div>`;
 }
 
 /* COMING SOON — one curated finite load (no scroll glitch) */
@@ -499,13 +511,13 @@ async function soonLoad(){
   SN.init=true;const grid=document.getElementById('soon-grid'),load=document.getElementById('soon-load');
   grid.innerHTML=`<div class="fyload">Loading upcoming…</div>`;load.textContent='';
   const today=todayStr();const seen={};let items=[];
-  for(let p=1;p<=8;p++){const r=await tmdb('/discover/movie',{sort_by:'popularity.desc',with_release_type:'2|3','primary_release_date.gte':today,region:'US',with_original_language:'en',page:p});const res=(r&&r.results)||[];res.forEach(x=>{if(x&&x.poster_path&&x.release_date&&x.release_date>=today&&(x.popularity||0)>=10&&!seen[x.id]){seen[x.id]=1;items.push(x);}});if(!r||p>=(r.total_pages||1)||items.length>=150)break;}
+  for(let p=1;p<=14;p++){const r=await tmdb('/discover/movie',{sort_by:'popularity.desc',with_release_type:'2|3','primary_release_date.gte':today,region:'US',with_original_language:'en',page:p});const res=(r&&r.results)||[];res.forEach(x=>{if(x&&x.poster_path&&x.release_date&&x.release_date>=today&&!seen[x.id]){seen[x.id]=1;items.push(x);}});if(!r||p>=(r.total_pages||1)||items.length>=320)break;}
   items.sort((a,b)=>(a.release_date||'').localeCompare(b.release_date||''));
   grid.innerHTML=items.length?items.map(soonTile).join(''):`<div class="empty">No upcoming titles found.</div>`;
   document.getElementById('soon-see').textContent=items.length?`${items.length} titles · by date`:'';
   load.textContent=items.length?'':'';
 }
-function soonTile(x){const d=new Date(x.release_date);const g=(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean).slice(0,2).join(' · ');return `<div class="soontile" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path,'w342')}')"><span class="dbadge">${MON[d.getMonth()]} ${d.getDate()}</span></div><div class="st">${esc(x.title)}<span class="sg">${g||'Upcoming'}</span></div></div>`;}
+function soonTile(x){const d=new Date(x.release_date);const g=(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean).slice(0,2).join(' · ');const chk=inLib(x.id)?'<span class="chk-badge">✓</span>':'';return `<div class="soontile" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path,'w342')}')"><span class="dbadge">${MON[d.getMonth()]} ${d.getDate()}</span>${chk}</div><div class="st">${esc(x.title)}<span class="sg">${g||'Upcoming'}</span></div></div>`;}
 
 /* DISCOVER — For You (infinite) + Oscar Winners */
 let FY={discPage:0,recPool:null,loading:false,done:false,seen:new Set(),init:false};
@@ -525,7 +537,9 @@ async function oscarMore(){
     const html=`<div class="oyear"><div class="oyh"><span class="oy">${yr}</span><span class="oyn">${films.length} nominees</span></div><div class="ogrid">${tiles}</div></div>`;
     if(DISC_MODE==='oscar')document.getElementById('fy-grid').insertAdjacentHTML('beforeend',html);
   }
-  OS.loading=false;document.getElementById('fy-load').textContent=OS.yi>=OYEARS.length?`All Best Picture nominees · 1927 → now`:'';
+  OS.loading=false;document.getElementById('fy-load').textContent=OS.yi>=OYEARS.length?`All Best Picture nominees · now → 1927`:'';
+  // keep loading until the viewport is filled, then let scroll take over
+  if(DISC_MODE==='oscar'&&OS.yi<OYEARS.length)requestAnimationFrame(()=>{const sen=document.getElementById('oscar-sentinel'),sc=document.getElementById('scroll');if(sen&&sc&&document.getElementById('v-discover').classList.contains('on')){const r=sen.getBoundingClientRect(),rr=sc.getBoundingClientRect();if(r.top<=rr.bottom+400)oscarMore();}});
 }
 function normDisc(x){return {tmdbId:x.id,title:x.title,year:(x.release_date||'').slice(0,4),poster:x.poster_path,rel:x.release_date||null,genres:(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean)};}
 function tasteGenres(){const c={};watchedPool().forEach(m=>(m.genres||[]).forEach(g=>c[g]=(c[g]||0)+1));const inv={};for(const id in GENRES)inv[GENRES[id]]=id;return Object.keys(c).sort((a,b)=>c[b]-c[a]).slice(0,3).map(n=>inv[n]).filter(Boolean);}
@@ -567,8 +581,10 @@ function renderStats(){
   const gc={};watched.forEach(m=>(m.genres||[]).forEach(g=>gc[g]=(gc[g]||0)+1));const gtop=Object.entries(gc).sort((a,b)=>b[1]-a[1]).slice(0,6);const gmax=gtop.length?gtop[0][1]:1;
   const topGenre=gtop.length?gtop[0][0]:'—';
   const dec={};watched.forEach(m=>{const y=+m.year;if(y){const d=Math.floor(y/10)*10;dec[d]=(dec[d]||0)+1;}});const decs=Object.keys(dec).map(Number).sort((a,b)=>a-b);const dmax=decs.length?Math.max(...decs.map(d=>dec[d])):1;
-  const topElo=watched.filter(m=>m.apps>0).sort((a,b)=>b.elo-a.elo)[0];
-  const genreBars=gtop.length?gtop.map(([g,n])=>`<div class="gbar"><span class="gn">${esc(g)}</span><span class="gt"><span class="gf" style="width:${Math.round(n/gmax*100)}%"></span></span><span class="gv">${n}</span></div>`).join(''):`<div class="empty">Mark movies watched to see genres.</div>`;
+  const ranked=watched.filter(m=>m.apps>0).sort((a,b)=>b.elo-a.elo);
+  const N=STATS.topN;let trHtml='';for(let i=0;i<N;i++){const m=ranked[i];trHtml+=m?`<div class="trow"><div class="tn">${i+1}</div><div class="tp" style="${m.poster?`background-image:url('${POSTER(m.poster,'w92')}')`:''}"></div><div class="tt"><b>${esc(m.title)}</b><small>${m.year||''} · ${m.w}-${m.l}</small></div><div class="te">${Math.round(m.elo)}</div></div>`:`<div class="trow empty"><div class="tn">${i+1}</div><div class="tp"></div><div class="tt"><b>—</b><small>unranked slot</small></div><div class="te">—</div></div>`;}
+  const topSeg=[10,25,50,100].map(n=>`<button class="${N===n?'on':''}" onclick="STATS.topN=${n};renderStats()">${n}</button>`).join('');
+  const genreBars=gtop.length?gtop.map(([g,n])=>`<div class="gbar"><span class="gn">${esc(g)}</span><span class="gt"><span class="gf" style="width:${Math.max(6,Math.round(n/gmax*100))}%"></span></span><span class="gv">${n}</span></div>`).join(''):`<div class="empty">Mark movies watched to see genres.</div>`;
   const decBars=decs.length?`<div class="decbars">`+decs.map(d=>`<div class="dc"><div class="dv">${dec[d]}</div><div class="db" style="height:${Math.round(dec[d]/dmax*80)}%"></div><div class="dl">${String(d).slice(2)}s</div></div>`).join('')+`</div>`:`<div class="empty">No decade data yet.</div>`;
   document.getElementById('statsModal').innerHTML=`<div class="dcard"><button class="close" onclick="closeStats()">×</button><h2 class="stitle">Your Stats</h2><div class="sbody">
     <div class="kpis">
@@ -581,7 +597,7 @@ function renderStats(){
     </div>
     <div class="spanel"><h3>Top genres watched</h3>${genreBars}</div>
     <div class="spanel"><h3>Watched by decade</h3>${decBars}</div>
-    ${topElo?`<div class="spanel"><h3>Your #1 ranked</h3><div style="display:flex;gap:12px;align-items:center"><div style="width:46px;height:69px;border-radius:6px;background-size:cover;background-position:center;background:#1c1c24${topElo.poster?`;background-image:url('${POSTER(topElo.poster,'w92')}')`:''}"></div><div><b style="font-size:15px">${esc(topElo.title)}</b><div style="color:var(--muted);font-size:12px">${topElo.year||''} · Elo ${Math.round(topElo.elo)} · ${topElo.w}-${topElo.l}</div></div></div></div>`:''}
+    <div class="spanel"><h3 style="display:flex;justify-content:space-between;align-items:center;gap:8px">Top ranked<span class="topseg">${topSeg}</span></h3>${trHtml}</div>
     <div style="height:24px"></div>
   </div></div>`;
 }
@@ -591,7 +607,7 @@ function playTrailer(key){if(!key){toast('Trailer unavailable');return;}let m=do
 function closeTrailer(){const m=document.getElementById('trailerModal');if(m)m.remove();}
 async function playTrailerFor(id){const d=await tmdb('/movie/'+id,{append_to_response:'videos'});playTrailer(d?trailerKey(d):null);}
 function openNowShowing(){let m=document.getElementById('nsModal');if(!m){m=document.createElement('div');m.id='nsModal';m.className='nsmodal';m.addEventListener('click',e=>{if(e.target===m)closeNS();});document.body.appendChild(m);}const wl=watchlistMovies().filter(isReleased);if(!wl.length){m.innerHTML=`<div class="nscard"><button class="close" onclick="closeNS()">×</button><div class="nskick">Now Showing</div><div class="nssub">No released movies on your watchlist yet. Add a few that are already out and I'll pick one for you.</div><button class="nsbig" onclick="closeNS();go('discover')">Find movies</button></div>`;return;}NS_MOVIE=wl[Math.random()*wl.length|0];m.innerHTML=`<div class="nscard"><button class="close" onclick="closeNS()">×</button><div class="nskick">Now Showing</div><div class="nsreel"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4"/><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="18" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/></svg></div><div class="nssub">Tonight's pick is locked in from your watchlist. Ready?</div><button class="nsbig" onclick="nsReveal()">Reveal my movie</button></div>`;}
-function nsReveal(){const m=document.getElementById('nsModal');if(!m||!NS_MOVIE)return;const g=(NS_MOVIE.genres||[]).slice(0,2).join(' · ');m.innerHTML=`<div class="nscard"><button class="close" onclick="closeNS()">×</button><div class="nskick">Tonight you're watching</div><div class="nsposter" style="${NS_MOVIE.poster?`background-image:url('${POSTER(NS_MOVIE.poster,'w342')}')`:''};margin-top:14px"></div><div class="nstitle">${esc(NS_MOVIE.title)}</div><div class="nsmeta">${[NS_MOVIE.year,g].filter(Boolean).join(' · ')}</div><div class="nsacts"><button class="p" onclick="playTrailerFor(${NS_MOVIE.tmdbId})">▶ Watch trailer</button><button onclick="nsOpenDetails()">Movie details</button><button onclick="nsWatched()">✓ Watched it today</button><button onclick="openNowShowing()">🎲 Spin again</button></div></div>`;}
+function nsReveal(){const m=document.getElementById('nsModal');if(!m||!NS_MOVIE)return;const g=(NS_MOVIE.genres||[]).slice(0,2).join(' · ');m.innerHTML=`<div class="nscard"><button class="close" onclick="closeNS()">×</button><div class="nskick">Tonight you're watching</div><div class="nsposter" style="${NS_MOVIE.poster?`background-image:url('${POSTER(NS_MOVIE.poster,'w342')}')`:''};margin-top:14px"></div><div class="nstitle">${esc(NS_MOVIE.title)}</div><div class="nsmeta">${[relLabel(NS_MOVIE),g].filter(Boolean).join(' · ')}</div><div class="nsacts"><button class="p" onclick="playTrailerFor(${NS_MOVIE.tmdbId})">▶ Watch trailer</button><button onclick="nsOpenDetails()">Movie details</button><button onclick="nsWatched()">✓ Watched it today</button><button onclick="openNowShowing()">🎲 Spin again</button></div></div>`;}
 function nsOpenDetails(){const id=NS_MOVIE.tmdbId;closeNS();openDetail(id);}
 function nsWatched(){if(!NS_MOVIE)return;addMovie(NS_MOVIE,'watched',new Date().toISOString());toast(`✓ Watched “${NS_MOVIE.title}”`);renderWatch();closeNS();}
 function closeNS(){const m=document.getElementById('nsModal');if(m)m.remove();}
