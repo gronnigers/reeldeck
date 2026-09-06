@@ -91,7 +91,7 @@ button{font-family:inherit;cursor:pointer;} .hidden{display:none!important;} img
 .rankbar{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px;font-size:11px;color:var(--muted);} .rankbar b{color:var(--ink);font-family:"Archivo";font-weight:800;}
 .prog{height:5px;border-radius:3px;background:var(--card);overflow:hidden;margin-bottom:16px;} .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold));}
 .duel{display:flex;gap:12px;position:relative;align-items:flex-start;} .rside{flex:1 1 0;min-width:0;}
-.bd{width:100%;aspect-ratio:2/3;border-radius:12px;background-size:cover;background-position:center;background-color:#1c1c24;position:relative;overflow:hidden;border:2px solid transparent;transition:border-color .15s,transform .1s;}
+.bd{width:100%;aspect-ratio:2/3;border-radius:12px;background-size:cover;background-position:center;background-color:#1c1c24;background-clip:padding-box;position:relative;overflow:hidden;border:2px solid transparent;transition:border-color .15s,transform .1s;}
 .bd.pick{cursor:pointer;} .bd.pick:active{transform:scale(.98);} .bd.pick:hover{border-color:rgba(255,255,255,.55);}
 .bd.revealed{animation:rv .28s ease;} @keyframes rv{from{opacity:.35}to{opacity:1}}
 .bd .curtain{position:absolute;inset:0;z-index:4;cursor:pointer;overflow:hidden;}
