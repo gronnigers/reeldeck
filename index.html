@@ -139,6 +139,43 @@ button{font-family:inherit; cursor:pointer;}
 .nav button{background:none; border:none; color:var(--faint); padding:10px 0 13px; display:flex; flex-direction:column; align-items:center; gap:4px; font-size:10px; font-weight:600;}
 .nav button svg{width:21px; height:21px; stroke:currentColor; fill:none; stroke-width:1.8;}
 .nav button.on{color:var(--ink);} .nav button.on svg{stroke:var(--red);}
+
+/* ---------- detail card (Action-Forward) ---------- */
+.poster{cursor:pointer;}
+.dmodal{position:fixed; inset:0; z-index:70; background:rgba(0,0,0,.72); display:none; align-items:flex-start; justify-content:center; overflow-y:auto;}
+.dmodal.show{display:flex;}
+.dcard{width:100%; max-width:440px; min-height:100%; background:#0b0b0f; position:relative; color:#fff; padding-bottom:34px;}
+.dloading{padding:64px 20px; text-align:center; color:var(--muted); font-size:14px;}
+.dback{height:200px; position:relative; background-size:cover; background-position:center; background-color:#17171e; display:flex; align-items:flex-end;}
+.dback::after{content:""; position:absolute; inset:0; background:linear-gradient(transparent 30%,#0b0b0f);}
+.dttl{position:relative; z-index:2; font-family:"Archivo"; font-weight:800; font-size:25px; line-height:1; margin:0; padding:16px;}
+.dbody{padding:12px 16px 0;}
+.dmeta{font-size:11.5px; color:#aeb2bd; font-weight:500; margin-bottom:13px;}
+.dmeta b{color:#fff;} .dmeta .rating{color:var(--gold); font-weight:800;}
+.rankpill{display:inline-flex; align-items:center; gap:4px; background:rgba(231,178,76,.16); color:var(--gold); font-weight:800; font-size:11px; padding:3px 8px; border-radius:6px;}
+.dgrid{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;}
+.dgrid button{padding:13px 0; border-radius:10px; border:1px solid #2a2d37; background:#16171d; color:#fff; font-weight:700; font-size:12.5px; display:flex; align-items:center; justify-content:center; gap:6px;}
+.dgrid button.on{background:var(--green); color:#04140a; border-color:transparent;}
+.dgrid button.on2{background:rgba(255,255,255,.9); color:#000; border-color:transparent;}
+.dgrid button.rk{background:var(--red); border-color:transparent;}
+.dgrid button.hd{color:#ff9a9a; border-color:rgba(255,120,120,.3);}
+.dgrid button:active{transform:scale(.97);}
+.dtrailer{display:flex; align-items:center; justify-content:center; gap:6px; width:100%; padding:12px 0; border-radius:10px; background:rgba(255,255,255,.14); color:#fff; font-weight:700; font-size:13px; text-decoration:none; margin-bottom:16px;}
+.dtrailer.off{background:#16171d; color:var(--faint); font-weight:600;}
+.dsec{margin-bottom:16px;}
+.dlbl{font-size:9px; text-transform:uppercase; letter-spacing:.14em; color:var(--faint); margin:0 0 9px;}
+.dprovs{display:flex; flex-wrap:wrap; gap:7px;}
+.dprovs .prov{display:inline-flex; align-items:center; gap:6px; background:#16171d; border:1px solid #262a34; border-radius:8px; padding:6px 9px; font-size:11px; font-weight:700; color:#e8e8ee;}
+.dprovs .prov img{width:18px; height:18px; border-radius:4px;}
+.dprovs .prov em{font-style:normal; color:var(--faint); font-size:9px; font-weight:600; margin-left:1px;}
+.dprovs .noprov{font-size:11px; color:var(--faint);}
+.dov{font-size:12.5px; color:#c4c6cf; line-height:1.6; margin:0;}
+.dsim{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;}
+.dsim::-webkit-scrollbar{display:none;}
+.dsim .s{width:78px; flex:0 0 auto; cursor:pointer;}
+.dsim .sp{aspect-ratio:2/3; border-radius:6px; margin-bottom:4px; background-size:cover; background-position:center; background-color:#1c1c24;}
+.dsim small{font-size:9px; color:#aeb2bd; line-height:1.15; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.dsim .noprov{font-size:11px; color:var(--faint);}
 </style>
 </head>
 <body>
@@ -453,7 +490,7 @@ function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>'
 function posterEl(m,opts={}){
   const bg=m.poster?`background-image:url('${POSTER(m.poster)}')`:'';
   const rank=opts.rank?`<span class="rank">#${opts.rank}</span>`:'';
-  return `<div class="poster" style="${bg}">${rank}<div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;
+  return `<div class="poster" style="${bg}" onclick="openDetail(${m.tmdbId})">${rank}<div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;
 }
 function renderWatch(){
   const watched=watchedPool().slice().sort((a,b)=>b.elo-a.elo);
@@ -481,7 +518,7 @@ async function renderSoon(){
   list.innerHTML=SOON.slice(0,20).map(x=>{
     const d=x.release_date?new Date(x.release_date):null;
     const g=(x.genre_ids||[]).map(id=>GENRES[id]).filter(Boolean).slice(0,2).join(" · ");
-    return `<div class="soon"><div class="date"><div class="m">${d?MON[d.getMonth()]:'—'}</div><div class="d">${d?d.getDate():''}</div></div>
+    return `<div class="soon" onclick="openDetail(${x.id})" style="cursor:pointer"><div class="date"><div class="m">${d?MON[d.getMonth()]:'—'}</div><div class="d">${d?d.getDate():''}</div></div>
       <div class="pill" style="background-image:url('${POSTER(x.poster_path,"w185")}')"></div>
       <div class="meta"><b>${esc(x.title)}</b><small>${g||'Upcoming'}</small></div></div>`;
   }).join('');
@@ -495,7 +532,7 @@ async function renderForYou(){
 }
 function posterElAdd(m){
   const bg=m.poster?`background-image:url('${POSTER(m.poster)}')`:'';
-  return `<div class="poster" style="${bg}" onclick="quickAdd(${m.tmdbId})" title="Add to Watchlist"><div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;
+  return `<div class="poster" style="${bg}" onclick="openDetail(${m.tmdbId})"><div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;
 }
 function quickAdd(id){const m=DISCOVER.find(d=>d.tmdbId===id); if(m){addMovie(m,'watchlist'); toast(`Added “${m.title}”`); renderWatch();}}
 
@@ -563,6 +600,83 @@ function go(v){
 }
 let toastT; function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1600);}
 function setHint(txt,warn){hintEl.textContent=txt;hintEl.className='hint'+(warn?' warn':'');}
+
+/* ================= DETAIL CARD ================= */
+let DETAIL=null;
+async function openDetail(id){
+  let m=document.getElementById('detailModal');
+  if(!m){m=document.createElement('div'); m.id='detailModal'; m.className='dmodal';
+    m.addEventListener('click',e=>{if(e.target===m)closeDetail();}); document.body.appendChild(m);}
+  m.innerHTML=`<div class="dcard"><button class="close" onclick="closeDetail()">×</button><div class="dloading">Loading…</div></div>`;
+  m.classList.add('show'); m.scrollTop=0;
+  const d=await tmdb('/movie/'+id,{append_to_response:'videos,watch/providers,recommendations'});
+  if(!d||!d.id){m.querySelector('.dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="dloading">Couldn't load details.</div>`; return;}
+  if(!(d.recommendations&&d.recommendations.results&&d.recommendations.results.length)){
+    const rc=await tmdb('/movie/'+id+'/recommendations'); if(rc&&rc.results)d.recommendations={results:rc.results};
+  }
+  DETAIL=d; renderDetail();
+}
+function closeDetail(){const m=document.getElementById('detailModal'); if(m)m.classList.remove('show');}
+function trailerUrl(d){
+  const v=((d.videos&&d.videos.results)||[]).filter(x=>x.site==='YouTube');
+  const t=v.find(x=>x.type==='Trailer')||v.find(x=>x.type==='Teaser')||v[0];
+  return t?`https://www.youtube.com/watch?v=${t.key}`:null;
+}
+function providersOf(d){
+  const wp=d['watch/providers']&&d['watch/providers'].results&&d['watch/providers'].results.US;
+  if(!wp)return [];
+  const seen={},out=[];
+  [['flatrate','Stream'],['free','Free'],['ads','Free'],['rent','Rent'],['buy','Buy']].forEach(([k,label])=>{
+    (wp[k]||[]).forEach(p=>{ if(!seen[p.provider_id]){seen[p.provider_id]=1; out.push({name:p.provider_name,logo:p.logo_path,kind:label});} });
+  });
+  return out.slice(0,4);
+}
+function renderDetail(){
+  const d=DETAIL, id=d.id, inl=inLib(id);
+  const watched=inl&&inl.status==='watched', onList=inl&&inl.status==='watchlist', hidden=isHidden(id);
+  let rankTxt='';
+  if(watched){const wp=watchedPool().filter(x=>x.apps>0).sort((a,b)=>b.elo-a.elo); const i=wp.findIndex(x=>x.tmdbId===id); if(i>=0)rankTxt=` · <span class="rankpill">♛#${i+1}</span>`;}
+  const year=(d.release_date||'').slice(0,4);
+  const runtime=d.runtime?`${Math.floor(d.runtime/60)}h ${d.runtime%60}m`:'';
+  const rating=d.vote_average?`<span class="rating">★${d.vote_average.toFixed(1)}</span>`:'';
+  const genre=(d.genres||[]).slice(0,2).map(g=>g.name).join(' · ');
+  const back=d.backdrop_path?`background-image:url('https://image.tmdb.org/t/p/w780${d.backdrop_path}')`
+            :(d.poster_path?`background-image:url('${POSTER(d.poster_path)}')`:'');
+  const tr=trailerUrl(d), provs=providersOf(d);
+  const recs=((d.recommendations&&d.recommendations.results)||[]).filter(x=>x.poster_path).slice(0,10);
+  const meta=[year?`<b>${year}</b>`:'',runtime,rating,genre].filter(Boolean).join(' · ')+rankTxt;
+  const provHtml=provs.length
+    ? provs.map(p=>`<span class="prov">${p.logo?`<img src="https://image.tmdb.org/t/p/w45${p.logo}" alt="">`:''}${esc(p.name)}<em>${p.kind}</em></span>`).join('')
+    : `<span class="noprov">Not on your streaming services right now.</span>`;
+  const recHtml=recs.length
+    ? recs.map(x=>`<div class="s" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path)}')"></div><small>${esc(x.title)}</small></div>`).join('')
+    : `<div class="noprov">No recommendations yet.</div>`;
+  document.querySelector('#detailModal .dcard').innerHTML=`
+    <button class="close" onclick="closeDetail()">×</button>
+    <div class="dback" style="${back}"><h2 class="dttl">${esc(d.title)}</h2></div>
+    <div class="dbody">
+      <div class="dmeta">${meta}</div>
+      <div class="dgrid">
+        <button class="${watched?'on':''}" onclick="detailAct(${id},'watch')">✓ Watched</button>
+        <button class="${onList?'on2':''}" onclick="detailAct(${id},'add')">＋ Watchlist</button>
+        <button class="rk" onclick="detailRank(${id})">♛ Rank it</button>
+        <button class="hd" onclick="detailAct(${id},'hide')">⊘ ${hidden?'Hidden':'Hide'}</button>
+      </div>
+      ${tr?`<a class="dtrailer" href="${tr}" target="_blank" rel="noopener">▶ Watch trailer</a>`:`<div class="dtrailer off">Trailer unavailable</div>`}
+      <div class="dsec"><p class="dlbl">Where to watch</p><div class="dprovs">${provHtml}</div></div>
+      <div class="dsec"><p class="dlbl">Overview</p><p class="dov">${esc(d.overview||'No description available.')}</p></div>
+      <div class="dsec"><p class="dlbl">Because you liked this</p><div class="dsim">${recHtml}</div></div>
+    </div>`;
+}
+function detailAct(id,what){
+  const d=DETAIL;
+  const src=d?{tmdbId:d.id,title:d.title,year:(d.release_date||'').slice(0,4),poster:d.poster_path,genres:(d.genres||[]).map(g=>g.name)}:null;
+  if(what==='watch'){ const c=inLib(id); if(c&&c.status==='watched'){toast('Already watched');} else {addMovie(src,'watched'); toast('✓ Watched');} }
+  else if(what==='add'){ addMovie(src,'watchlist'); toast('＋ Watchlist'); }
+  else if(what==='hide'){ if(!isHidden(id))LIB.hidden.push(id); queueSave(); toast("Hidden — won't show again"); }
+  renderWatch(); renderDetail();
+}
+function detailRank(id){ closeDetail(); go('rank'); }
 
 /* ================= BOOT ================= */
 (async function init(){
