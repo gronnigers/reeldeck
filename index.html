@@ -6,16 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0f">
 <link rel="manifest" href="./manifest.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap">
 <style>
 :root{--bg:#0b0b0f;--bg2:#131318;--card:#17171e;--line:#25252e;--ink:#f4f4f6;--muted:#9a9aa6;--faint:#63636e;--red:#e50914;--green:#46d369;--gold:#e7b24c;--blue:#5cc8ff;--violet:#a371f7;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden;overscroll-behavior:none;}
 body{position:fixed;inset:0;width:100%;touch-action:pan-y;}
-button{font-family:inherit;cursor:pointer;} .hidden{display:none!important;} img{max-width:100%;}
-select{font-family:inherit;}
+button{font-family:inherit;cursor:pointer;} .hidden{display:none!important;} img{max-width:100%;} select{font-family:inherit;}
 
 .authwrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;overflow:auto;}
 .authwrap .logo{font-family:"Archivo";font-weight:900;font-size:40px;letter-spacing:-.02em;color:var(--red);margin-bottom:6px;} .authwrap .logo b{color:var(--ink);font-weight:800;}
@@ -29,7 +27,6 @@ select{font-family:inherit;}
 .appbar .logo{font-family:"Archivo";font-weight:900;font-size:18px;letter-spacing:-.02em;color:var(--red);flex:0 0 auto;} .appbar .logo b{color:var(--ink);font-weight:800;}
 .appbar .tools{display:flex;gap:8px;align-items:center;}
 .icobtn{background:transparent;border:1px solid var(--line);color:var(--muted);width:34px;height:34px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;} .icobtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;} .icobtn:active{background:var(--card);}
-.nsbtn{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;border:none;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;white-space:nowrap;} .nsbtn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;}
 .scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
 
 .view{display:none;padding:2px 0 30px;animation:fade .2s ease;} .view.on{display:block;}
@@ -37,10 +34,9 @@ select{font-family:inherit;}
 .empty{color:var(--muted);font-size:13px;line-height:1.55;padding:26px 22px;text-align:center;} .empty b{color:var(--ink);}
 
 .nav{flex:0 0 auto;display:flex;background:rgba(12,12,16,.96);border-top:1px solid var(--line);backdrop-filter:blur(12px);padding-bottom:env(safe-area-inset-bottom);}
-.nav .brand,.nav .navtools,.nav .nsbtn{display:none;}
+.nav .brand,.nav .navtools{display:none;}
 .nav .tab{flex:1;background:none;border:none;color:var(--faint);padding:9px 0 11px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9.5px;font-weight:600;}
-.nav .tab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;}
-.nav .tab.on{color:var(--ink);} .nav .tab.on svg{stroke:var(--red);}
+.nav .tab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;} .nav .tab.on{color:var(--ink);} .nav .tab.on svg{stroke:var(--red);}
 
 .hero{margin:6px 16px 16px;height:172px;border-radius:14px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:16px;background:var(--card);background-size:cover;background-position:center;}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,rgba(0,0,0,.55),transparent 60%),linear-gradient(transparent 30%,rgba(0,0,0,.9));}
@@ -56,7 +52,11 @@ select{font-family:inherit;}
 .toolbar{display:flex;gap:9px;flex-wrap:wrap;padding:0 16px 12px;align-items:center;}
 .toolbar label{font-size:10.5px;color:var(--muted);display:flex;align-items:center;gap:6px;}
 .toolbar select,.toolbar .seg{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:12px;font-weight:600;}
-.toolbar .seg{display:inline-flex;align-items:center;gap:6px;}
+.toolbar .seg{display:inline-flex;align-items:center;gap:6px;} .toolbar .seg.on{border-color:var(--red);color:#fff;}
+.toolbar .chk{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);cursor:pointer;} .toolbar .chk input{width:15px;height:15px;accent-color:var(--red);}
+
+.segbar{display:flex;gap:8px;padding:0 16px 12px;flex-wrap:wrap;}
+.segbar button{background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:7px 15px;font-size:12px;font-weight:700;} .segbar button.on{background:var(--red);color:#fff;border-color:transparent;}
 
 .poster{border-radius:9px;overflow:hidden;position:relative;aspect-ratio:2/3;display:flex;align-items:flex-end;flex:0 0 auto;background-size:cover;background-position:center;background-color:#1c1c24;cursor:pointer;}
 .rail .poster{width:128px;}
@@ -64,13 +64,28 @@ select{font-family:inherit;}
 .poster .lab{position:relative;z-index:2;padding:8px;font-size:11px;font-weight:700;line-height:1.12;} .poster .yr{display:block;font-weight:500;color:rgba(255,255,255,.6);font-size:9px;margin-top:2px;}
 .poster .rank{position:absolute;top:6px;right:6px;z-index:2;font-family:"Archivo";font-weight:900;font-size:12px;color:var(--gold);background:rgba(0,0,0,.6);padding:2px 7px;border-radius:6px;}
 .poster .wb{position:absolute;top:6px;left:6px;z-index:2;font-size:9px;font-weight:700;color:#fff;background:rgba(0,0,0,.62);padding:2px 6px;border-radius:5px;}
+.poster .upb{position:absolute;top:6px;left:6px;z-index:2;font-size:8px;font-weight:800;letter-spacing:.05em;color:#0b0b0f;background:var(--gold);padding:2px 6px;border-radius:5px;}
+.poster.up{outline:1px solid rgba(231,178,76,.35);outline-offset:-1px;}
+.poster.win{outline:2px solid var(--gold);outline-offset:-2px;}
+.fygrid.oscarmode{display:block;}
+.oyear{margin-bottom:22px;}
+.oyh{display:flex;align-items:baseline;gap:10px;padding:0 0 10px;}
+.oyh .oy{font-family:"Archivo";font-weight:900;font-size:20px;color:var(--gold);}
+.oyh .oyn{font-size:11px;color:var(--faint);font-weight:600;}
+.ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:12px;}
+
+.listwrap{padding:2px 0 0;} .listrow{display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid var(--line);cursor:pointer;}
+.listrow .lp{width:40px;height:60px;border-radius:6px;background-size:cover;background-position:center;background:#1c1c24;flex:0 0 auto;}
+.listrow .li{flex:1;min-width:0;} .listrow .li b{font-size:14px;font-weight:600;display:block;} .listrow .li small{font-size:11px;color:var(--muted);}
+.listrow .up{display:inline-block;margin-left:7px;font-size:8.5px;font-weight:800;color:var(--gold);border:1px solid rgba(231,178,76,.45);padding:1px 6px;border-radius:5px;vertical-align:middle;letter-spacing:.04em;}
+.listrow .chev{width:16px;height:16px;stroke:var(--faint);fill:none;stroke-width:2;flex:0 0 auto;}
 
 .soongrid,.fygrid{display:grid;gap:14px;padding:6px 16px 0;}
 .soongrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));} .fygrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
 .soontile{cursor:pointer;} .soontile .sp{aspect-ratio:2/3;border-radius:11px;background-size:cover;background-position:center;background-color:#1c1c24;position:relative;overflow:hidden;} .soontile .sp::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 60%,rgba(0,0,0,.85));}
 .soontile .dbadge{position:absolute;top:8px;left:8px;z-index:2;font-size:10px;font-weight:800;color:#fff;background:var(--red);padding:3px 8px;border-radius:6px;}
 .soontile .st{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:9px;font-size:12px;font-weight:700;line-height:1.15;} .soontile .sg{display:block;font-size:9px;color:rgba(255,255,255,.6);font-weight:500;margin-top:2px;}
-.fyload{text-align:center;color:var(--faint);font-size:12px;padding:22px;} #fy-sentinel,#soon-sentinel{height:1px;}
+.fyload{text-align:center;color:var(--faint);font-size:12px;padding:22px;} #fy-sentinel,#oscar-sentinel{height:1px;}
 
 .rankwrap{padding:0 16px;max-width:640px;margin:0 auto;}
 .rankbar{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px;font-size:11px;color:var(--muted);} .rankbar b{color:var(--ink);font-family:"Archivo";font-weight:800;}
@@ -78,12 +93,15 @@ select{font-family:inherit;}
 .duel{display:flex;gap:12px;position:relative;align-items:flex-start;} .rside{flex:1 1 0;min-width:0;}
 .bd{width:100%;aspect-ratio:2/3;border-radius:12px;background-size:cover;background-position:center;background-color:#1c1c24;position:relative;overflow:hidden;border:2px solid transparent;transition:border-color .15s,transform .1s;}
 .bd.pick{cursor:pointer;} .bd.pick:active{transform:scale(.98);} .bd.pick:hover{border-color:rgba(255,255,255,.55);}
-.bd .newtag{position:absolute;top:8px;left:8px;z-index:2;font-size:9px;font-weight:800;text-transform:uppercase;color:#04121f;background:var(--blue);padding:3px 7px;border-radius:6px;}
+.bd.revealed{animation:rv .28s ease;} @keyframes rv{from{opacity:.35}to{opacity:1}}
+.bd .curtain{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;background:linear-gradient(90deg,#43070c,#7c1319 50%,#43070c);}
+.bd .curtain::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.34) 0 9px,rgba(255,255,255,.05) 9px 18px);}
+.bd .curtain::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(0,0,0,.5);transform:translateX(-1px);}
+.bd .ctxt{position:relative;z-index:2;font-family:"Archivo";font-weight:800;font-size:10px;letter-spacing:.14em;color:#f4d9b0;text-transform:uppercase;text-shadow:0 1px 3px #000;}
 .bd .crown{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);color:#fff;font-weight:800;font-size:13px;opacity:0;transition:.15s;z-index:3;} .bd.pick:hover .crown{opacity:1;}
-.rcap{margin:9px 0 7px;} .rcap b{font-size:13px;font-weight:700;display:block;line-height:1.15;} .rcap small{font-size:10px;color:var(--muted);}
+.rcap{margin:9px 0 7px;min-height:34px;} .rcap b{font-size:13px;font-weight:700;display:block;line-height:1.15;} .rcap small{font-size:10px;color:var(--muted);}
 .qa2{display:grid;grid-template-columns:1fr 1fr;gap:5px;} .qa2 button{font-size:10px;font-weight:700;padding:7px 4px;border-radius:7px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;gap:3px;}
 .qa2 button.hide{color:#ff9a9a;border-color:rgba(255,120,120,.3);} .qa2 button.skip{color:var(--blue);border-color:rgba(92,200,255,.3);} .qa2 button:active{transform:scale(.95);}
-.qa1{display:flex;} .qa1 button{flex:1;font-size:10px;font-weight:700;padding:7px 0;border-radius:7px;border:1px solid rgba(255,120,120,.3);background:rgba(255,255,255,.06);color:#ff9a9a;}
 .vstok{position:absolute;left:50%;top:32%;transform:translate(-50%,-50%);z-index:6;width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;font-family:"Archivo";font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;border:3px solid var(--bg);pointer-events:none;}
 .hint{text-align:center;font-size:11.5px;color:var(--muted);margin:14px 0 2px;min-height:16px;} .hint.warn{color:var(--gold);}
 .skipbtn{display:block;margin:12px auto 0;background:transparent;border:1px solid var(--line);color:var(--muted);font-size:11px;font-weight:600;padding:8px 16px;border-radius:999px;}
@@ -95,7 +113,7 @@ select{font-family:inherit;}
 .lrow .e{font-family:"Archivo";font-variant-numeric:tabular-nums;font-weight:800;font-size:13px;color:var(--ink);} .lrow .e small{color:var(--faint);font-size:9px;font-weight:600;display:block;text-align:right;}
 .done{text-align:center;padding:28px 16px;color:var(--muted);font-size:13px;line-height:1.5;}
 
-/* detail + actor */
+/* detail + actor + stats modal */
 .dmodal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.72);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;overscroll-behavior:contain;} .dmodal.show{display:flex;}
 .dcard{width:100%;max-width:560px;min-height:100%;background:#0b0b0f;position:relative;color:#fff;padding-bottom:40px;}
 .dloading{padding:64px 20px;text-align:center;color:var(--muted);font-size:14px;}
@@ -123,29 +141,32 @@ select{font-family:inherit;}
 .filmo{padding:4px 16px 0;max-width:560px;margin:0 auto;} .filmrow{display:flex;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #1c1e26;cursor:pointer;}
 .filmrow .yr{width:42px;flex:0 0 auto;font-family:"Archivo";font-weight:800;font-size:13px;color:var(--gold);font-variant-numeric:tabular-nums;} .filmrow .fp{width:38px;height:57px;border-radius:5px;flex:0 0 auto;background-size:cover;background-position:center;background:#1c1c24;} .filmrow .fm{flex:1;min-width:0;} .filmrow .fm b{font-size:13px;font-weight:600;display:block;} .filmrow .fm small{font-size:10.5px;color:var(--faint);}
 
-/* trailer player */
+/* stats */
+.stitle{font-family:"Archivo";font-weight:800;font-size:24px;margin:0;padding:20px 16px 4px;max-width:620px;margin:0 auto;}
+.sbody{padding:8px 16px 0;max-width:620px;margin:0 auto;}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:8px;}
+.kpi{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px;}
+.kpi .v{font-family:"Archivo";font-weight:900;font-size:26px;line-height:1;} .kpi .v.g{color:var(--gold);} .kpi .v.gr{color:var(--green);} .kpi .v.b{color:var(--blue);}
+.kpi .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:5px;}
+.spanel{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px 15px;margin-top:14px;}
+.spanel h3{font-family:"Archivo";font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 12px;}
+.gbar{display:flex;align-items:center;gap:9px;margin-bottom:9px;font-size:11.5px;} .gbar .gn{width:72px;color:#c9d1d9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .gbar .gt{flex:1;height:9px;background:#23252e;border-radius:5px;overflow:hidden;} .gbar .gf{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:5px;} .gbar .gv{width:26px;text-align:right;font-family:"Archivo";font-weight:800;color:var(--muted);}
+.decbars{display:flex;align-items:flex-end;gap:6px;height:96px;} .decbars .dc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:100%;} .decbars .db{width:100%;background:linear-gradient(180deg,var(--blue),#2a4a6b);border-radius:4px 4px 0 0;min-height:3px;} .decbars .dl{font-size:8.5px;color:var(--faint);} .decbars .dv{font-size:9px;color:var(--muted);font-weight:700;}
+
+/* trailer / now showing / choose / search */
 .tmodal{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:16px;}
 .tframe{position:relative;width:100%;max-width:900px;} .tvideo{position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;} .tvideo iframe{position:absolute;inset:0;width:100%;height:100%;border:0;} .tframe .close{top:-42px;right:0;}
-
-/* now showing */
 .nsmodal{position:fixed;inset:0;z-index:92;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:20px;}
 .nscard{width:100%;max-width:360px;background:radial-gradient(120% 80% at 50% 0%,#241016,#0b0b0f);border:1px solid var(--line);border-radius:18px;padding:26px 22px;text-align:center;position:relative;}
-.nskick{font-family:"Archivo";font-weight:900;letter-spacing:.14em;font-size:13px;color:var(--red);text-transform:uppercase;}
-.nssub{color:var(--muted);font-size:13px;margin:10px 0 20px;line-height:1.5;}
+.nskick{font-family:"Archivo";font-weight:900;letter-spacing:.14em;font-size:13px;color:var(--red);text-transform:uppercase;} .nssub{color:var(--muted);font-size:13px;margin:10px 0 20px;line-height:1.5;}
 .nsreel{width:56px;height:56px;margin:2px auto 20px;color:var(--gold);} .nsreel svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:1.6;animation:spin 3s linear infinite;} @keyframes spin{to{transform:rotate(360deg)}}
 .nsbig{background:var(--red);color:#fff;border:none;border-radius:10px;padding:13px 24px;font-weight:700;font-size:15px;width:100%;}
 .nsposter{width:150px;aspect-ratio:2/3;border-radius:12px;margin:2px auto 14px;background-size:cover;background-position:center;background-color:#1c1c24;box-shadow:0 16px 40px rgba(0,0,0,.6);}
 .nstitle{font-family:"Archivo";font-weight:800;font-size:20px;margin:0 0 4px;line-height:1.05;} .nsmeta{color:var(--muted);font-size:12px;margin-bottom:16px;}
 .nsacts{display:flex;flex-direction:column;gap:8px;} .nsacts button{padding:11px;border-radius:10px;font-weight:700;font-size:13px;border:1px solid var(--line);background:var(--card);color:#fff;} .nsacts .p{background:var(--red);border-color:transparent;}
-
-/* choose watched-when */
 .choose{position:fixed;inset:0;z-index:94;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;justify-content:center;padding:16px;}
 .csheet{width:100%;max-width:400px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px;}
-.ctitle{font-weight:700;font-size:15px;text-align:center;margin-bottom:14px;}
-.cbtn{width:100%;padding:13px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:#fff;font-weight:700;font-size:14px;margin-bottom:8px;} .cbtn.p{background:var(--red);border-color:transparent;}
-.ccancel{width:100%;padding:11px;border:none;background:none;color:var(--muted);font-size:13px;}
-
-/* search */
+.ctitle{font-weight:700;font-size:15px;text-align:center;margin-bottom:14px;} .cbtn{width:100%;padding:13px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:#fff;font-weight:700;font-size:14px;margin-bottom:8px;} .cbtn.p{background:var(--red);border-color:transparent;} .ccancel{width:100%;padding:11px;border:none;background:none;color:var(--muted);font-size:13px;}
 .modal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.6);display:flex;align-items:flex-start;justify-content:center;padding:56px 16px;}
 .sheet{width:100%;max-width:460px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;overflow:hidden;max-height:82vh;display:flex;flex-direction:column;}
 .sheet .top{display:flex;gap:8px;padding:14px;border-bottom:1px solid var(--line);} .sheet input{flex:1;background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:9px;padding:10px 12px;font-size:16px;} .sheet input:focus{outline:none;border-color:var(--muted);} .sheet .x{background:none;border:none;color:var(--muted);font-size:20px;}
@@ -158,7 +179,6 @@ select{font-family:inherit;}
   .appbar{display:none;}
   .nav{order:-1;flex-direction:column;width:172px;border-top:none;border-right:1px solid var(--line);padding:16px 10px;gap:4px;}
   .nav .brand{display:block;font-family:"Archivo";font-weight:900;font-size:20px;color:var(--red);padding:4px 12px 12px;} .nav .brand b{color:var(--ink);font-weight:800;}
-  .nav .nsbtn{display:flex;width:100%;justify-content:flex-start;margin:0 0 10px;}
   .nav .tab{flex:0 0 auto;flex-direction:row;justify-content:flex-start;gap:12px;width:100%;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:700;} .nav .tab.on{background:var(--card);color:var(--ink);}
   .nav .navtools{display:flex;gap:8px;margin-top:auto;padding:8px 6px;}
   .main{flex:1 1 auto;} .scroll{padding-top:6px;}
@@ -181,7 +201,7 @@ select{font-family:inherit;}
     <header class="appbar">
       <div class="logo">REEL<b>DECK</b></div>
       <div class="tools">
-        <button class="nsbtn" onclick="openNowShowing()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Now Showing</button>
+        <button class="icobtn" onclick="openStats()" aria-label="Stats"><svg viewBox="0 0 24 24"><path d="M6 20V10M12 20V4M18 20v-7"/></svg></button>
         <button class="icobtn" onclick="openSearch()" aria-label="Add movie"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
         <button class="icobtn" onclick="signOut()" aria-label="Sign out"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg></button>
       </div>
@@ -191,29 +211,31 @@ select{font-family:inherit;}
         <div id="hero" class="hero"></div>
         <div class="sec-h"><h2>Your Watchlist</h2><span class="see" id="wl-count"></span></div>
         <div class="toolbar">
-          <label>Sort <select id="wl-sort" onchange="WL.sort=this.value;renderWatch()">
-            <option value="added">Recently added</option><option value="title">A–Z</option><option value="release">Release date</option></select></label>
+          <label>Sort <select id="wl-sort" onchange="WL.sort=this.value;renderWatch()"><option value="added">Recently added</option><option value="title">A–Z</option><option value="release">Release date</option></select></label>
           <label>Genre <select id="wl-genre" onchange="WL.genre=this.value;renderWatch()"></select></label>
+          <label class="chk"><input type="checkbox" id="wl-hideup" onchange="WL.hideUnreleased=this.checked;renderWatch()"> Hide upcoming</label>
+          <button class="seg" id="wl-view" onclick="WL.view=WL.view==='grid'?'list':'grid';renderWatch()">List view</button>
         </div>
-        <div class="grid" id="wl-grid"></div>
+        <div id="wl-body"></div>
       </section>
 
       <section class="view" id="v-soon">
-        <div class="sec-h" style="margin-top:8px"><h2>Coming Soon</h2><span class="see">by release date</span></div>
+        <div class="sec-h" style="margin-top:8px"><h2>Coming Soon</h2><span class="see" id="soon-see">by release date</span></div>
         <div class="soongrid" id="soon-grid"></div>
-        <div id="soon-sentinel"></div><div class="fyload" id="soon-load"></div>
+        <div class="fyload" id="soon-load"></div>
       </section>
 
       <section class="view" id="v-discover">
-        <div class="sec-h" style="margin-top:8px"><h2>Discover</h2><span class="see">from your taste</span></div>
+        <div class="sec-h" style="margin-top:8px"><h2>Discover</h2><span class="see" id="disc-see">from your taste</span></div>
+        <div class="segbar"><button class="on" id="seg-fy" onclick="setDisc('foryou')">For You</button><button id="seg-os" onclick="setDisc('oscar')">Oscar Winners</button></div>
         <div class="fygrid" id="fy-grid"></div>
-        <div id="fy-sentinel"></div><div class="fyload" id="fy-load"></div>
+        <div id="fy-sentinel"></div><div id="oscar-sentinel"></div><div class="fyload" id="fy-load"></div>
       </section>
 
       <section class="view" id="v-can">
         <div class="sec-h" style="margin-top:8px"><h2>In the Can</h2><span class="see" id="can-count"></span></div>
-        <div class="toolbar"><button class="seg" id="can-order" onclick="CAN.order=CAN.order==='recent'?'oldest':'recent';renderCan()">Recently watched ⇅</button></div>
-        <div class="grid" id="can-grid"></div>
+        <div class="toolbar"><button class="seg" id="can-order" onclick="CAN.order=CAN.order==='recent'?'oldest':'recent';renderCan()">Recently watched ⇅</button><button class="seg" id="can-view" onclick="CAN.view=CAN.view==='grid'?'list':'grid';renderCan()">List view</button></div>
+        <div id="can-body"></div>
       </section>
 
       <section class="view" id="v-rank">
@@ -222,7 +244,7 @@ select{font-family:inherit;}
           <div class="prog"><i id="progbar"></i></div>
           <div id="duelzone"></div>
           <div class="hint" id="hint"></div>
-          <button class="skipbtn" onclick="skipPair()">↻ Too close — skip this pair</button>
+          <button class="skipbtn" onclick="skipPair()">↻ New pair</button>
           <div class="lb"><h4>Your Ranking <span id="lb-sub"></span></h4><div id="lb-rows"></div></div>
         </div>
       </section>
@@ -231,13 +253,13 @@ select{font-family:inherit;}
 
   <nav class="nav">
     <div class="brand">REEL<b>DECK</b></div>
-    <button class="nsbtn" onclick="openNowShowing()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>Now Showing</button>
     <button class="tab on" data-v="watch" onclick="go('watch')"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Watchlist</button>
     <button class="tab" data-v="soon" onclick="go('soon')"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>Coming Soon</button>
     <button class="tab" data-v="discover" onclick="go('discover')"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.8L20 9.5l-4.5 4 1.4 6L12 16.8 7.1 19.5l1.4-6L4 9.5l5.8-.7z"/></svg>Discover</button>
     <button class="tab" data-v="can" onclick="go('can')"><svg viewBox="0 0 24 24"><path d="M4 8h16v12H4z"/><path d="M4 8l3-4h10l3 4M9 4v4M15 4v4"/></svg>In the Can</button>
     <button class="tab" data-v="rank" onclick="go('rank')"><svg viewBox="0 0 24 24"><path d="M6 20V10M12 20V4M18 20v-7"/></svg>Rank</button>
     <div class="navtools">
+      <button class="icobtn" onclick="openStats()" aria-label="Stats"><svg viewBox="0 0 24 24"><path d="M6 20V10M12 20V4M18 20v-7"/></svg></button>
       <button class="icobtn" onclick="openSearch()" aria-label="Add movie"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
       <button class="icobtn" onclick="signOut()" aria-label="Sign out"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg></button>
     </div>
@@ -254,9 +276,113 @@ const POSTER=(p,s="w342")=>p?`https://image.tmdb.org/t/p/${s}${p}`:"";
 const GENRES={28:"Action",12:"Adventure",16:"Animation",35:"Comedy",80:"Crime",99:"Documentary",18:"Drama",10751:"Family",14:"Fantasy",36:"History",27:"Horror",10402:"Music",9648:"Mystery",10749:"Romance",878:"Sci-Fi",10770:"TV",53:"Thriller",10752:"War",37:"Western"};
 const MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
 const MONL=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-let accessToken=null,LIB=blankLib(),DISCOVER=[],currentPair=null,saveTimer,hintEl,DETAIL=null,ACTOR_BACK=null,NS_MOVIE=null;
-let WL={sort:'added',genre:'all'},CAN={order:'recent'};
+const OSCARS=[[1927,"Wings"],[1928,"The Broadway Melody"],[1929,"All Quiet on the Western Front"],[1930,"Cimarron"],[1931,"Grand Hotel"],[1932,"Cavalcade"],[1934,"It Happened One Night"],[1935,"Mutiny on the Bounty"],[1936,"The Great Ziegfeld"],[1937,"The Life of Emile Zola"],[1938,"You Can't Take It with You"],[1939,"Gone with the Wind"],[1940,"Rebecca"],[1941,"How Green Was My Valley"],[1942,"Mrs. Miniver"],[1943,"Casablanca"],[1944,"Going My Way"],[1945,"The Lost Weekend"],[1946,"The Best Years of Our Lives"],[1947,"Gentleman's Agreement"],[1948,"Hamlet"],[1949,"All the King's Men"],[1950,"All About Eve"],[1951,"An American in Paris"],[1952,"The Greatest Show on Earth"],[1953,"From Here to Eternity"],[1954,"On the Waterfront"],[1955,"Marty"],[1956,"Around the World in 80 Days"],[1957,"The Bridge on the River Kwai"],[1958,"Gigi"],[1959,"Ben-Hur"],[1960,"The Apartment"],[1961,"West Side Story"],[1962,"Lawrence of Arabia"],[1963,"Tom Jones"],[1964,"My Fair Lady"],[1965,"The Sound of Music"],[1966,"A Man for All Seasons"],[1967,"In the Heat of the Night"],[1968,"Oliver!"],[1969,"Midnight Cowboy"],[1970,"Patton"],[1971,"The French Connection"],[1972,"The Godfather"],[1973,"The Sting"],[1974,"The Godfather Part II"],[1975,"One Flew Over the Cuckoo's Nest"],[1976,"Rocky"],[1977,"Annie Hall"],[1978,"The Deer Hunter"],[1979,"Kramer vs. Kramer"],[1980,"Ordinary People"],[1981,"Chariots of Fire"],[1982,"Gandhi"],[1983,"Terms of Endearment"],[1984,"Amadeus"],[1985,"Out of Africa"],[1986,"Platoon"],[1987,"The Last Emperor"],[1988,"Rain Man"],[1989,"Driving Miss Daisy"],[1990,"Dances with Wolves"],[1991,"The Silence of the Lambs"],[1992,"Unforgiven"],[1993,"Schindler's List"],[1994,"Forrest Gump"],[1995,"Braveheart"],[1996,"The English Patient"],[1997,"Titanic"],[1998,"Shakespeare in Love"],[1999,"American Beauty"],[2000,"Gladiator"],[2001,"A Beautiful Mind"],[2002,"Chicago"],[2003,"The Lord of the Rings: The Return of the King"],[2004,"Million Dollar Baby"],[2005,"Crash"],[2006,"The Departed"],[2007,"No Country for Old Men"],[2008,"Slumdog Millionaire"],[2009,"The Hurt Locker"],[2010,"The King's Speech"],[2011,"The Artist"],[2012,"Argo"],[2013,"12 Years a Slave"],[2014,"Birdman"],[2015,"Spotlight"],[2016,"Moonlight"],[2017,"The Shape of Water"],[2018,"Green Book"],[2019,"Parasite"],[2020,"Nomadland"],[2021,"CODA"],[2022,"Everything Everywhere All at Once"],[2023,"Oppenheimer"],[2024,"Anora"]];
+/* Best Picture: winner first, then the rest of that year's nominees */
+const BP={
+1927:["Wings","7th Heaven","The Racket"],
+1928:["The Broadway Melody","Alibi","The Hollywood Revue of 1929","In Old Arizona","The Patriot"],
+1929:["All Quiet on the Western Front","The Big House","Disraeli","The Divorcee","The Love Parade"],
+1930:["Cimarron","East Lynne","The Front Page","Skippy","Trader Horn"],
+1931:["Grand Hotel","Arrowsmith","Bad Girl","The Champ","Five Star Final","One Hour with You","Shanghai Express","The Smiling Lieutenant"],
+1932:["Cavalcade","42nd Street","A Farewell to Arms","I Am a Fugitive from a Chain Gang","Lady for a Day","Little Women","The Private Life of Henry VIII","She Done Him Wrong","Smilin' Through","State Fair"],
+1934:["It Happened One Night","The Barretts of Wimpole Street","Cleopatra","Flirtation Walk","The Gay Divorcee","Here Comes the Navy","The House of Rothschild","Imitation of Life","One Night of Love","The Thin Man","Viva Villa!","The White Parade"],
+1935:["Mutiny on the Bounty","Alice Adams","Broadway Melody of 1936","Captain Blood","David Copperfield","The Informer","Les Misérables","The Lives of a Bengal Lancer","A Midsummer Night's Dream","Naughty Marietta","Ruggles of Red Gap","Top Hat"],
+1936:["The Great Ziegfeld","Anthony Adverse","Dodsworth","Libeled Lady","Mr. Deeds Goes to Town","Romeo and Juliet","San Francisco","The Story of Louis Pasteur","A Tale of Two Cities","Three Smart Girls"],
+1937:["The Life of Emile Zola","The Awful Truth","Captains Courageous","Dead End","The Good Earth","In Old Chicago","Lost Horizon","One Hundred Men and a Girl","Stage Door","A Star Is Born"],
+1938:["You Can't Take It with You","The Adventures of Robin Hood","Alexander's Ragtime Band","Boys Town","The Citadel","Four Daughters","Grand Illusion","Jezebel","Pygmalion","Test Pilot"],
+1939:["Gone with the Wind","Dark Victory","Goodbye, Mr. Chips","Love Affair","Mr. Smith Goes to Washington","Ninotchka","Of Mice and Men","Stagecoach","The Wizard of Oz","Wuthering Heights"],
+1940:["Rebecca","All This, and Heaven Too","Foreign Correspondent","The Grapes of Wrath","The Great Dictator","Kitty Foyle","The Letter","The Long Voyage Home","Our Town","The Philadelphia Story"],
+1941:["How Green Was My Valley","Blossoms in the Dust","Citizen Kane","Here Comes Mr. Jordan","Hold Back the Dawn","The Little Foxes","The Maltese Falcon","One Foot in Heaven","Sergeant York","Suspicion"],
+1942:["Mrs. Miniver","49th Parallel","Kings Row","The Magnificent Ambersons","The Pied Piper","The Pride of the Yankees","Random Harvest","The Talk of the Town","Wake Island","Yankee Doodle Dandy"],
+1943:["Casablanca","For Whom the Bell Tolls","Heaven Can Wait","The Human Comedy","In Which We Serve","Madame Curie","The More the Merrier","The Ox-Bow Incident","The Song of Bernadette","Watch on the Rhine"],
+1944:["Going My Way","Double Indemnity","Gaslight","Since You Went Away","Wilson"],
+1945:["The Lost Weekend","Anchors Aweigh","The Bells of St. Mary's","Mildred Pierce","Spellbound"],
+1946:["The Best Years of Our Lives","Henry V","It's a Wonderful Life","The Razor's Edge","The Yearling"],
+1947:["Gentleman's Agreement","The Bishop's Wife","Crossfire","Great Expectations","Miracle on 34th Street"],
+1948:["Hamlet","Johnny Belinda","The Red Shoes","The Snake Pit","The Treasure of the Sierra Madre"],
+1949:["All the King's Men","Battleground","The Heiress","A Letter to Three Wives","Twelve O'Clock High"],
+1950:["All About Eve","Born Yesterday","Father of the Bride","King Solomon's Mines","Sunset Boulevard"],
+1951:["An American in Paris","Decision Before Dawn","A Place in the Sun","Quo Vadis","A Streetcar Named Desire"],
+1952:["The Greatest Show on Earth","High Noon","Ivanhoe","Moulin Rouge","The Quiet Man"],
+1953:["From Here to Eternity","Julius Caesar","The Robe","Roman Holiday","Shane"],
+1954:["On the Waterfront","The Caine Mutiny","The Country Girl","Seven Brides for Seven Brothers","Three Coins in the Fountain"],
+1955:["Marty","Love Is a Many-Splendored Thing","Mister Roberts","Picnic","The Rose Tattoo"],
+1956:["Around the World in 80 Days","Friendly Persuasion","Giant","The King and I","The Ten Commandments"],
+1957:["The Bridge on the River Kwai","Peyton Place","Sayonara","12 Angry Men","Witness for the Prosecution"],
+1958:["Gigi","Auntie Mame","Cat on a Hot Tin Roof","The Defiant Ones","Separate Tables"],
+1959:["Ben-Hur","Anatomy of a Murder","The Diary of Anne Frank","The Nun's Story","Room at the Top"],
+1960:["The Apartment","The Alamo","Elmer Gantry","Sons and Lovers","The Sundowners"],
+1961:["West Side Story","Fanny","The Guns of Navarone","The Hustler","Judgment at Nuremberg"],
+1962:["Lawrence of Arabia","The Longest Day","The Music Man","Mutiny on the Bounty","To Kill a Mockingbird"],
+1963:["Tom Jones","America America","Cleopatra","How the West Was Won","Lilies of the Field"],
+1964:["My Fair Lady","Becket","Dr. Strangelove","Mary Poppins","Zorba the Greek"],
+1965:["The Sound of Music","Darling","Doctor Zhivago","Ship of Fools","A Thousand Clowns"],
+1966:["A Man for All Seasons","Alfie","The Russians Are Coming, the Russians Are Coming","The Sand Pebbles","Who's Afraid of Virginia Woolf?"],
+1967:["In the Heat of the Night","Bonnie and Clyde","Doctor Dolittle","The Graduate","Guess Who's Coming to Dinner"],
+1968:["Oliver!","Funny Girl","The Lion in Winter","Rachel, Rachel","Romeo and Juliet"],
+1969:["Midnight Cowboy","Anne of the Thousand Days","Butch Cassidy and the Sundance Kid","Hello, Dolly!","Z"],
+1970:["Patton","Airport","Five Easy Pieces","Love Story","M*A*S*H"],
+1971:["The French Connection","A Clockwork Orange","Fiddler on the Roof","The Last Picture Show","Nicholas and Alexandra"],
+1972:["The Godfather","Cabaret","Deliverance","The Emigrants","Sounder"],
+1973:["The Sting","American Graffiti","Cries and Whispers","The Exorcist","A Touch of Class"],
+1974:["The Godfather Part II","Chinatown","The Conversation","Lenny","The Towering Inferno"],
+1975:["One Flew Over the Cuckoo's Nest","Barry Lyndon","Dog Day Afternoon","Jaws","Nashville"],
+1976:["Rocky","All the President's Men","Bound for Glory","Network","Taxi Driver"],
+1977:["Annie Hall","The Goodbye Girl","Julia","Star Wars","The Turning Point"],
+1978:["The Deer Hunter","Coming Home","Heaven Can Wait","Midnight Express","An Unmarried Woman"],
+1979:["Kramer vs. Kramer","All That Jazz","Apocalypse Now","Breaking Away","Norma Rae"],
+1980:["Ordinary People","Coal Miner's Daughter","The Elephant Man","Raging Bull","Tess"],
+1981:["Chariots of Fire","Atlantic City","On Golden Pond","Raiders of the Lost Ark","Reds"],
+1982:["Gandhi","E.T. the Extra-Terrestrial","Missing","Tootsie","The Verdict"],
+1983:["Terms of Endearment","The Big Chill","The Dresser","The Right Stuff","Tender Mercies"],
+1984:["Amadeus","The Killing Fields","A Passage to India","Places in the Heart","A Soldier's Story"],
+1985:["Out of Africa","The Color Purple","Kiss of the Spider Woman","Prizzi's Honor","Witness"],
+1986:["Platoon","Children of a Lesser God","Hannah and Her Sisters","The Mission","A Room with a View"],
+1987:["The Last Emperor","Broadcast News","Fatal Attraction","Hope and Glory","Moonstruck"],
+1988:["Rain Man","The Accidental Tourist","Dangerous Liaisons","Mississippi Burning","Working Girl"],
+1989:["Driving Miss Daisy","Born on the Fourth of July","Dead Poets Society","Field of Dreams","My Left Foot"],
+1990:["Dances with Wolves","Awakenings","Ghost","The Godfather Part III","Goodfellas"],
+1991:["The Silence of the Lambs","Beauty and the Beast","Bugsy","JFK","The Prince of Tides"],
+1992:["Unforgiven","The Crying Game","A Few Good Men","Howards End","Scent of a Woman"],
+1993:["Schindler's List","The Fugitive","In the Name of the Father","The Piano","The Remains of the Day"],
+1994:["Forrest Gump","Four Weddings and a Funeral","Pulp Fiction","Quiz Show","The Shawshank Redemption"],
+1995:["Braveheart","Apollo 13","Babe","Il Postino: The Postman","Sense and Sensibility"],
+1996:["The English Patient","Fargo","Jerry Maguire","Secrets & Lies","Shine"],
+1997:["Titanic","As Good as It Gets","The Full Monty","Good Will Hunting","L.A. Confidential"],
+1998:["Shakespeare in Love","Elizabeth","Life Is Beautiful","Saving Private Ryan","The Thin Red Line"],
+1999:["American Beauty","The Cider House Rules","The Green Mile","The Insider","The Sixth Sense"],
+2000:["Gladiator","Chocolat","Crouching Tiger, Hidden Dragon","Erin Brockovich","Traffic"],
+2001:["A Beautiful Mind","Gosford Park","In the Bedroom","The Lord of the Rings: The Fellowship of the Ring","Moulin Rouge!"],
+2002:["Chicago","Gangs of New York","The Hours","The Lord of the Rings: The Two Towers","The Pianist"],
+2003:["The Lord of the Rings: The Return of the King","Lost in Translation","Master and Commander: The Far Side of the World","Mystic River","Seabiscuit"],
+2004:["Million Dollar Baby","The Aviator","Finding Neverland","Ray","Sideways"],
+2005:["Crash","Brokeback Mountain","Capote","Good Night, and Good Luck","Munich"],
+2006:["The Departed","Babel","Letters from Iwo Jima","Little Miss Sunshine","The Queen"],
+2007:["No Country for Old Men","Atonement","Juno","Michael Clayton","There Will Be Blood"],
+2008:["Slumdog Millionaire","The Curious Case of Benjamin Button","Frost/Nixon","Milk","The Reader"],
+2009:["The Hurt Locker","Avatar","The Blind Side","District 9","An Education","Inglourious Basterds","Precious","A Serious Man","Up","Up in the Air"],
+2010:["The King's Speech","127 Hours","Black Swan","The Fighter","Inception","The Kids Are All Right","The Social Network","Toy Story 3","True Grit","Winter's Bone"],
+2011:["The Artist","The Descendants","Extremely Loud & Incredibly Close","The Help","Hugo","Midnight in Paris","Moneyball","The Tree of Life","War Horse"],
+2012:["Argo","Amour","Beasts of the Southern Wild","Django Unchained","Les Misérables","Life of Pi","Lincoln","Silver Linings Playbook","Zero Dark Thirty"],
+2013:["12 Years a Slave","American Hustle","Captain Phillips","Dallas Buyers Club","Gravity","Her","Nebraska","Philomena","The Wolf of Wall Street"],
+2014:["Birdman","American Sniper","Boyhood","The Grand Budapest Hotel","The Imitation Game","Selma","The Theory of Everything","Whiplash"],
+2015:["Spotlight","The Big Short","Bridge of Spies","Brooklyn","Mad Max: Fury Road","The Martian","The Revenant","Room"],
+2016:["Moonlight","Arrival","Fences","Hacksaw Ridge","Hell or High Water","Hidden Figures","La La Land","Lion","Manchester by the Sea"],
+2017:["The Shape of Water","Call Me by Your Name","Darkest Hour","Dunkirk","Get Out","Lady Bird","Phantom Thread","The Post","Three Billboards Outside Ebbing, Missouri"],
+2018:["Green Book","Black Panther","BlacKkKlansman","Bohemian Rhapsody","The Favourite","Roma","A Star Is Born","Vice"],
+2019:["Parasite","Ford v Ferrari","The Irishman","Jojo Rabbit","Joker","Little Women","Marriage Story","1917","Once Upon a Time in Hollywood"],
+2020:["Nomadland","The Father","Judas and the Black Messiah","Mank","Minari","Promising Young Woman","Sound of Metal","The Trial of the Chicago 7"],
+2021:["CODA","Belfast","Don't Look Up","Drive My Car","Dune","King Richard","Licorice Pizza","Nightmare Alley","The Power of the Dog","West Side Story"],
+2022:["Everything Everywhere All at Once","All Quiet on the Western Front","Avatar: The Way of Water","The Banshees of Inisherin","Elvis","The Fabelmans","Tár","Top Gun: Maverick","Triangle of Sadness","Women Talking"],
+2023:["Oppenheimer","American Fiction","Anatomy of a Fall","Barbie","The Holdovers","Killers of the Flower Moon","Maestro","Past Lives","Poor Things","The Zone of Interest"],
+2024:["Anora","The Brutalist","A Complete Unknown","Conclave","Dune: Part Two","Emilia Pérez","I'm Still Here","Nickel Boys","The Substance","Wicked"]
+};
+const OYEARS=Object.keys(BP).map(Number).sort((a,b)=>a-b);
+let accessToken=null,LIB=blankLib(),DISCOVER=[],currentPair=null,REV=[false,false],saveTimer,hintEl,DETAIL=null,ACTOR_BACK=null,NS_MOVIE=null,savedScroll=0,DISC_MODE='foryou';
+let WL={sort:'added',genre:'all',view:'grid',hideUnreleased:false},CAN={order:'recent',view:'grid'};
 function blankLib(){return {version:1,updated:null,movies:[],seen:[],hidden:[],log:[]};}
+const todayStr=()=>new Date().toISOString().slice(0,10);
+function isReleased(m){if(m.rel)return m.rel<=todayStr();if(m.year){const y=+m.year,cy=new Date().getFullYear();if(y<cy)return true;if(y>cy)return false;return true;}return true;}
 
 /* AUTH */
 function b64u(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
@@ -267,133 +393,147 @@ async function refreshToken(){const rt=localStorage.getItem('rd_ref');if(!rt)ret
 function signOut(){['rd_tok','rd_ref','rd_pkv','rd_pks'].forEach(k=>localStorage.removeItem(k));location.reload();}
 function showAuth(){document.getElementById("app").classList.add("hidden");document.getElementById("auth").classList.remove("hidden");}
 function showApp(){document.getElementById("auth").classList.add("hidden");document.getElementById("app").classList.remove("hidden");}
-
-/* GRAPH + TMDB */
 async function gF(url,opts={}){const tok=accessToken||localStorage.getItem('rd_tok');if(!tok){showAuth();return null;}accessToken=tok;const res=await fetch('https://graph.microsoft.com/v1.0'+url,{...opts,headers:{Authorization:'Bearer '+accessToken,...(opts.headers||{})}});if(res.status===401){if(await refreshToken())return gF(url,opts);signOut();return null;}return res;}
 async function tmdb(path,params={}){try{const u=new URL(CONFIG.WORKER);u.searchParams.set('path',path);for(const k in params)if(params[k]!=null)u.searchParams.set(k,params[k]);const r=await fetch(u.toString());if(!r.ok)return null;return await r.json();}catch(e){return null;}}
 
 /* LIBRARY */
 async function loadLibrary(){const r=await gF(LIB_PATH+':/content');if(r&&r.ok){try{LIB=await r.json();}catch(e){LIB=blankLib();}}else if(r&&r.status===404){LIB=blankLib();await saveLibrary();}normalize();}
-function normalize(){LIB.movies=LIB.movies||[];LIB.seen=LIB.seen||[];LIB.hidden=LIB.hidden||[];LIB.log=LIB.log||[];LIB.movies.forEach(m=>{if(m.elo==null)m.elo=1500;if(m.apps==null)m.apps=0;if(m.w==null)m.w=0;if(m.l==null)m.l=0;if(!m.status)m.status='watched';if(m.watchedDate===undefined)m.watchedDate=null;});}
+function normalize(){LIB.movies=LIB.movies||[];LIB.seen=LIB.seen||[];LIB.hidden=LIB.hidden||[];LIB.log=LIB.log||[];LIB.movies.forEach(m=>{if(m.elo==null)m.elo=1500;if(m.apps==null)m.apps=0;if(m.w==null)m.w=0;if(m.l==null)m.l=0;if(!m.status)m.status='watched';if(m.watchedDate===undefined)m.watchedDate=null;if(m.rel===undefined)m.rel=null;});}
 async function saveLibrary(){LIB.updated=new Date().toISOString();await gF(LIB_PATH+':/content',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(LIB,null,2)});}
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveLibrary,600);}
 function inLib(id){return LIB.movies.find(m=>m.tmdbId===id);}
 function isHidden(id){return LIB.hidden.includes(id);}
 function removeMovie(id){LIB.movies=LIB.movies.filter(m=>m.tmdbId!==id);queueSave();}
-function addMovie(src,status,watchedDate){
-  let m=inLib(src.tmdbId);
-  if(m){m.status=status;if(status==='watched'&&watchedDate!==undefined)m.watchedDate=watchedDate;}
-  else{m={tmdbId:src.tmdbId,title:src.title,year:src.year,poster:src.poster,genres:src.genres||[],status,elo:1500,apps:0,w:0,l:0,addedDate:new Date().toISOString(),watchedDate:status==='watched'?(watchedDate!==undefined?watchedDate:null):null};LIB.movies.push(m);}
-  queueSave();return m;
-}
+function addMovie(src,status,watchedDate){let m=inLib(src.tmdbId);if(m){m.status=status;if(src.rel&&!m.rel)m.rel=src.rel;if(status==='watched'&&watchedDate!==undefined)m.watchedDate=watchedDate;}else{m={tmdbId:src.tmdbId,title:src.title,year:src.year,poster:src.poster,genres:src.genres||[],rel:src.rel||null,status,elo:1500,apps:0,w:0,l:0,addedDate:new Date().toISOString(),watchedDate:status==='watched'?(watchedDate!==undefined?watchedDate:null):null};LIB.movies.push(m);}queueSave();return m;}
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function fmtWatched(iso){if(!iso)return 'seen before';const d=new Date(iso);return `${MONL[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;}
 const watchlistMovies=()=>LIB.movies.filter(m=>m.status==='watchlist'&&!isHidden(m.tmdbId));
 const watchedMovies=()=>LIB.movies.filter(m=>m.status==='watched'&&!isHidden(m.tmdbId));
 
-/* RANKING */
-function watchedPool(){return watchedMovies();}
+/* RANKING (released only, curtain reveal) */
+function watchedPool(){return watchedMovies().filter(isReleased);}
 const pk=(a,b)=>[a,b].sort((x,y)=>x-y).join('|');
 const seenPair=(a,b)=>LIB.seen.includes(pk(a,b));
 function partners(m,pool){return pool.filter(o=>o.tmdbId!==m.tmdbId&&!seenPair(m.tmdbId,o.tmdbId));}
 function K(m){return m.apps<10?40:24;}
 function wrap(m){return Object.assign({seen:true},m);}
 function nextRankingPair(){const pool=watchedPool();const cands=pool.filter(m=>partners(m,pool).length>0);if(!cands.length)return null;const minA=Math.min(...cands.map(c=>c.apps));const fp=cands.filter(c=>c.apps===minA);const focus=fp[Math.random()*fp.length|0];let ps=partners(focus,pool);const minP=Math.min(...ps.map(p=>p.apps));ps=ps.filter(p=>p.apps<=minP+1).sort((a,b)=>Math.abs(a.elo-focus.elo)-Math.abs(b.elo-focus.elo));return [wrap(focus),wrap(ps[0])];}
-function discPool(){return DISCOVER.filter(d=>!inLib(d.tmdbId)&&!isHidden(d.tmdbId));}
+function discPool(){return DISCOVER.filter(d=>!inLib(d.tmdbId)&&!isHidden(d.tmdbId)&&isReleased(d));}
 function discoveryPair(){const wp=watchedPool(),dp=discPool();if(!wp.length||!dp.length)return null;return [wrap(wp[Math.random()*wp.length|0]),{...dp[Math.random()*dp.length|0],seen:false}];}
-function getPair(){const canD=discPool().length>0&&watchedPool().length>0;if(canD&&Math.random()<0.28){const d=discoveryPair();if(d)return d;}return nextRankingPair()||discoveryPair();}
-function resolve(w,l){const W=inLib(w),L=inLib(l);if(!W||!L)return;const ew=1/(1+Math.pow(10,(L.elo-W.elo)/400));W.elo+=K(W)*(1-ew);L.elo+=K(L)*(0-(1-ew));W.apps++;L.apps++;W.w++;L.l++;LIB.seen.push(pk(w,l));LIB.log.unshift({date:new Date().toISOString().slice(0,10),win:W.title,lose:L.title});queueSave();}
+function getPair(){const canD=discPool().length>0&&watchedPool().length>0;if(canD&&Math.random()<0.25){const d=discoveryPair();if(d)return d;}return nextRankingPair()||discoveryPair();}
+function resolve(w,l){const W=inLib(w),L=inLib(l);if(!W||!L)return;const ew=1/(1+Math.pow(10,(L.elo-W.elo)/400));W.elo+=K(W)*(1-ew);L.elo+=K(L)*(0-(1-ew));W.apps++;L.apps++;W.w++;L.l++;LIB.seen.push(pk(w,l));LIB.log.unshift({date:todayStr(),win:W.title,lose:L.title});queueSave();}
+function setPair(p){currentPair=p;REV=[false,false];}
 function renderDuel(){
   const zone=document.getElementById('duelzone');const wp=watchedPool();
   if(wp.length<2&&!discPool().length){zone.innerHTML=`<div class="done">Add a few movies you've <b>watched</b> and they'll face off here.</div>`;document.querySelector('.skipbtn').style.display='none';setHint('');updateProgress();renderLeaderboard();return;}
-  if(!currentPair)currentPair=getPair();
+  if(!currentPair)setPair(getPair());
   if(!currentPair){zone.innerHTML=`<div class="done"><b style="color:var(--gold);font-family:Archivo;font-size:16px">Round-robin complete!</b><br>Every watched pair has met.</div>`;document.querySelector('.skipbtn').style.display='none';setHint('');updateProgress();renderLeaderboard();return;}
   document.querySelector('.skipbtn').style.display='';
   const [a,b]=currentPair;
   zone.innerHTML=`<div class="duel"><div class="rside">${card(a,'a')}</div><div class="vstok">VS</div><div class="rside">${card(b,'b')}</div></div>`;
-  const both=a.seen&&b.seen;setHint(both?"Tap the poster you like better.":"One's new — ✓ Seen it to rank, or ↷ Skip / ＋ List / ⊘ Hide.",!both);
+  const bothRev=REV[0]&&REV[1],bothSeen=a.seen&&b.seen;
+  if(!bothRev)setHint("Tap a curtain to reveal each movie.");
+  else if(bothSeen)setHint("Tap the poster you like better.");
+  else setHint("New to you — ＋ Watchlist, ↷ Skip, or ⊘ Hide to swap it out.",true);
   document.getElementById('matchno').textContent=(LIB.seen.length+1);updateProgress();renderLeaderboard();
 }
 function card(m,side){
-  const both=currentPair[0].seen&&currentPair[1].seen;const bg=m.poster?`background-image:url('${POSTER(m.poster,'w342')}')`:'';
-  const newtag=m.seen?'':'<span class="newtag">New</span>';
-  const cap=m.seen?`<b>${esc(m.title)}</b><small>${m.year||''} · Elo ${Math.round(m.elo||1500)}</small>`:`<b>${esc(m.title)}</b><small>${m.year||''} · not seen</small>`;
-  const actions=m.seen?`<div class="qa1"><button onclick="event.stopPropagation();act('${side}','hide')">⊘ Hide</button></div>`
-    :`<div class="qa2"><button onclick="event.stopPropagation();act('${side}','watch')">✓ Seen</button><button onclick="event.stopPropagation();act('${side}','add')">＋ List</button><button class="skip" onclick="event.stopPropagation();skipCard('${side}')">↷ Skip</button><button class="hide" onclick="event.stopPropagation();act('${side}','hide')">⊘ Hide</button></div>`;
-  return `<div class="bd ${both?'pick':''}" style="${bg}" ${both?`onclick="pick('${side}')"`:''}>${newtag}<div class="crown">Crown ♛</div></div><div class="rcap">${cap}</div>${actions}`;
+  const idx=side==='a'?0:1,revealed=REV[idx];
+  const bothRev=REV[0]&&REV[1],pickable=revealed&&bothRev&&currentPair[0].seen&&currentPair[1].seen&&m.seen;
+  const bg=m.poster?`background-image:url('${POSTER(m.poster,'w342')}')`:'';
+  const curtain=revealed?'':`<div class="curtain" onclick="reveal('${side}')"><span class="ctxt">Tap to reveal</span></div>`;
+  const cap=revealed?`<div class="rcap"><b>${esc(m.title)}</b><small>${m.year||''}${m.seen?` · Elo ${Math.round(m.elo||1500)}`:' · not seen'}</small></div>`:`<div class="rcap"><b>&nbsp;</b><small>&nbsp;</small></div>`;
+  const opts=revealed?`<div class="qa2"><button class="skip" onclick="event.stopPropagation();skipCard('${side}')">↷ Skip</button>${m.seen?'':`<button onclick="event.stopPropagation();rankAdd('${side}')">＋ List</button>`}<button class="hide" onclick="event.stopPropagation();rankHide('${side}')">⊘ Hide</button></div>`:'';
+  return `<div class="bd ${pickable?'pick':''} ${revealed?'revealed':''}" style="${bg}" ${pickable?`onclick="pick('${side}')"`:''}>${curtain}${pickable?'<div class="crown">Crown ♛</div>':''}</div>${cap}${opts}`;
 }
-function pick(side){const [a,b]=currentPair;if(!(a.seen&&b.seen)){setHint("Mark the new one ✓ Seen first, or ↷ Skip it.",true);return;}const win=side==='a'?a:b,lose=side==='a'?b:a;const gain=Math.round(K(inLib(win.tmdbId))*(1-1/(1+Math.pow(10,(lose.elo-win.elo)/400))));resolve(win.tmdbId,lose.tmdbId);toast(`${win.title} wins · +${gain} Elo`);currentPair=null;renderDuel();}
-function act(side,what){const it=currentPair[side==='a'?0:1];
-  if(what==='watch'){addMovie(it,'watched',null);it.seen=true;pruneOwnedFromForYou();toast(`Marked “${it.title}” watched`);renderDuel();return;}
-  if(what==='add'){addMovie(it,'watchlist');pruneOwnedFromForYou();toast(`Added “${it.title}” to Watchlist`);swap(side,it.tmdbId);return;}
-  if(what==='hide'){if(!isHidden(it.tmdbId))LIB.hidden.push(it.tmdbId);queueSave();pruneOwnedFromForYou();toast("Hidden");swap(side,it.tmdbId);return;}}
+function reveal(side){REV[side==='a'?0:1]=true;renderDuel();}
+function pick(side){const [a,b]=currentPair;if(!(a.seen&&b.seen&&REV[0]&&REV[1]))return;const win=side==='a'?a:b,lose=side==='a'?b:a;const gain=Math.round(K(inLib(win.tmdbId))*(1-1/(1+Math.pow(10,(lose.elo-win.elo)/400))));resolve(win.tmdbId,lose.tmdbId);toast(`${win.title} wins · +${gain} Elo`);setPair(null);renderDuel();}
+function rankAdd(side){const it=currentPair[side==='a'?0:1];addMovie(it,'watchlist');pruneOwnedFromForYou();toast(`Added “${it.title}” to Watchlist`);swap(side,it.tmdbId);}
+function rankHide(side){const it=currentPair[side==='a'?0:1];if(!isHidden(it.tmdbId))LIB.hidden.push(it.tmdbId);queueSave();pruneOwnedFromForYou();toast("Hidden");swap(side,it.tmdbId);}
 function skipCard(side){const it=currentPair[side==='a'?0:1];toast(`Skipped “${it.title}”`);swap(side,it.tmdbId);}
-function swap(side,ex){const keep=currentPair[side==='a'?1:0];let repl=null;const dp=discPool().filter(x=>x.tmdbId!==keep.tmdbId&&x.tmdbId!==ex);if(Math.random()<0.5&&dp.length)repl={...dp[Math.random()*dp.length|0],seen:false};if(!repl){const pool=watchedPool().filter(x=>x.tmdbId!==keep.tmdbId&&x.tmdbId!==ex&&(keep.seen?!seenPair(keep.tmdbId,x.tmdbId):true));if(pool.length)repl=wrap(pool[Math.random()*pool.length|0]);}if(!repl&&dp.length)repl={...dp[0],seen:false};if(!repl){currentPair=null;renderDuel();return;}currentPair=side==='a'?[repl,keep]:[keep,repl];renderDuel();}
-function skipPair(){currentPair=null;renderDuel();toast("Skipped — pair kept for later");}
+function swap(side,ex){const keep=currentPair[side==='a'?1:0];let repl=null;const dp=discPool().filter(x=>x.tmdbId!==keep.tmdbId&&x.tmdbId!==ex);if(Math.random()<0.5&&dp.length)repl={...dp[Math.random()*dp.length|0],seen:false};if(!repl){const pool=watchedPool().filter(x=>x.tmdbId!==keep.tmdbId&&x.tmdbId!==ex&&(keep.seen?!seenPair(keep.tmdbId,x.tmdbId):true));if(pool.length)repl=wrap(pool[Math.random()*pool.length|0]);}if(!repl&&dp.length)repl={...dp[0],seen:false};if(!repl){setPair(null);renderDuel();return;}const keepRev=REV[side==='a'?1:0];currentPair=side==='a'?[repl,keep]:[keep,repl];REV=side==='a'?[false,keepRev]:[keepRev,false];renderDuel();}
+function skipPair(){setPair(null);renderDuel();}
 function updateProgress(){const n=watchedPool().length;const total=n*(n-1)/2;const done=LIB.seen.length;const pct=total?Math.round(done/total*100):0;document.getElementById('ranked-pct').textContent=pct+'%';document.getElementById('progbar').style.width=pct+'%';document.getElementById('lb-sub').textContent=`${done} of ${total} pairs · ${n} films`;}
 function renderLeaderboard(){const ranked=watchedPool().filter(m=>m.apps>0).sort((a,b)=>b.elo-a.elo).slice(0,6);const rows=document.getElementById('lb-rows');if(!ranked.length){rows.innerHTML=`<div style="color:var(--faint);font-size:12px;padding:6px 0">Rank a few pairs and your top films appear here.</div>`;return;}rows.innerHTML=ranked.map((m,i)=>`<div class="lrow"><div class="p ${i>2?'o':''}">${i+1}</div><div class="t">${esc(m.title)}<small>${m.year||''}</small></div><div class="e">${Math.round(m.elo)}<small>${m.w}-${m.l}</small></div></div>`).join('');}
 
-/* POSTER + VIEWS */
-function posterEl(m,opts={}){const bg=m.poster?`background-image:url('${POSTER(m.poster)}')`:'';const rank=opts.rank?`<span class="rank">#${opts.rank}</span>`:'';const wb=opts.wb?`<span class="wb">${opts.wb}</span>`:'';return `<div class="poster" data-id="${m.tmdbId}" style="${bg}" onclick="openDetail(${m.tmdbId})">${rank}${wb}<div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;}
-function pruneOwnedFromForYou(){const grid=document.getElementById('fy-grid');if(!grid)return;[...grid.children].forEach(el=>{const id=+el.getAttribute('data-id');if(id&&(inLib(id)||isHidden(id)))el.remove();});}
+/* POSTER + LIST + VIEWS */
+function posterEl(m,opts={}){const bg=m.poster?`background-image:url('${POSTER(m.poster)}')`:'';const rank=opts.rank?`<span class="rank">#${opts.rank}</span>`:'';const badge=opts.winner?`<span class="upb">WINNER</span>`:(opts.upcoming?`<span class="upb">UPCOMING</span>`:(opts.wb?`<span class="wb">${opts.wb}</span>`:''));const cls=opts.upcoming?'up':(opts.winner?'win':'');return `<div class="poster ${cls}" data-id="${m.tmdbId}" style="${bg}" onclick="openDetail(${m.tmdbId})">${rank}${badge}<div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;}
+function listRow(m,opts={}){const bg=m.poster?`background-image:url('${POSTER(m.poster,'w92')}')`:'';const g=(m.genres||[]).slice(0,2).join(' · ');const up=opts.upcoming?`<span class="up">Upcoming</span>`:'';const sub=opts.sub?` · ${opts.sub}`:'';return `<div class="listrow" data-id="${m.tmdbId}" onclick="openDetail(${m.tmdbId})"><div class="lp" style="${bg}"></div><div class="li"><b>${esc(m.title)}${up}</b><small>${[m.year,g].filter(Boolean).join(' · ')}${sub}</small></div><svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></div>`;}
+function pruneOwnedFromForYou(){const grid=document.getElementById('fy-grid');if(!grid||DISC_MODE!=='foryou')return;[...grid.children].forEach(el=>{const id=+el.getAttribute('data-id');if(id&&(inLib(id)||isHidden(id)))el.remove();});}
 
 function renderWatch(){
-  const wl=watchlistMovies();const hero=document.getElementById('hero');
-  const bgm=wl.length?wl[Math.random()*wl.length|0]:null;
+  const wl=watchlistMovies();const hero=document.getElementById('hero');const bgm=wl.length?wl[Math.random()*wl.length|0]:null;
   hero.style.backgroundImage=bgm&&bgm.poster?`url('${POSTER(bgm.poster,"w780")}')`:'';
   hero.innerHTML=`<div class="z"><div class="tag">Can't decide?</div><h1>Let me pick tonight's movie</h1><div class="btns"><button onclick="openNowShowing()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Now Showing</button></div></div>`;
-  // genre select
-  const genres=[...new Set(wl.flatMap(m=>m.genres||[]))].sort();
-  const gsel=document.getElementById('wl-genre');
+  const genres=[...new Set(wl.flatMap(m=>m.genres||[]))].sort();const gsel=document.getElementById('wl-genre');
   gsel.innerHTML=`<option value="all">All</option>`+genres.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join('');
   if([...gsel.options].some(o=>o.value===WL.genre))gsel.value=WL.genre;else WL.genre='all';
-  document.getElementById('wl-sort').value=WL.sort;
+  document.getElementById('wl-sort').value=WL.sort;document.getElementById('wl-hideup').checked=WL.hideUnreleased;document.getElementById('wl-view').textContent=WL.view==='grid'?'List view':'Gallery view';
   let list=wl.slice();
   if(WL.genre!=='all')list=list.filter(m=>(m.genres||[]).includes(WL.genre));
+  if(WL.hideUnreleased)list=list.filter(isReleased);
   if(WL.sort==='title')list.sort((a,b)=>(a.title||'').localeCompare(b.title||''));
   else if(WL.sort==='release')list.sort((a,b)=>(b.year||'').localeCompare(a.year||''));
   else list.sort((a,b)=>(b.addedDate||'').localeCompare(a.addedDate||''));
   document.getElementById('wl-count').textContent=`${wl.length} to watch`;
-  document.getElementById('wl-grid').innerHTML=list.length?list.map(m=>posterEl(m)).join(''):`<div class="empty">Nothing on your watchlist yet — add movies from Discover or 🔍.</div>`;
+  const body=document.getElementById('wl-body');
+  if(!list.length){body.innerHTML=`<div class="empty">Nothing on your watchlist yet — add movies from Discover or 🔍.</div>`;return;}
+  if(WL.view==='list')body.innerHTML=`<div class="listwrap">`+list.map(m=>listRow(m,{upcoming:!isReleased(m)})).join('')+`</div>`;
+  else body.innerHTML=`<div class="grid">`+list.map(m=>posterEl(m,{upcoming:!isReleased(m)})).join('')+`</div>`;
 }
 function renderCan(){
   const list=watchedMovies().slice();const val=d=>d?Date.parse(d):-8640000000000;
   list.sort((a,b)=>CAN.order==='recent'?val(b.watchedDate)-val(a.watchedDate):val(a.watchedDate)-val(b.watchedDate));
   document.getElementById('can-count').textContent=`${list.length} watched`;
   document.getElementById('can-order').textContent=(CAN.order==='recent'?'Recently watched':'Oldest first')+' ⇅';
-  document.getElementById('can-grid').innerHTML=list.length?list.map(m=>posterEl(m,{wb:m.watchedDate?fmtWatched(m.watchedDate).split(',')[0]:'seen before'})).join(''):`<div class="empty">No watched movies yet. Mark films watched and they'll land here.</div>`;
+  document.getElementById('can-view').textContent=CAN.view==='grid'?'List view':'Gallery view';
+  const body=document.getElementById('can-body');
+  if(!list.length){body.innerHTML=`<div class="empty">No watched movies yet. Mark films watched and they'll land here.</div>`;return;}
+  if(CAN.view==='list')body.innerHTML=`<div class="listwrap">`+list.map(m=>listRow(m,{sub:m.watchedDate?fmtWatched(m.watchedDate):'seen before'})).join('')+`</div>`;
+  else body.innerHTML=`<div class="grid">`+list.map(m=>posterEl(m,{wb:m.watchedDate?fmtWatched(m.watchedDate).split(',')[0]:'seen before'})).join('')+`</div>`;
 }
 
-/* Coming Soon — infinite, release-date order */
-let SN={page:0,loading:false,done:false,seen:new Set(),items:[],init:false};
-async function soonReset(){SN={page:0,loading:false,done:false,seen:new Set(),items:[],init:true};document.getElementById('soon-grid').innerHTML='';document.getElementById('soon-load').textContent='';await soonMore();await soonMore();}
-async function soonMore(){
-  if(SN.loading||SN.done)return;SN.loading=true;document.getElementById('soon-load').textContent='Loading…';SN.page++;
-  const today=new Date().toISOString().slice(0,10);
-  // pull the anticipated (popular) upcoming films...
-  const r=await tmdb('/discover/movie',{sort_by:'popularity.desc',with_release_type:'2|3','primary_release_date.gte':today,region:'US',page:SN.page});
-  const results=(r&&r.results)||[];
-  if(!r||SN.page>=(r.total_pages||1))SN.done=true;
-  results.forEach(x=>{if(x&&x.poster_path&&x.release_date&&x.release_date>=today&&!SN.seen.has(x.id)){SN.seen.add(x.id);SN.items.push(x);}});
-  // ...but always display them in release-date order
-  SN.items.sort((a,b)=>(a.release_date||'').localeCompare(b.release_date||''));
-  document.getElementById('soon-grid').innerHTML=SN.items.map(soonTile).join('');
-  SN.loading=false;document.getElementById('soon-load').textContent=SN.done?'That’s everything scheduled.':'';
-  if(!SN.items.length&&SN.done)document.getElementById('soon-grid').innerHTML=`<div class="empty">No upcoming titles found.</div>`;
+/* COMING SOON — one curated finite load (no scroll glitch) */
+let SN={init:false};
+async function soonLoad(){
+  SN.init=true;const grid=document.getElementById('soon-grid'),load=document.getElementById('soon-load');
+  grid.innerHTML=`<div class="fyload">Loading upcoming…</div>`;load.textContent='';
+  const today=todayStr();const seen={};let items=[];
+  for(let p=1;p<=8;p++){const r=await tmdb('/discover/movie',{sort_by:'popularity.desc',with_release_type:'2|3','primary_release_date.gte':today,region:'US',with_original_language:'en',page:p});const res=(r&&r.results)||[];res.forEach(x=>{if(x&&x.poster_path&&x.release_date&&x.release_date>=today&&(x.popularity||0)>=10&&!seen[x.id]){seen[x.id]=1;items.push(x);}});if(!r||p>=(r.total_pages||1)||items.length>=150)break;}
+  items.sort((a,b)=>(a.release_date||'').localeCompare(b.release_date||''));
+  grid.innerHTML=items.length?items.map(soonTile).join(''):`<div class="empty">No upcoming titles found.</div>`;
+  document.getElementById('soon-see').textContent=items.length?`${items.length} titles · by date`:'';
+  load.textContent=items.length?'':'';
 }
 function soonTile(x){const d=new Date(x.release_date);const g=(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean).slice(0,2).join(' · ');return `<div class="soontile" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path,'w342')}')"><span class="dbadge">${MON[d.getMonth()]} ${d.getDate()}</span></div><div class="st">${esc(x.title)}<span class="sg">${g||'Upcoming'}</span></div></div>`;}
 
-/* Discover — infinite gallery */
+/* DISCOVER — For You (infinite) + Oscar Winners */
 let FY={discPage:0,recPool:null,loading:false,done:false,seen:new Set(),init:false};
+function setDisc(mode){DISC_MODE=mode;document.getElementById('seg-fy').classList.toggle('on',mode==='foryou');document.getElementById('seg-os').classList.toggle('on',mode==='oscar');const grid=document.getElementById('fy-grid');grid.classList.toggle('oscarmode',mode==='oscar');grid.innerHTML='';document.getElementById('fy-load').textContent='';document.getElementById('disc-see').textContent=mode==='oscar'?'Best Picture winners + nominees':'from your taste';if(mode==='foryou'){FY.init=false;fyReset();}else{OS.init=false;oscarReset();}}
 async function fyReset(){FY={discPage:0,recPool:null,loading:false,done:false,seen:new Set(),init:true};document.getElementById('fy-grid').innerHTML='';document.getElementById('fy-load').textContent='';await fyMore();await fyMore();}
-async function fyMore(){if(FY.loading||FY.done)return;FY.loading=true;document.getElementById('fy-load').textContent='Loading…';const owned=new Set(LIB.movies.map(m=>m.tmdbId).concat(LIB.hidden));if(FY.recPool===null){FY.recPool=[];const seeds=watchedPool().slice().sort((a,b)=>b.elo-a.elo).slice(0,6).map(m=>m.tmdbId);for(const id of seeds){const r=await tmdb('/movie/'+id+'/recommendations');if(r&&r.results)FY.recPool=FY.recPool.concat(r.results);}}let batch=[];while(FY.recPool.length&&batch.length<10)batch.push(FY.recPool.shift());if(batch.length<14){FY.discPage++;const g=tasteGenres().join(',');const r=await tmdb('/discover/movie',{with_genres:g||undefined,sort_by:'popularity.desc','vote_count.gte':150,page:FY.discPage});if(r&&r.results)batch=batch.concat(r.results);if(r&&FY.discPage>=(r.total_pages||500))FY.done=true;}const add=[];batch.forEach(x=>{if(x&&x.poster_path&&!owned.has(x.id)&&!FY.seen.has(x.id)){FY.seen.add(x.id);const m=normDisc(x);add.push(m);if(!DISCOVER.find(d=>d.tmdbId===m.tmdbId))DISCOVER.push(m);}});document.getElementById('fy-grid').insertAdjacentHTML('beforeend',add.map(m=>posterEl(m)).join(''));FY.loading=false;document.getElementById('fy-load').textContent=FY.done?'That’s everything in your lane.':'';if(!document.getElementById('fy-grid').children.length&&FY.done)document.getElementById('fy-grid').innerHTML=`<div class="empty">Add a few watched movies and recs will appear.</div>`;}
-function normDisc(x){return {tmdbId:x.id,title:x.title,year:(x.release_date||'').slice(0,4),poster:x.poster_path,genres:(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean)};}
+async function fyMore(){if(FY.loading||FY.done)return;FY.loading=true;document.getElementById('fy-load').textContent='Loading…';const owned=new Set(LIB.movies.map(m=>m.tmdbId).concat(LIB.hidden));if(FY.recPool===null){FY.recPool=[];const seeds=watchedPool().slice().sort((a,b)=>b.elo-a.elo).slice(0,6).map(m=>m.tmdbId);for(const id of seeds){const r=await tmdb('/movie/'+id+'/recommendations');if(r&&r.results)FY.recPool=FY.recPool.concat(r.results);}}let batch=[];while(FY.recPool.length&&batch.length<10)batch.push(FY.recPool.shift());if(batch.length<14){FY.discPage++;const g=tasteGenres().join(',');const r=await tmdb('/discover/movie',{with_genres:g||undefined,sort_by:'popularity.desc','vote_count.gte':150,page:FY.discPage});if(r&&r.results)batch=batch.concat(r.results);if(r&&FY.discPage>=(r.total_pages||500))FY.done=true;}const add=[];batch.forEach(x=>{if(x&&x.poster_path&&!owned.has(x.id)&&!FY.seen.has(x.id)){FY.seen.add(x.id);const m=normDisc(x);add.push(m);if(!DISCOVER.find(d=>d.tmdbId===m.tmdbId))DISCOVER.push(m);}});if(DISC_MODE==='foryou')document.getElementById('fy-grid').insertAdjacentHTML('beforeend',add.map(m=>posterEl(m)).join(''));FY.loading=false;document.getElementById('fy-load').textContent=(DISC_MODE==='foryou'&&FY.done)?'That’s everything in your lane.':'';if(DISC_MODE==='foryou'&&!document.getElementById('fy-grid').children.length&&FY.done)document.getElementById('fy-grid').innerHTML=`<div class="empty">Add a few watched movies and recs will appear.</div>`;}
+let OS={yi:0,loading:false,init:false};
+async function oscarReset(){OS={yi:0,loading:false,init:true};document.getElementById('fy-grid').innerHTML='';document.getElementById('fy-load').textContent='';await oscarMore();await oscarMore();}
+async function oscarResolve(title,yr){let r=await tmdb('/search/movie',{query:title,primary_release_year:yr,include_adult:'false'});let hit=(r&&r.results&&r.results[0])||null;if(!hit){const r2=await tmdb('/search/movie',{query:title,include_adult:'false'});hit=(r2&&r2.results&&r2.results[0])||null;}return hit;}
+async function oscarMore(){
+  if(OS.loading||OS.yi>=OYEARS.length)return;OS.loading=true;document.getElementById('fy-load').textContent='Loading…';
+  const batch=OYEARS.slice(OS.yi,OS.yi+2);OS.yi+=2;
+  for(const yr of batch){
+    const films=BP[yr];
+    const resolved=await Promise.all(films.map(async (title,i)=>{const hit=await oscarResolve(title,yr);return {tmdbId:hit?hit.id:null,title:hit?(hit.title||title):title,year:String(yr),poster:hit?hit.poster_path:null,rel:hit?hit.release_date:null,winner:i===0};}));
+    const tiles=resolved.filter(m=>m.tmdbId).map(m=>posterEl(m,{winner:m.winner})).join('');
+    const html=`<div class="oyear"><div class="oyh"><span class="oy">${yr}</span><span class="oyn">${films.length} nominees</span></div><div class="ogrid">${tiles}</div></div>`;
+    if(DISC_MODE==='oscar')document.getElementById('fy-grid').insertAdjacentHTML('beforeend',html);
+  }
+  OS.loading=false;document.getElementById('fy-load').textContent=OS.yi>=OYEARS.length?`All Best Picture nominees · 1927 → now`:'';
+}
+function normDisc(x){return {tmdbId:x.id,title:x.title,year:(x.release_date||'').slice(0,4),poster:x.poster_path,rel:x.release_date||null,genres:(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean)};}
 function tasteGenres(){const c={};watchedPool().forEach(m=>(m.genres||[]).forEach(g=>c[g]=(c[g]||0)+1));const inv={};for(const id in GENRES)inv[GENRES[id]]=id;return Object.keys(c).sort((a,b)=>c[b]-c[a]).slice(0,3).map(n=>inv[n]).filter(Boolean);}
 async function buildDiscover(){const owned=new Set(LIB.movies.map(m=>m.tmdbId).concat(LIB.hidden));let pool=[];const seeds=watchedPool().slice().sort((a,b)=>b.elo-a.elo).slice(0,5).map(m=>m.tmdbId);for(const id of seeds){const r=await tmdb('/movie/'+id+'/recommendations');if(r&&r.results)pool=pool.concat(r.results);}if(pool.length<10){const g=tasteGenres().join(',');const r=await tmdb('/discover/movie',{with_genres:g||undefined,sort_by:'popularity.desc','vote_count.gte':200});if(r&&r.results)pool=pool.concat(r.results);}if(pool.length<10){const r=await tmdb('/movie/popular');if(r&&r.results)pool=pool.concat(r.results);}const uniq={};pool.forEach(x=>{if(x&&x.poster_path&&!owned.has(x.id)&&!uniq[x.id])uniq[x.id]=normDisc(x);});Object.values(uniq).forEach(m=>{if(!DISCOVER.find(d=>d.tmdbId===m.tmdbId))DISCOVER.push(m);});}
 
 /* DETAIL */
-async function openDetail(id){let m=document.getElementById('detailModal');if(!m){m=document.createElement('div');m.id='detailModal';m.className='dmodal';m.addEventListener('click',e=>{if(e.target===m)closeDetail();});document.body.appendChild(m);}m.innerHTML=`<div class="dcard"><button class="close" onclick="closeDetail()">×</button><div class="dloading">Loading…</div></div>`;m.classList.add('show');m.scrollTop=0;const d=await tmdb('/movie/'+id,{append_to_response:'videos,credits,watch/providers,recommendations'});if(!d||!d.id){m.querySelector('.dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="dloading">Couldn't load details.</div>`;return;}if(!(d.recommendations&&d.recommendations.results&&d.recommendations.results.length)){const rc=await tmdb('/movie/'+id+'/recommendations');if(rc&&rc.results)d.recommendations={results:rc.results};}DETAIL=d;renderDetail();}
-function closeDetail(){const m=document.getElementById('detailModal');if(m)m.classList.remove('show');}
+async function openDetail(id){savedScroll=document.getElementById('scroll').scrollTop;let m=document.getElementById('detailModal');if(!m){m=document.createElement('div');m.id='detailModal';m.className='dmodal';m.addEventListener('click',e=>{if(e.target===m)closeDetail();});document.body.appendChild(m);}m.innerHTML=`<div class="dcard"><button class="close" onclick="closeDetail()">×</button><div class="dloading">Loading…</div></div>`;m.classList.add('show');m.scrollTop=0;const d=await tmdb('/movie/'+id,{append_to_response:'videos,credits,watch/providers,recommendations'});if(!d||!d.id){m.querySelector('.dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="dloading">Couldn't load details.</div>`;return;}if(!(d.recommendations&&d.recommendations.results&&d.recommendations.results.length)){const rc=await tmdb('/movie/'+id+'/recommendations');if(rc&&rc.results)d.recommendations={results:rc.results};}DETAIL=d;renderDetail();}
+function closeDetail(){const m=document.getElementById('detailModal');if(m)m.classList.remove('show');const sc=document.getElementById('scroll');if(sc)sc.scrollTop=savedScroll;}
 function trailerKey(d){const v=((d.videos&&d.videos.results)||[]).filter(x=>x.site==='YouTube');const t=v.find(x=>x.type==='Trailer')||v.find(x=>x.type==='Teaser')||v[0];return t?t.key:null;}
 function providersOf(d){const wp=d['watch/providers']&&d['watch/providers'].results&&d['watch/providers'].results.US;if(!wp)return [];const seen={},out=[];[['flatrate','Stream'],['free','Free'],['ads','Free'],['rent','Rent'],['buy','Buy']].forEach(([k,l])=>{(wp[k]||[]).forEach(p=>{if(!seen[p.provider_id]){seen[p.provider_id]=1;out.push({name:p.provider_name,logo:p.logo_path,kind:l});}});});return out.slice(0,5);}
 function castOf(d){return ((d.credits&&d.credits.cast)||[]).slice(0,8);}
@@ -408,71 +548,62 @@ function renderDetail(){
   const provHtml=provs.length?provs.map(p=>`<span class="prov">${p.logo?`<img src="https://image.tmdb.org/t/p/w45${p.logo}" alt="">`:''}${esc(p.name)}<em>${p.kind}</em></span>`).join(''):`<span class="noprov">Not on your streaming services right now.</span>`;
   const castHtml=cast.length?cast.map(c=>{const av=c.profile_path?`background-image:url('https://image.tmdb.org/t/p/w185${c.profile_path}')`:'';const ini=(c.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('');return `<div class="c" onclick="openActor(${c.id})"><div class="av" style="${av}">${c.profile_path?'':esc(ini)}</div><span class="nm">${esc(c.name)}</span><span class="rl">${esc(c.character||'')}</span></div>`;}).join(''):`<span class="noprov">Cast unavailable.</span>`;
   const recHtml=recs.length?recs.map(x=>`<div class="s" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path)}')"></div><small>${esc(x.title)}</small></div>`).join(''):`<div class="noprov">No recommendations yet.</div>`;
-  document.querySelector('#detailModal .dcard').innerHTML=`
-    <button class="close" onclick="closeDetail()">×</button>
-    <div class="dback" style="${back}"><h2 class="dttl">${esc(d.title)}</h2></div>
-    <div class="dbody">
-      <div class="dmeta">${meta}${watchedNote}</div>
-      <div class="dgrid">
-        <button class="${watched?'on':''}" onclick="detailAct(${id},'watch')">${watched?'✓ Watched':'＋ Mark watched'}</button>
-        <button class="${onList?'on2':''}" onclick="detailAct(${id},'add')">${onList?'✓ On Watchlist':'＋ Watchlist'}</button>
-        <button class="rk" onclick="detailRank(${id})">♛ Rank it</button>
-        <button class="hd" onclick="detailAct(${id},'hide')">⊘ ${hidden?'Hidden':'Hide'}</button>
-      </div>
-      ${tk?`<button class="dtrailer" onclick="playTrailer('${tk}')">▶ Watch trailer</button>`:`<div class="dtrailer off">Trailer unavailable</div>`}
-      <div class="dsec"><p class="dlbl">Where to watch</p><div class="dprovs">${provHtml}</div></div>
-      <div class="dsec"><p class="dlbl">Top cast</p><div class="dcast">${castHtml}</div></div>
-      <div class="dsec"><p class="dlbl">Overview</p><p class="dov">${esc(d.overview||'No description available.')}</p></div>
-      <div class="dsec"><p class="dlbl">Because you liked this</p><div class="dsim">${recHtml}</div></div>
-    </div>`;
+  document.querySelector('#detailModal .dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="dback" style="${back}"><h2 class="dttl">${esc(d.title)}</h2></div><div class="dbody"><div class="dmeta">${meta}${watchedNote}</div><div class="dgrid"><button class="${watched?'on':''}" onclick="detailAct(${id},'watch')">${watched?'✓ Watched':'＋ Mark watched'}</button><button class="${onList?'on2':''}" onclick="detailAct(${id},'add')">${onList?'✓ On Watchlist':'＋ Watchlist'}</button><button class="rk" onclick="detailRank(${id})">♛ Rank it</button><button class="hd" onclick="detailAct(${id},'hide')">⊘ ${hidden?'Hidden':'Hide'}</button></div>${tk?`<button class="dtrailer" onclick="playTrailer('${tk}')">▶ Watch trailer</button>`:`<div class="dtrailer off">Trailer unavailable</div>`}<div class="dsec"><p class="dlbl">Where to watch</p><div class="dprovs">${provHtml}</div></div><div class="dsec"><p class="dlbl">Top cast</p><div class="dcast">${castHtml}</div></div><div class="dsec"><p class="dlbl">Overview</p><p class="dov">${esc(d.overview||'No description available.')}</p></div><div class="dsec"><p class="dlbl">Because you liked this</p><div class="dsim">${recHtml}</div></div></div>`;
 }
-function detailAct(id,what){
-  const d=DETAIL;const src=d?{tmdbId:d.id,title:d.title,year:(d.release_date||'').slice(0,4),poster:d.poster_path,genres:(d.genres||[]).map(g=>g.name)}:null;
-  const done=()=>{pruneOwnedFromForYou();renderWatch();renderDetail();};
-  if(what==='watch'){const c=inLib(id);if(c&&c.status==='watched'){removeMovie(id);toast('Removed from Watched');done();}else{askWatched(date=>{addMovie(src,'watched',date);toast(date?'✓ Watched — today':'✓ Marked watched');done();});}return;}
-  if(what==='add'){const c=inLib(id);if(c&&c.status==='watchlist'){removeMovie(id);toast('Removed from Watchlist');}else{addMovie(src,'watchlist');toast('＋ Added to Watchlist');}done();return;}
-  if(what==='hide'){if(inLib(id))removeMovie(id);if(!isHidden(id))LIB.hidden.push(id);queueSave();toast("Hidden");done();return;}
-}
+function detailAct(id,what){const d=DETAIL;const src=d?{tmdbId:d.id,title:d.title,year:(d.release_date||'').slice(0,4),poster:d.poster_path,rel:d.release_date,genres:(d.genres||[]).map(g=>g.name)}:null;const done=()=>{pruneOwnedFromForYou();renderWatch();renderDetail();};if(what==='watch'){const c=inLib(id);if(c&&c.status==='watched'){removeMovie(id);toast('Removed from Watched');done();}else{askWatched(date=>{addMovie(src,'watched',date);toast(date?'✓ Watched — today':'✓ Marked watched');done();});}return;}if(what==='add'){const c=inLib(id);if(c&&c.status==='watchlist'){removeMovie(id);toast('Removed from Watchlist');}else{addMovie(src,'watchlist');toast('＋ Added to Watchlist');}done();return;}if(what==='hide'){if(inLib(id))removeMovie(id);if(!isHidden(id))LIB.hidden.push(id);queueSave();toast("Hidden");done();return;}}
 function detailRank(id){closeDetail();go('rank');}
 
 /* ACTOR */
 function ageFrom(bd,dd){if(!bd)return '';const b=new Date(bd);const end=dd?new Date(dd):new Date();let a=end.getFullYear()-b.getFullYear();const mm=end.getMonth()-b.getMonth();if(mm<0||(mm===0&&end.getDate()<b.getDate()))a--;return a;}
 async function openActor(pid){ACTOR_BACK=DETAIL?DETAIL.id:null;let m=document.getElementById('detailModal');if(!m){m=document.createElement('div');m.id='detailModal';m.className='dmodal';m.addEventListener('click',e=>{if(e.target===m)closeDetail();});document.body.appendChild(m);}m.innerHTML=`<div class="dcard"><button class="close" onclick="closeDetail()">×</button><div class="dloading">Loading…</div></div>`;m.classList.add('show');m.scrollTop=0;const p=await tmdb('/person/'+pid,{append_to_response:'movie_credits'});if(!p||!p.id){m.querySelector('.dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="dloading">Couldn't load this person.</div>`;return;}renderActor(p);}
-function renderActor(p){
-  const photo=p.profile_path?`background-image:url('https://image.tmdb.org/t/p/w185${p.profile_path}')`:'';
-  const age=p.birthday?ageFrom(p.birthday,p.deathday):'';const metaBits=[p.known_for_department,p.birthday?`b. ${p.birthday}${age?` · ${age}${p.deathday?' (deceased)':''}`:''}`:'',p.place_of_birth].filter(Boolean).join(' · ');
-  const bioFull=p.biography||'No biography available.';const bioShort=bioFull.length>320?bioFull.slice(0,320).trim()+'…':bioFull;
-  const films=((p.movie_credits&&p.movie_credits.cast)||[]).filter(x=>x.release_date&&x.poster_path);const uniq={};films.forEach(x=>{if(!uniq[x.id])uniq[x.id]=x;});const list=Object.values(uniq).sort((a,b)=>(b.release_date||'').localeCompare(a.release_date||''));
-  const back=ACTOR_BACK?`<button class="pback" onclick="openDetail(${ACTOR_BACK})">‹ Back to movie</button>`:'';
-  const filmHtml=list.map(x=>`<div class="filmrow" onclick="openDetail(${x.id})"><div class="yr">${(x.release_date||'').slice(0,4)}</div><div class="fp" style="background-image:url('${POSTER(x.poster_path,'w92')}')"></div><div class="fm"><b>${esc(x.title)}</b><small>${esc(x.character||'')}</small></div></div>`).join('');
-  document.querySelector('#detailModal .dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button>${back}<div class="phead"><div class="pphoto" style="${photo}"></div><div class="pinfo"><h2>${esc(p.name)}</h2><div class="pm">${esc(metaBits)}</div></div></div><div class="pbio" id="pbio">${esc(bioShort)}</div><div class="dsec" style="margin-top:14px"><p class="dlbl" style="padding:0 16px">Filmography · ${list.length} films</p><div class="filmo">${filmHtml||'<div class="empty">No films found.</div>'}</div></div>`;
-  if(bioFull.length>320){const el=document.getElementById('pbio');el.innerHTML=`${esc(bioShort)} <span class="more">Read more</span>`;el.querySelector('.more').addEventListener('click',()=>{el.innerHTML=esc(bioFull);});}
+function renderActor(p){const photo=p.profile_path?`background-image:url('https://image.tmdb.org/t/p/w185${p.profile_path}')`:'';const age=p.birthday?ageFrom(p.birthday,p.deathday):'';const metaBits=[p.known_for_department,p.birthday?`b. ${p.birthday}${age?` · ${age}${p.deathday?' (deceased)':''}`:''}`:'',p.place_of_birth].filter(Boolean).join(' · ');const bioFull=p.biography||'No biography available.';const bioShort=bioFull.length>320?bioFull.slice(0,320).trim()+'…':bioFull;const films=((p.movie_credits&&p.movie_credits.cast)||[]).filter(x=>x.release_date&&x.poster_path);const uniq={};films.forEach(x=>{if(!uniq[x.id])uniq[x.id]=x;});const list=Object.values(uniq).sort((a,b)=>(b.release_date||'').localeCompare(a.release_date||''));const back=ACTOR_BACK?`<button class="pback" onclick="openDetail(${ACTOR_BACK})">‹ Back to movie</button>`:'';const filmHtml=list.map(x=>`<div class="filmrow" onclick="openDetail(${x.id})"><div class="yr">${(x.release_date||'').slice(0,4)}</div><div class="fp" style="background-image:url('${POSTER(x.poster_path,'w92')}')"></div><div class="fm"><b>${esc(x.title)}</b><small>${esc(x.character||'')}</small></div></div>`).join('');document.querySelector('#detailModal .dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button>${back}<div class="phead"><div class="pphoto" style="${photo}"></div><div class="pinfo"><h2>${esc(p.name)}</h2><div class="pm">${esc(metaBits)}</div></div></div><div class="pbio" id="pbio">${esc(bioShort)}</div><div class="dsec" style="margin-top:14px"><p class="dlbl" style="padding:0 16px">Filmography · ${list.length} films</p><div class="filmo">${filmHtml||'<div class="empty">No films found.</div>'}</div></div>`;if(bioFull.length>320){const el=document.getElementById('pbio');el.innerHTML=`${esc(bioShort)} <span class="more">Read more</span>`;el.querySelector('.more').addEventListener('click',()=>{el.innerHTML=esc(bioFull);});}}
+
+/* STATS */
+function openStats(){savedScroll=document.getElementById('scroll').scrollTop;let m=document.getElementById('statsModal');if(!m){m=document.createElement('div');m.id='statsModal';m.className='dmodal';m.addEventListener('click',e=>{if(e.target===m)closeStats();});document.body.appendChild(m);}m.classList.add('show');m.scrollTop=0;renderStats();}
+function closeStats(){const m=document.getElementById('statsModal');if(m)m.classList.remove('show');}
+function renderStats(){
+  const watched=watchedMovies(),wl=watchlistMovies();const total=watched.length+wl.length;const pctW=total?Math.round(watched.length/total*100):0;
+  const rankedFilms=watched.filter(m=>m.apps>0).length;const pairs=LIB.seen.length;
+  const gc={};watched.forEach(m=>(m.genres||[]).forEach(g=>gc[g]=(gc[g]||0)+1));const gtop=Object.entries(gc).sort((a,b)=>b[1]-a[1]).slice(0,6);const gmax=gtop.length?gtop[0][1]:1;
+  const topGenre=gtop.length?gtop[0][0]:'—';
+  const dec={};watched.forEach(m=>{const y=+m.year;if(y){const d=Math.floor(y/10)*10;dec[d]=(dec[d]||0)+1;}});const decs=Object.keys(dec).map(Number).sort((a,b)=>a-b);const dmax=decs.length?Math.max(...decs.map(d=>dec[d])):1;
+  const topElo=watched.filter(m=>m.apps>0).sort((a,b)=>b.elo-a.elo)[0];
+  const genreBars=gtop.length?gtop.map(([g,n])=>`<div class="gbar"><span class="gn">${esc(g)}</span><span class="gt"><span class="gf" style="width:${Math.round(n/gmax*100)}%"></span></span><span class="gv">${n}</span></div>`).join(''):`<div class="empty">Mark movies watched to see genres.</div>`;
+  const decBars=decs.length?`<div class="decbars">`+decs.map(d=>`<div class="dc"><div class="dv">${dec[d]}</div><div class="db" style="height:${Math.round(dec[d]/dmax*80)}%"></div><div class="dl">${String(d).slice(2)}s</div></div>`).join('')+`</div>`:`<div class="empty">No decade data yet.</div>`;
+  document.getElementById('statsModal').innerHTML=`<div class="dcard"><button class="close" onclick="closeStats()">×</button><h2 class="stitle">Your Stats</h2><div class="sbody">
+    <div class="kpis">
+      <div class="kpi"><div class="v">${total}</div><div class="l">Movies tracked</div></div>
+      <div class="kpi"><div class="v gr">${watched.length}</div><div class="l">Watched</div></div>
+      <div class="kpi"><div class="v g">${pctW}%</div><div class="l">of library watched</div></div>
+      <div class="kpi"><div class="v">${wl.length}</div><div class="l">On watchlist</div></div>
+      <div class="kpi"><div class="v b">${rankedFilms}</div><div class="l">Films ranked</div></div>
+      <div class="kpi"><div class="v">${pairs}</div><div class="l">Head-to-heads</div></div>
+    </div>
+    <div class="spanel"><h3>Top genres watched</h3>${genreBars}</div>
+    <div class="spanel"><h3>Watched by decade</h3>${decBars}</div>
+    ${topElo?`<div class="spanel"><h3>Your #1 ranked</h3><div style="display:flex;gap:12px;align-items:center"><div style="width:46px;height:69px;border-radius:6px;background-size:cover;background-position:center;background:#1c1c24${topElo.poster?`;background-image:url('${POSTER(topElo.poster,'w92')}')`:''}"></div><div><b style="font-size:15px">${esc(topElo.title)}</b><div style="color:var(--muted);font-size:12px">${topElo.year||''} · Elo ${Math.round(topElo.elo)} · ${topElo.w}-${topElo.l}</div></div></div></div>`:''}
+    <div style="height:24px"></div>
+  </div></div>`;
 }
 
-/* TRAILER PLAYER (in-app) */
+/* TRAILER / NOW SHOWING / CHOOSE / SEARCH */
 function playTrailer(key){if(!key){toast('Trailer unavailable');return;}let m=document.getElementById('trailerModal');if(!m){m=document.createElement('div');m.id='trailerModal';m.className='tmodal';m.addEventListener('click',e=>{if(e.target===m)closeTrailer();});document.body.appendChild(m);}m.innerHTML=`<div class="tframe"><button class="close" onclick="closeTrailer()">×</button><div class="tvideo"><iframe src="https://www.youtube.com/embed/${key}?autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div></div>`;}
 function closeTrailer(){const m=document.getElementById('trailerModal');if(m)m.remove();}
-async function playTrailerFor(id){const d=await tmdb('/movie/'+id,{append_to_response:'videos'});const k=d?trailerKey(d):null;playTrailer(k);}
-
-/* NOW SHOWING */
-function openNowShowing(){let m=document.getElementById('nsModal');if(!m){m=document.createElement('div');m.id='nsModal';m.className='nsmodal';m.addEventListener('click',e=>{if(e.target===m)closeNS();});document.body.appendChild(m);}const wl=watchlistMovies();if(!wl.length){m.innerHTML=`<div class="nscard"><button class="close" onclick="closeNS()">×</button><div class="nskick">Now Showing</div><div class="nssub">Your watchlist is empty. Add a few movies you want to see, then let me pick one for you.</div><button class="nsbig" onclick="closeNS();go('discover')">Find movies</button></div>`;return;}NS_MOVIE=wl[Math.random()*wl.length|0];m.innerHTML=`<div class="nscard"><button class="close" onclick="closeNS()">×</button><div class="nskick">Now Showing</div><div class="nsreel"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4"/><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="18" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/></svg></div><div class="nssub">Tonight's pick is locked in from your watchlist. Ready?</div><button class="nsbig" onclick="nsReveal()">Reveal my movie</button></div>`;}
+async function playTrailerFor(id){const d=await tmdb('/movie/'+id,{append_to_response:'videos'});playTrailer(d?trailerKey(d):null);}
+function openNowShowing(){let m=document.getElementById('nsModal');if(!m){m=document.createElement('div');m.id='nsModal';m.className='nsmodal';m.addEventListener('click',e=>{if(e.target===m)closeNS();});document.body.appendChild(m);}const wl=watchlistMovies().filter(isReleased);if(!wl.length){m.innerHTML=`<div class="nscard"><button class="close" onclick="closeNS()">×</button><div class="nskick">Now Showing</div><div class="nssub">No released movies on your watchlist yet. Add a few that are already out and I'll pick one for you.</div><button class="nsbig" onclick="closeNS();go('discover')">Find movies</button></div>`;return;}NS_MOVIE=wl[Math.random()*wl.length|0];m.innerHTML=`<div class="nscard"><button class="close" onclick="closeNS()">×</button><div class="nskick">Now Showing</div><div class="nsreel"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4"/><circle cx="12" cy="6" r="1.4"/><circle cx="12" cy="18" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/></svg></div><div class="nssub">Tonight's pick is locked in from your watchlist. Ready?</div><button class="nsbig" onclick="nsReveal()">Reveal my movie</button></div>`;}
 function nsReveal(){const m=document.getElementById('nsModal');if(!m||!NS_MOVIE)return;const g=(NS_MOVIE.genres||[]).slice(0,2).join(' · ');m.innerHTML=`<div class="nscard"><button class="close" onclick="closeNS()">×</button><div class="nskick">Tonight you're watching</div><div class="nsposter" style="${NS_MOVIE.poster?`background-image:url('${POSTER(NS_MOVIE.poster,'w342')}')`:''};margin-top:14px"></div><div class="nstitle">${esc(NS_MOVIE.title)}</div><div class="nsmeta">${[NS_MOVIE.year,g].filter(Boolean).join(' · ')}</div><div class="nsacts"><button class="p" onclick="playTrailerFor(${NS_MOVIE.tmdbId})">▶ Watch trailer</button><button onclick="nsOpenDetails()">Movie details</button><button onclick="nsWatched()">✓ Watched it today</button><button onclick="openNowShowing()">🎲 Spin again</button></div></div>`;}
 function nsOpenDetails(){const id=NS_MOVIE.tmdbId;closeNS();openDetail(id);}
 function nsWatched(){if(!NS_MOVIE)return;addMovie(NS_MOVIE,'watched',new Date().toISOString());toast(`✓ Watched “${NS_MOVIE.title}”`);renderWatch();closeNS();}
 function closeNS(){const m=document.getElementById('nsModal');if(m)m.remove();}
-
-/* WATCHED-WHEN CHOOSER */
 function askWatched(cb){let m=document.createElement('div');m.className='choose';m.id='chooseModal';m.innerHTML=`<div class="csheet"><div class="ctitle">When did you watch it?</div><button class="cbtn p" onclick="__wc(true)">Watched today</button><button class="cbtn" onclick="__wc(false)">A while ago</button><button class="ccancel" onclick="closeChoose()">Cancel</button></div>`;m.addEventListener('click',e=>{if(e.target===m)closeChoose();});document.body.appendChild(m);window.__wc=(today)=>{closeChoose();cb(today?new Date().toISOString():null);};}
 function closeChoose(){const m=document.getElementById('chooseModal');if(m)m.remove();}
-
-/* SEARCH */
 function openSearch(){const m=document.createElement('div');m.className='modal';m.id='searchModal';m.innerHTML=`<div class="sheet"><div class="top"><input id="sq" placeholder="Search a movie to add…" autocomplete="off"><button class="x" onclick="closeSearch()">×</button></div><div class="sresults" id="sres"><div class="empty">Type to search TMDB.</div></div></div>`;m.addEventListener('click',e=>{if(e.target===m)closeSearch();});document.body.appendChild(m);const inp=document.getElementById('sq');inp.focus();let t;inp.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>doSearch(inp.value),300);});}
 function closeSearch(){const m=document.getElementById('searchModal');if(m)m.remove();}
 async function doSearch(q){const box=document.getElementById('sres');if(!q.trim()){box.innerHTML=`<div class="empty">Type to search TMDB.</div>`;return;}box.innerHTML=`<div class="empty">Searching…</div>`;const r=await tmdb('/search/movie',{query:q,include_adult:'false'});const res=(r&&r.results)?r.results.filter(x=>x.poster_path).slice(0,20):[];if(!res.length){box.innerHTML=`<div class="empty">No matches.</div>`;return;}box.innerHTML=res.map(x=>{const m=normDisc(x);return `<div class="sr"><div class="p" style="background-image:url('${POSTER(m.poster,'w92')}')" onclick="closeSearch();openDetail(${m.tmdbId})"></div><div class="m" onclick="closeSearch();openDetail(${m.tmdbId})"><b>${esc(m.title)}</b><small>${m.year||''} · ${(m.genres||[]).slice(0,2).join(' · ')}</small></div><div class="adds"><button onclick='addFromSearch(${JSON.stringify(m)},"watchlist")'>＋ List</button><button class="w" onclick='addFromSearch(${JSON.stringify(m)},"watched")'>✓ Seen</button></div></div>`;}).join('');}
 function addFromSearch(m,status){addMovie(m,status,status==='watched'?null:undefined);pruneOwnedFromForYou();toast(`${status==='watched'?'✓ Watched':'＋ Watchlist'}: ${m.title}`);renderWatch();}
 
 /* NAV */
-function go(v){document.querySelectorAll('.view').forEach(el=>el.classList.remove('on'));document.getElementById('v-'+v).classList.add('on');document.querySelectorAll('.nav .tab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='watch')renderWatch();if(v==='soon'){if(!SN.init)soonReset();}if(v==='discover'){if(!FY.init)fyReset();}if(v==='can')renderCan();if(v==='rank')renderDuel();const sc=document.getElementById('scroll');if(sc)sc.scrollTop=0;}
+function go(v){document.querySelectorAll('.view').forEach(el=>el.classList.remove('on'));document.getElementById('v-'+v).classList.add('on');document.querySelectorAll('.nav .tab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='watch')renderWatch();if(v==='soon'){if(!SN.init)soonLoad();}if(v==='discover'){if(!FY.init&&!OS.init)fyReset();}if(v==='can')renderCan();if(v==='rank')renderDuel();const sc=document.getElementById('scroll');if(sc)sc.scrollTop=0;}
 let toastT;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1600);}
 function setHint(txt,warn){hintEl.textContent=txt;hintEl.className='hint'+(warn?' warn':'');}
 
@@ -483,8 +614,8 @@ function setHint(txt,warn){hintEl.textContent=txt;hintEl.className='hint'+(warn?
   if(accessToken||localStorage.getItem('rd_tok')||cameBack){
     showApp();await loadLibrary();renderWatch();buildDiscover();
     const root=document.getElementById('scroll');
-    const fs=document.getElementById('fy-sentinel');if(fs&&'IntersectionObserver'in window)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&document.getElementById('v-discover').classList.contains('on')&&FY.init)fyMore();}),{root,rootMargin:'400px'}).observe(fs);
-    const ss=document.getElementById('soon-sentinel');if(ss&&'IntersectionObserver'in window)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&document.getElementById('v-soon').classList.contains('on')&&SN.init)soonMore();}),{root,rootMargin:'400px'}).observe(ss);
+    const fs=document.getElementById('fy-sentinel');if(fs&&'IntersectionObserver'in window)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&document.getElementById('v-discover').classList.contains('on')&&DISC_MODE==='foryou'&&FY.init)fyMore();}),{root,rootMargin:'400px'}).observe(fs);
+    const os=document.getElementById('oscar-sentinel');if(os&&'IntersectionObserver'in window)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&document.getElementById('v-discover').classList.contains('on')&&DISC_MODE==='oscar'&&OS.init)oscarMore();}),{root,rootMargin:'400px'}).observe(os);
   }else{showAuth();if(CONFIG.WORKER.includes("YOURNAME"))document.getElementById("setupNote").classList.remove("hidden");}
 })();
 </script>
