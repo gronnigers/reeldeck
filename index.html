@@ -160,7 +160,10 @@ button{font-family:inherit;cursor:pointer;} .hidden{display:none!important;} img
 .trow .tt{flex:1;min-width:0;} .trow .tt b{font-size:13px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .trow .tt small{font-size:10.5px;color:var(--faint);} .trow.empty .tt b{color:var(--faint);font-weight:400;}
 .trow .te{font-family:"Archivo";font-weight:800;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;} .trow.empty .te{color:var(--faint);}
 .soontile .chk-badge{position:absolute;top:8px;right:8px;z-index:2;background:var(--green);color:#04140a;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.5);}
-.wlbar{justify-content:space-between;align-items:center;} .wlbar .grp{display:flex;gap:9px;align-items:center;flex-wrap:wrap;} .wlbar .grp.right{margin-left:auto;}
+.wlbar{flex-direction:column;align-items:stretch;gap:10px;}
+.wlbar .grp{display:flex;gap:9px;align-items:center;flex-wrap:wrap;}
+.wlbar .grp.filters label{flex:1;min-width:0;justify-content:space-between;} .wlbar .grp.filters select{flex:1;min-width:0;}
+.wlbar .seg{white-space:nowrap;}
 
 /* trailer / now showing / choose / search */
 .tmodal{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:16px;}
@@ -220,8 +223,8 @@ button{font-family:inherit;cursor:pointer;} .hidden{display:none!important;} img
         <div id="hero" class="hero"></div>
         <div class="sec-h"><h2>Your Watchlist</h2><span class="see" id="wl-count"></span></div>
         <div class="toolbar wlbar">
-          <div class="grp"><label>Sort <select id="wl-sort" onchange="WL.sort=this.value;renderWatch()"><option value="added">Recently added</option><option value="title">A–Z</option><option value="release">Release date</option></select></label><label>Genre <select id="wl-genre" onchange="WL.genre=this.value;renderWatch()"></select></label></div>
-          <div class="grp right"><button class="seg" id="wl-view" onclick="WL.view=WL.view==='grid'?'list':'grid';renderWatch()">List view</button><label class="chk"><input type="checkbox" id="wl-hideup" onchange="WL.hideUnreleased=this.checked;renderWatch()"> Hide upcoming</label></div>
+          <div class="grp filters"><label>Sort <select id="wl-sort" onchange="WL.sort=this.value;renderWatch()"><option value="title">A–Z</option><option value="added">Recently added</option><option value="release">Release date</option></select></label><label>Genre <select id="wl-genre" onchange="WL.genre=this.value;renderWatch()"></select></label></div>
+          <div class="grp"><button class="seg" id="wl-view" onclick="WL.view=WL.view==='grid'?'list':'grid';renderWatch()">List view</button><label class="chk"><input type="checkbox" id="wl-hideup" onchange="WL.hideUnreleased=this.checked;renderWatch()"> Hide upcoming</label></div>
         </div>
         <div id="wl-body"></div>
       </section>
@@ -385,11 +388,12 @@ const BP={
 2021:["CODA","Belfast","Don't Look Up","Drive My Car","Dune","King Richard","Licorice Pizza","Nightmare Alley","The Power of the Dog","West Side Story"],
 2022:["Everything Everywhere All at Once","All Quiet on the Western Front","Avatar: The Way of Water","The Banshees of Inisherin","Elvis","The Fabelmans","Tár","Top Gun: Maverick","Triangle of Sadness","Women Talking"],
 2023:["Oppenheimer","American Fiction","Anatomy of a Fall","Barbie","The Holdovers","Killers of the Flower Moon","Maestro","Past Lives","Poor Things","The Zone of Interest"],
-2024:["Anora","The Brutalist","A Complete Unknown","Conclave","Dune: Part Two","Emilia Pérez","I'm Still Here","Nickel Boys","The Substance","Wicked"]
+2024:["Anora","The Brutalist","A Complete Unknown","Conclave","Dune: Part Two","Emilia Pérez","I'm Still Here","Nickel Boys","The Substance","Wicked"],
+2025:["One Battle After Another","Bugonia","F1","Frankenstein","Hamnet","Marty Supreme","The Secret Agent","Sentimental Value","Sinners","Train Dreams"]
 };
 const OYEARS=Object.keys(BP).map(Number).sort((a,b)=>b-a);
 let accessToken=null,LIB=blankLib(),DISCOVER=[],currentPair=null,REV=[false,false],saveTimer,hintEl,DETAIL=null,ACTOR_BACK=null,NS_MOVIE=null,savedScroll=0,DISC_MODE='foryou';
-let WL={sort:'added',genre:'all',view:'grid',hideUnreleased:false},CAN={sort:'recent',view:'grid'},STATS={topN:10};
+let WL={sort:'title',genre:'all',view:'grid',hideUnreleased:false},CAN={sort:'recent',view:'grid'},STATS={topN:10};
 function blankLib(){return {version:1,updated:null,movies:[],seen:[],hidden:[],log:[]};}
 const todayStr=()=>new Date().toISOString().slice(0,10);
 function isReleased(m){if(m.rel)return m.rel<=todayStr();const y=+m.year,cy=new Date().getFullYear();if(!y)return true;return y<cy;}
@@ -473,7 +477,7 @@ function listRow(m,opts={}){const bg=m.poster?`background-image:url('${POSTER(m.
 function pruneOwnedFromForYou(){const grid=document.getElementById('fy-grid');if(!grid||DISC_MODE!=='foryou')return;[...grid.children].forEach(el=>{const id=+el.getAttribute('data-id');if(id&&(inLib(id)||isHidden(id)))el.remove();});}
 
 function renderWatch(){
-  const wl=watchlistMovies();const hero=document.getElementById('hero');const bgm=wl.length?wl[Math.random()*wl.length|0]:null;
+  const wl=watchlistMovies();const hero=document.getElementById('hero');const relwl=wl.filter(isReleased);const bgm=relwl.length?relwl[Math.random()*relwl.length|0]:null;
   hero.style.backgroundImage=bgm&&bgm.poster?`url('${POSTER(bgm.poster,"w780")}')`:'';
   hero.innerHTML=`<div class="z"><div class="tag">Can't decide?</div><h1>Let me pick tonight's movie</h1><div class="btns"><button onclick="openNowShowing()"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Now Showing</button></div></div>`;
   const genres=[...new Set(wl.flatMap(m=>m.genres||[]))].sort();const gsel=document.getElementById('wl-genre');
@@ -517,7 +521,8 @@ async function soonLoad(){
   document.getElementById('soon-see').textContent=items.length?`${items.length} titles · by date`:'';
   load.textContent=items.length?'':'';
 }
-function soonTile(x){const d=new Date(x.release_date);const g=(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean).slice(0,2).join(' · ');const chk=inLib(x.id)?'<span class="chk-badge">✓</span>':'';return `<div class="soontile" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path,'w342')}')"><span class="dbadge">${MON[d.getMonth()]} ${d.getDate()}</span>${chk}</div><div class="st">${esc(x.title)}<span class="sg">${g||'Upcoming'}</span></div></div>`;}
+function soonTile(x){const d=new Date(x.release_date);const g=(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean).slice(0,2).join(' · ');const chk=inLib(x.id)?'<span class="chk-badge">✓</span>':'';return `<div class="soontile" data-id="${x.id}" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path,'w342')}')"><span class="dbadge">${MON[d.getMonth()]} ${d.getDate()}</span>${chk}</div><div class="st">${esc(x.title)}<span class="sg">${g||'Upcoming'}</span></div></div>`;}
+function refreshSoonChecks(){document.querySelectorAll('#soon-grid .soontile').forEach(el=>{const id=+el.getAttribute('data-id');const sp=el.querySelector('.sp');if(!sp)return;let b=sp.querySelector('.chk-badge');if(inLib(id)){if(!b)sp.insertAdjacentHTML('beforeend','<span class="chk-badge">✓</span>');}else if(b){b.remove();}});}
 
 /* DISCOVER — For You (infinite) + Oscar Winners */
 let FY={discPage:0,recPool:null,loading:false,done:false,seen:new Set(),init:false};
@@ -564,7 +569,7 @@ function renderDetail(){
   const recHtml=recs.length?recs.map(x=>`<div class="s" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path)}')"></div><small>${esc(x.title)}</small></div>`).join(''):`<div class="noprov">No recommendations yet.</div>`;
   document.querySelector('#detailModal .dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="dback" style="${back}"><h2 class="dttl">${esc(d.title)}</h2></div><div class="dbody"><div class="dmeta">${meta}${watchedNote}</div><div class="dgrid"><button class="${watched?'on':''}" onclick="detailAct(${id},'watch')">${watched?'✓ Watched':'＋ Mark watched'}</button><button class="${onList?'on2':''}" onclick="detailAct(${id},'add')">${onList?'✓ On Watchlist':'＋ Watchlist'}</button><button class="rk" onclick="detailRank(${id})">♛ Rank it</button><button class="hd" onclick="detailAct(${id},'hide')">⊘ ${hidden?'Hidden':'Hide'}</button></div>${tk?`<button class="dtrailer" onclick="playTrailer('${tk}')">▶ Watch trailer</button>`:`<div class="dtrailer off">Trailer unavailable</div>`}<div class="dsec"><p class="dlbl">Where to watch</p><div class="dprovs">${provHtml}</div></div><div class="dsec"><p class="dlbl">Top cast</p><div class="dcast">${castHtml}</div></div><div class="dsec"><p class="dlbl">Overview</p><p class="dov">${esc(d.overview||'No description available.')}</p></div><div class="dsec"><p class="dlbl">Because you liked this</p><div class="dsim">${recHtml}</div></div></div>`;
 }
-function detailAct(id,what){const d=DETAIL;const src=d?{tmdbId:d.id,title:d.title,year:(d.release_date||'').slice(0,4),poster:d.poster_path,rel:d.release_date,genres:(d.genres||[]).map(g=>g.name)}:null;const done=()=>{pruneOwnedFromForYou();renderWatch();renderDetail();};if(what==='watch'){const c=inLib(id);if(c&&c.status==='watched'){removeMovie(id);toast('Removed from Watched');done();}else{askWatched(date=>{addMovie(src,'watched',date);toast(date?'✓ Watched — today':'✓ Marked watched');done();});}return;}if(what==='add'){const c=inLib(id);if(c&&c.status==='watchlist'){removeMovie(id);toast('Removed from Watchlist');}else{addMovie(src,'watchlist');toast('＋ Added to Watchlist');}done();return;}if(what==='hide'){if(inLib(id))removeMovie(id);if(!isHidden(id))LIB.hidden.push(id);queueSave();toast("Hidden");done();return;}}
+function detailAct(id,what){const d=DETAIL;const src=d?{tmdbId:d.id,title:d.title,year:(d.release_date||'').slice(0,4),poster:d.poster_path,rel:d.release_date,genres:(d.genres||[]).map(g=>g.name)}:null;const done=()=>{pruneOwnedFromForYou();refreshSoonChecks();renderWatch();renderDetail();};if(what==='watch'){const c=inLib(id);if(c&&c.status==='watched'){removeMovie(id);toast('Removed from Watched');done();}else{askWatched(date=>{addMovie(src,'watched',date);toast(date?'✓ Watched — today':'✓ Marked watched');done();});}return;}if(what==='add'){const c=inLib(id);if(c&&c.status==='watchlist'){removeMovie(id);toast('Removed from Watchlist');}else{addMovie(src,'watchlist');toast('＋ Added to Watchlist');}done();return;}if(what==='hide'){if(inLib(id))removeMovie(id);if(!isHidden(id))LIB.hidden.push(id);queueSave();toast("Hidden");done();return;}}
 function detailRank(id){closeDetail();go('rank');}
 
 /* ACTOR */
@@ -616,7 +621,7 @@ function closeChoose(){const m=document.getElementById('chooseModal');if(m)m.rem
 function openSearch(){const m=document.createElement('div');m.className='modal';m.id='searchModal';m.innerHTML=`<div class="sheet"><div class="top"><input id="sq" placeholder="Search a movie to add…" autocomplete="off"><button class="x" onclick="closeSearch()">×</button></div><div class="sresults" id="sres"><div class="empty">Type to search TMDB.</div></div></div>`;m.addEventListener('click',e=>{if(e.target===m)closeSearch();});document.body.appendChild(m);const inp=document.getElementById('sq');inp.focus();let t;inp.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>doSearch(inp.value),300);});}
 function closeSearch(){const m=document.getElementById('searchModal');if(m)m.remove();}
 async function doSearch(q){const box=document.getElementById('sres');if(!q.trim()){box.innerHTML=`<div class="empty">Type to search TMDB.</div>`;return;}box.innerHTML=`<div class="empty">Searching…</div>`;const r=await tmdb('/search/movie',{query:q,include_adult:'false'});const res=(r&&r.results)?r.results.filter(x=>x.poster_path).slice(0,20):[];if(!res.length){box.innerHTML=`<div class="empty">No matches.</div>`;return;}box.innerHTML=res.map(x=>{const m=normDisc(x);return `<div class="sr"><div class="p" style="background-image:url('${POSTER(m.poster,'w92')}')" onclick="closeSearch();openDetail(${m.tmdbId})"></div><div class="m" onclick="closeSearch();openDetail(${m.tmdbId})"><b>${esc(m.title)}</b><small>${m.year||''} · ${(m.genres||[]).slice(0,2).join(' · ')}</small></div><div class="adds"><button onclick='addFromSearch(${JSON.stringify(m)},"watchlist")'>＋ List</button><button class="w" onclick='addFromSearch(${JSON.stringify(m)},"watched")'>✓ Seen</button></div></div>`;}).join('');}
-function addFromSearch(m,status){addMovie(m,status,status==='watched'?null:undefined);pruneOwnedFromForYou();toast(`${status==='watched'?'✓ Watched':'＋ Watchlist'}: ${m.title}`);renderWatch();}
+function addFromSearch(m,status){addMovie(m,status,status==='watched'?null:undefined);pruneOwnedFromForYou();refreshSoonChecks();toast(`${status==='watched'?'✓ Watched':'＋ Watchlist'}: ${m.title}`);renderWatch();}
 
 /* NAV */
 function go(v){document.querySelectorAll('.view').forEach(el=>el.classList.remove('on'));document.getElementById('v-'+v).classList.add('on');document.querySelectorAll('.nav .tab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='watch')renderWatch();if(v==='soon'){if(!SN.init)soonLoad();}if(v==='discover'){if(!FY.init&&!OS.init)fyReset();}if(v==='can')renderCan();if(v==='rank')renderDuel();const sc=document.getElementById('scroll');if(sc)sc.scrollTop=0;}
