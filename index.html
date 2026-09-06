@@ -103,8 +103,8 @@ button{font-family:inherit;cursor:pointer;} .hidden{display:none!important;} img
 .bd .curtain.open .ctxt{opacity:0;}
 .bd .crown{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);color:#fff;font-weight:800;font-size:13px;opacity:0;transition:.15s;z-index:3;} .bd.pick:hover .crown{opacity:1;}
 .rcap{margin:9px 0 7px;min-height:52px;} .rcap b{font-size:13px;font-weight:700;line-height:1.15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;} .rcap small{font-size:10px;color:var(--muted);display:block;margin-top:2px;}
-.qa3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;} .qa3 button{font-size:9.5px;font-weight:700;padding:7px 3px;border-radius:7px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;gap:2px;}
-.qa3 button.hide{color:#ff9a9a;border-color:rgba(255,120,120,.3);} .qa3 button.skip{color:var(--blue);border-color:rgba(92,200,255,.3);} .qa3 button:active{transform:scale(.95);}
+.qarow{display:flex;gap:8px;} .qarow button{flex:1;font-size:10px;font-weight:700;padding:8px 4px;border-radius:7px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;gap:3px;}
+.qarow button.hide{color:#ff9a9a;border-color:rgba(255,120,120,.3);} .qarow button.skip{color:var(--blue);border-color:rgba(92,200,255,.3);} .qarow button:active{transform:scale(.95);}
 .vstok{position:absolute;left:50%;top:32%;transform:translate(-50%,-50%);z-index:6;width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;font-family:"Archivo";font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;border:3px solid var(--bg);pointer-events:none;}
 .hint{text-align:center;font-size:11.5px;color:var(--muted);margin:14px 0 2px;min-height:16px;} .hint.warn{color:var(--gold);}
 .skipbtn{display:block;margin:12px auto 0;background:transparent;border:1px solid var(--line);color:var(--muted);font-size:11px;font-weight:600;padding:8px 16px;border-radius:999px;}
@@ -462,8 +462,8 @@ function card(m,side){
   const bg=m.poster?`background-image:url('${POSTER(m.poster,'w342')}')`:'';
   const curtain=revealed?'':`<div class="curtain" onclick="reveal('${side}')"><div class="cpanel cL"></div><div class="cpanel cR"></div><span class="ctxt">Tap to reveal</span></div>`;
   const cap=revealed?`<div class="rcap"><b>${esc(m.title)}</b><small>${m.year||''}${m.seen?` · Elo ${Math.round(m.elo||1500)}`:' · not seen'}</small></div>`:`<div class="rcap"><b>&nbsp;</b><small>&nbsp;</small></div>`;
-  const listBtn=m.seen?'<span></span>':`<button onclick="event.stopPropagation();rankAdd('${side}')">＋ List</button>`;
-  const opts=revealed?`<div class="qa3"><button class="skip" onclick="event.stopPropagation();skipCard('${side}')">↷ Skip</button>${listBtn}<button class="hide" onclick="event.stopPropagation();rankHide('${side}')">⊘ Hide</button></div>`:'';
+  const listBtn=m.seen?'':`<button onclick="event.stopPropagation();rankAdd('${side}')">＋ List</button>`;
+  const opts=revealed?`<div class="qarow"><button class="skip" onclick="event.stopPropagation();skipCard('${side}')">↷ Skip</button><button class="hide" onclick="event.stopPropagation();rankHide('${side}')">⊘ Hide</button>${listBtn}</div>`:'';
   return `<div class="bd ${pickable?'pick':''} ${revealed?'revealed':''}" style="${bg}" ${pickable?`onclick="pick('${side}')"`:''}>${curtain}${pickable?'<div class="crown">Crown ♛</div>':''}</div>${cap}${opts}`;
 }
 function reveal(side){const idx=side==='a'?0:1;const bd=document.querySelectorAll('#duelzone .bd')[idx];const curt=bd?bd.querySelector('.curtain'):null;if(curt){curt.classList.add('open');setTimeout(()=>{REV[idx]=true;renderDuel();},560);}else{REV[idx]=true;renderDuel();}}
