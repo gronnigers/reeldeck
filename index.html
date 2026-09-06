@@ -163,6 +163,20 @@ img{max-width:100%;}
 .dsim small{font-size:9.5px; color:#aeb2bd; line-height:1.15; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .dsim .noprov{font-size:11px; color:var(--faint);}
 .close{position:absolute; top:12px; right:12px; z-index:30; width:30px; height:30px; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; border:none; font-size:16px; display:flex; align-items:center; justify-content:center;}
+.dcast .c{cursor:pointer;}
+/* actor card */
+.pback{display:inline-flex; align-items:center; gap:5px; font-size:12px; color:var(--blue); background:none; border:none; padding:16px 16px 0; font-weight:600;}
+.phead{display:flex; gap:14px; padding:14px 16px 4px; max-width:560px; margin:0 auto;}
+.pphoto{width:96px; height:96px; border-radius:12px; background-size:cover; background-position:center; background-color:#22232c; flex:0 0 auto;}
+.pinfo{flex:1; min-width:0;} .pinfo h2{font-family:"Archivo"; font-weight:800; font-size:22px; margin:2px 0 5px; line-height:1;}
+.pinfo .pm{font-size:11.5px; color:var(--muted); line-height:1.5;}
+.pbio{padding:12px 16px 0; font-size:12.5px; color:#c4c6cf; line-height:1.6; max-width:560px; margin:0 auto;}
+.pbio .more{color:var(--blue); cursor:pointer; font-weight:600;}
+.filmo{padding:4px 16px 0; max-width:560px; margin:0 auto;}
+.filmrow{display:flex; gap:12px; align-items:center; padding:9px 0; border-bottom:1px solid #1c1e26; cursor:pointer;}
+.filmrow .yr{width:42px; flex:0 0 auto; font-family:"Archivo"; font-weight:800; font-size:13px; color:var(--gold); font-variant-numeric:tabular-nums;}
+.filmrow .fp{width:38px; height:57px; border-radius:5px; flex:0 0 auto; background-size:cover; background-position:center; background:#1c1c24;}
+.filmrow .fm{flex:1; min-width:0;} .filmrow .fm b{font-size:13px; font-weight:600; display:block;} .filmrow .fm small{font-size:10.5px; color:var(--faint);}
 
 /* ---------- search modal ---------- */
 .modal{position:fixed; inset:0; z-index:80; background:rgba(0,0,0,.6); display:flex; align-items:flex-start; justify-content:center; padding:56px 16px;}
@@ -234,6 +248,8 @@ img{max-width:100%;}
       <section class="view" id="v-soon">
         <div class="sec-h" style="margin-top:8px"><h2>Coming Soon</h2><span class="see">upcoming releases</span></div>
         <div class="soongrid" id="soon-grid"></div>
+        <div id="soon-sentinel"></div>
+        <div class="fyload" id="soon-load"></div>
       </section>
 
       <section class="view" id="v-foryou">
@@ -409,9 +425,9 @@ function pick(side){
 }
 function act(side,what){
   const it=currentPair[side==='a'?0:1];
-  if(what==='watch'){addMovie(it,'watched');it.seen=true;toast(`Marked “${it.title}” watched`);renderDuel();return;}
-  if(what==='add'){addMovie(it,'watchlist');toast(`Added “${it.title}” to Watchlist`);swap(side,it.tmdbId);return;}
-  if(what==='hide'){if(!isHidden(it.tmdbId))LIB.hidden.push(it.tmdbId);queueSave();toast("Hidden — won't show again");swap(side,it.tmdbId);return;}
+  if(what==='watch'){addMovie(it,'watched');it.seen=true;pruneOwnedFromForYou();toast(`Marked “${it.title}” watched`);renderDuel();return;}
+  if(what==='add'){addMovie(it,'watchlist');pruneOwnedFromForYou();toast(`Added “${it.title}” to Watchlist`);swap(side,it.tmdbId);return;}
+  if(what==='hide'){if(!isHidden(it.tmdbId))LIB.hidden.push(it.tmdbId);queueSave();pruneOwnedFromForYou();toast("Hidden — won't show again");swap(side,it.tmdbId);return;}
 }
 function skipCard(side){const it=currentPair[side==='a'?0:1];toast(`Skipped “${it.title}”`);swap(side,it.tmdbId);}
 function swap(side,excludeId){
@@ -432,7 +448,8 @@ function renderLeaderboard(){
 }
 
 /* ================= VIEWS ================= */
-function posterEl(m,opts={}){const bg=m.poster?`background-image:url('${POSTER(m.poster)}')`:'';const rank=opts.rank?`<span class="rank">#${opts.rank}</span>`:'';return `<div class="poster" style="${bg}" onclick="openDetail(${m.tmdbId})">${rank}<div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;}
+function posterEl(m,opts={}){const bg=m.poster?`background-image:url('${POSTER(m.poster)}')`:'';const rank=opts.rank?`<span class="rank">#${opts.rank}</span>`:'';return `<div class="poster" data-id="${m.tmdbId}" style="${bg}" onclick="openDetail(${m.tmdbId})">${rank}<div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;}
+function pruneOwnedFromForYou(){const grid=document.getElementById('fy-grid');if(!grid)return;[...grid.children].forEach(el=>{const id=+el.getAttribute('data-id');if(id&&(inLib(id)||isHidden(id)))el.remove();});}
 function renderWatch(){
   const watched=watchedPool().slice().sort((a,b)=>b.elo-a.elo);const hero=document.getElementById('hero');
   if(watched.length){const top=watched[0];hero.style.backgroundImage=top.poster?`url('${POSTER(top.poster,"w780")}')`:'';hero.innerHTML=`<div class="z"><div class="tag">#1 in your ranking</div><h1>${esc(top.title)}</h1><div class="btns"><button onclick="go('rank')">Rank more</button></div></div>`;}
@@ -443,23 +460,24 @@ function renderWatch(){
   document.getElementById('watched-count').textContent=`${watched.length} films`;
   document.getElementById('watched-grid').innerHTML=watched.slice(0,18).map((m,i)=>posterEl(m,{rank:i+1})).join('')||`<div class="empty">Mark movies watched to build your ranking.</div>`;
 }
-async function renderSoon(){
-  const grid=document.getElementById('soon-grid');
-  if(!SOON.length){
-    grid.innerHTML=`<div class="fyload">Loading upcoming…</div>`;
-    const today=new Date().toISOString().slice(0,10);
-    let res=[];
-    for(const pg of [1,2,3]){const r=await tmdb('/movie/upcoming',{region:'US',page:pg});if(r&&r.results)res=res.concat(r.results);}
-    const seen={};
-    res=res.filter(x=>x.poster_path&&x.release_date&&x.release_date>today&&!seen[x.id]&&(seen[x.id]=1));
-    res.sort((a,b)=>(b.popularity||0)-(a.popularity||0));
-    SOON=res.slice(0,30);
-  }
-  if(!SOON.length){grid.innerHTML=`<div class="empty">Couldn't load upcoming — check the Worker URL.</div>`;return;}
-  grid.innerHTML=SOON.map(x=>{const d=new Date(x.release_date);const g=(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean).slice(0,2).join(' · ');
-    return `<div class="soontile" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path,'w342')}')"><span class="dbadge">${MON[d.getMonth()]} ${d.getDate()}</span></div><div class="st">${esc(x.title)}<span class="sg">${g||'Upcoming'}</span></div></div>`;
-  }).join('');
+/* Coming Soon — unlimited infinite scroll (popular upcoming) */
+let SN={page:0,loading:false,done:false,seen:new Set(),init:false};
+async function soonReset(){SN={page:0,loading:false,done:false,seen:new Set(),init:true};document.getElementById('soon-grid').innerHTML='';document.getElementById('soon-load').textContent='';await soonMore();await soonMore();}
+async function soonMore(){
+  if(SN.loading||SN.done)return;SN.loading=true;document.getElementById('soon-load').textContent='Loading…';
+  SN.page++;
+  const today=new Date().toISOString().slice(0,10);
+  const r=await tmdb('/discover/movie',{sort_by:'popularity.desc',with_release_type:'2|3','primary_release_date.gte':today,region:'US',page:SN.page});
+  const results=(r&&r.results)||[];
+  if(!r||SN.page>=(r.total_pages||1))SN.done=true;
+  const add=[];
+  results.forEach(x=>{if(x&&x.poster_path&&x.release_date&&x.release_date>=today&&!SN.seen.has(x.id)){SN.seen.add(x.id);add.push(x);}});
+  document.getElementById('soon-grid').insertAdjacentHTML('beforeend',add.map(soonTile).join(''));
+  SN.loading=false;document.getElementById('soon-load').textContent=SN.done?'That’s everything scheduled.':'';
+  if(!document.getElementById('soon-grid').children.length&&SN.done)document.getElementById('soon-grid').innerHTML=`<div class="empty">No upcoming titles found.</div>`;
 }
+function soonTile(x){const d=new Date(x.release_date);const g=(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean).slice(0,2).join(' · ');
+  return `<div class="soontile" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path,'w342')}')"><span class="dbadge">${MON[d.getMonth()]} ${d.getDate()}</span></div><div class="st">${esc(x.title)}<span class="sg">${g||'Upcoming'}</span></div></div>`;}
 /* For You — infinite gallery */
 let FY={discPage:0,recPool:null,loading:false,done:false,seen:new Set(),init:false};
 async function fyReset(){FY={discPage:0,recPool:null,loading:false,done:false,seen:new Set(),init:true};document.getElementById('fy-grid').innerHTML='';document.getElementById('fy-load').textContent='';await fyMore();await fyMore();}
@@ -513,7 +531,7 @@ function renderDetail(){
   const recs=((d.recommendations&&d.recommendations.results)||[]).filter(x=>x.poster_path).slice(0,12);
   const meta=[year?`<b>${year}</b>`:'',runtime,rating,genre].filter(Boolean).join(' · ')+rankTxt;
   const provHtml=provs.length?provs.map(p=>`<span class="prov">${p.logo?`<img src="https://image.tmdb.org/t/p/w45${p.logo}" alt="">`:''}${esc(p.name)}<em>${p.kind}</em></span>`).join(''):`<span class="noprov">Not on your streaming services right now.</span>`;
-  const castHtml=cast.length?cast.map(c=>{const av=c.profile_path?`background-image:url('https://image.tmdb.org/t/p/w185${c.profile_path}')`:'';const ini=(c.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('');return `<div class="c"><div class="av" style="${av}">${c.profile_path?'':esc(ini)}</div><span class="nm">${esc(c.name)}</span><span class="rl">${esc(c.character||'')}</span></div>`;}).join(''):`<span class="noprov">Cast unavailable.</span>`;
+  const castHtml=cast.length?cast.map(c=>{const av=c.profile_path?`background-image:url('https://image.tmdb.org/t/p/w185${c.profile_path}')`:'';const ini=(c.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('');return `<div class="c" onclick="openActor(${c.id})"><div class="av" style="${av}">${c.profile_path?'':esc(ini)}</div><span class="nm">${esc(c.name)}</span><span class="rl">${esc(c.character||'')}</span></div>`;}).join(''):`<span class="noprov">Cast unavailable.</span>`;
   const recHtml=recs.length?recs.map(x=>`<div class="s" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path)}')"></div><small>${esc(x.title)}</small></div>`).join(''):`<div class="noprov">No recommendations yet.</div>`;
   document.querySelector('#detailModal .dcard').innerHTML=`
     <button class="close" onclick="closeDetail()">×</button>
@@ -521,8 +539,8 @@ function renderDetail(){
     <div class="dbody">
       <div class="dmeta">${meta}</div>
       <div class="dgrid">
-        <button class="${watched?'on':''}" onclick="detailAct(${id},'watch')">✓ Watched</button>
-        <button class="${onList?'on2':''}" onclick="detailAct(${id},'add')">＋ Watchlist</button>
+        <button class="${watched?'on':''}" onclick="detailAct(${id},'watch')">${watched?'✓ Watched':'＋ Mark watched'}</button>
+        <button class="${onList?'on2':''}" onclick="detailAct(${id},'add')">${onList?'✓ On Watchlist':'＋ Watchlist'}</button>
         <button class="rk" onclick="detailRank(${id})">♛ Rank it</button>
         <button class="hd" onclick="detailAct(${id},'hide')">⊘ ${hidden?'Hidden':'Hide'}</button>
       </div>
@@ -533,14 +551,47 @@ function renderDetail(){
       <div class="dsec"><p class="dlbl">Because you liked this</p><div class="dsim">${recHtml}</div></div>
     </div>`;
 }
+function removeMovie(id){LIB.movies=LIB.movies.filter(m=>m.tmdbId!==id);queueSave();}
 function detailAct(id,what){
   const d=DETAIL;const src=d?{tmdbId:d.id,title:d.title,year:(d.release_date||'').slice(0,4),poster:d.poster_path,genres:(d.genres||[]).map(g=>g.name)}:null;
-  if(what==='watch'){const c=inLib(id);if(c&&c.status==='watched'){toast('Already watched');}else{addMovie(src,'watched');toast('✓ Watched');}}
-  else if(what==='add'){addMovie(src,'watchlist');toast('＋ Watchlist');}
-  else if(what==='hide'){if(!isHidden(id))LIB.hidden.push(id);queueSave();toast("Hidden — won't show again");}
-  renderWatch();renderDetail();
+  if(what==='watch'){const c=inLib(id);if(c&&c.status==='watched'){removeMovie(id);toast('Removed from Watched');}else{addMovie(src,'watched');toast('✓ Marked watched');}}
+  else if(what==='add'){const c=inLib(id);if(c&&c.status==='watchlist'){removeMovie(id);toast('Removed from Watchlist');}else{addMovie(src,'watchlist');toast('＋ Added to Watchlist');}}
+  else if(what==='hide'){if(inLib(id))removeMovie(id);if(!isHidden(id))LIB.hidden.push(id);queueSave();toast("Hidden — won't show again");}
+  pruneOwnedFromForYou();renderWatch();renderDetail();
 }
 function detailRank(id){closeDetail();go('rank');}
+
+/* ================= ACTOR CARD ================= */
+let ACTOR_BACK=null;
+function ageFrom(bd,dd){if(!bd)return '';const b=new Date(bd);const end=dd?new Date(dd):new Date();let a=end.getFullYear()-b.getFullYear();const mm=end.getMonth()-b.getMonth();if(mm<0||(mm===0&&end.getDate()<b.getDate()))a--;return a;}
+async function openActor(pid){
+  ACTOR_BACK = DETAIL?DETAIL.id:null;
+  let m=document.getElementById('detailModal');
+  if(!m){m=document.createElement('div');m.id='detailModal';m.className='dmodal';m.addEventListener('click',e=>{if(e.target===m)closeDetail();});document.body.appendChild(m);}
+  m.innerHTML=`<div class="dcard"><button class="close" onclick="closeDetail()">×</button><div class="dloading">Loading…</div></div>`;m.classList.add('show');m.scrollTop=0;
+  const p=await tmdb('/person/'+pid,{append_to_response:'movie_credits'});
+  if(!p||!p.id){m.querySelector('.dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="dloading">Couldn't load this person.</div>`;return;}
+  renderActor(p);
+}
+function renderActor(p){
+  const photo=p.profile_path?`background-image:url('https://image.tmdb.org/t/p/w185${p.profile_path}')`:'';
+  const age=p.birthday?ageFrom(p.birthday,p.deathday):'';
+  const metaBits=[p.known_for_department,p.birthday?`b. ${p.birthday}${age?` · ${age}${p.deathday?' (deceased)':''}`:''}`:'',p.place_of_birth].filter(Boolean).join(' · ');
+  const bioFull=p.biography||'No biography available.';
+  const bioShort=bioFull.length>320?bioFull.slice(0,320).trim()+'…':bioFull;
+  const films=((p.movie_credits&&p.movie_credits.cast)||[]).filter(x=>x.release_date&&x.poster_path);
+  const uniq={};films.forEach(x=>{if(!uniq[x.id])uniq[x.id]=x;});
+  const list=Object.values(uniq).sort((a,b)=>(b.release_date||'').localeCompare(a.release_date||''));
+  const back=ACTOR_BACK?`<button class="pback" onclick="openDetail(${ACTOR_BACK})">‹ Back to movie</button>`:'';
+  const filmHtml=list.map(x=>`<div class="filmrow" onclick="openDetail(${x.id})"><div class="yr">${(x.release_date||'').slice(0,4)}</div><div class="fp" style="background-image:url('${POSTER(x.poster_path,'w92')}')"></div><div class="fm"><b>${esc(x.title)}</b><small>${esc(x.character||'')}</small></div></div>`).join('');
+  document.querySelector('#detailModal .dcard').innerHTML=`
+    <button class="close" onclick="closeDetail()">×</button>
+    ${back}
+    <div class="phead"><div class="pphoto" style="${photo}"></div><div class="pinfo"><h2>${esc(p.name)}</h2><div class="pm">${esc(metaBits)}</div></div></div>
+    <div class="pbio" id="pbio">${esc(bioShort)}</div>
+    <div class="dsec" style="margin-top:14px"><p class="dlbl" style="padding:0 16px">Filmography · ${list.length} films</p><div class="filmo">${filmHtml||'<div class="empty">No films found.</div>'}</div></div>`;
+  if(bioFull.length>320){const el=document.getElementById('pbio');el.innerHTML=`${esc(bioShort)} <span class="more">Read more</span>`;el.querySelector('.more').addEventListener('click',()=>{el.innerHTML=esc(bioFull);});}
+}
 
 /* ================= SEARCH ================= */
 function openSearch(){
@@ -557,7 +608,7 @@ async function doSearch(q){
   if(!res.length){box.innerHTML=`<div class="empty">No matches.</div>`;return;}
   box.innerHTML=res.map(x=>{const m=normDisc(x);return `<div class="sr"><div class="p" style="background-image:url('${POSTER(m.poster,'w92')}')" onclick="closeSearch();openDetail(${m.tmdbId})"></div><div class="m" onclick="closeSearch();openDetail(${m.tmdbId})"><b>${esc(m.title)}</b><small>${m.year||''} · ${(m.genres||[]).slice(0,2).join(' · ')}</small></div><div class="adds"><button onclick='addFromSearch(${JSON.stringify(m)},"watchlist")'>＋ List</button><button class="w" onclick='addFromSearch(${JSON.stringify(m)},"watched")'>✓ Seen</button></div></div>`;}).join('');
 }
-function addFromSearch(m,status){addMovie(m,status);toast(`${status==='watched'?'✓ Watched':'＋ Watchlist'}: ${m.title}`);renderWatch();if(status==='watched')FY.init=false;}
+function addFromSearch(m,status){addMovie(m,status);pruneOwnedFromForYou();toast(`${status==='watched'?'✓ Watched':'＋ Watchlist'}: ${m.title}`);renderWatch();}
 
 /* ================= NAV ================= */
 function go(v){
@@ -565,7 +616,7 @@ function go(v){
   document.getElementById('v-'+v).classList.add('on');
   document.querySelectorAll('.nav .tab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   if(v==='watch')renderWatch();
-  if(v==='soon')renderSoon();
+  if(v==='soon'){if(!SN.init)soonReset();}
   if(v==='foryou'){if(!FY.init)fyReset();}
   if(v==='rank')renderDuel();
   const sc=document.getElementById('scroll');if(sc)sc.scrollTop=0;
@@ -583,6 +634,10 @@ function setHint(txt,warn){hintEl.textContent=txt;hintEl.className='hint'+(warn?
     const sentinel=document.getElementById('fy-sentinel'),root=document.getElementById('scroll');
     if(sentinel&&'IntersectionObserver'in window){
       new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&document.getElementById('v-foryou').classList.contains('on')&&FY.init)fyMore();});},{root,rootMargin:'400px'}).observe(sentinel);
+    }
+    const ss=document.getElementById('soon-sentinel');
+    if(ss&&'IntersectionObserver'in window){
+      new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&document.getElementById('v-soon').classList.contains('on')&&SN.init)soonMore();});},{root,rootMargin:'400px'}).observe(ss);
     }
   }else{showAuth();if(CONFIG.WORKER.includes("YOURNAME"))document.getElementById("setupNote").classList.remove("hidden");}
 })();
