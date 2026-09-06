@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Reel Deck</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0f">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,145 +13,128 @@
 :root{
   --bg:#0b0b0f; --bg2:#131318; --card:#17171e; --line:#25252e;
   --ink:#f4f4f6; --muted:#9a9aa6; --faint:#63636e;
-  --red:#e50914; --green:#46d369; --blue:#5cc8ff; --gold:#e7b24c; --violet:#a371f7;
+  --red:#e50914; --green:#46d369; --gold:#e7b24c; --blue:#5cc8ff; --violet:#a371f7;
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-html,body{margin:0; background:var(--bg); color:var(--ink); font-family:"Inter",system-ui,sans-serif; -webkit-font-smoothing:antialiased;}
+html,body{margin:0; height:100%; background:var(--bg); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+  overflow:hidden; overscroll-behavior:none;}
+body{position:fixed; inset:0; width:100%; touch-action:pan-y;}
 button{font-family:inherit; cursor:pointer;}
 .hidden{display:none !important;}
+img{max-width:100%;}
 
-/* ---------- auth / setup ---------- */
-.authwrap{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:30px;}
+/* ---------- auth ---------- */
+.authwrap{position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:30px; overflow:auto;}
 .authwrap .logo{font-family:"Archivo"; font-weight:900; font-size:40px; letter-spacing:-.02em; color:var(--red); margin-bottom:6px;}
 .authwrap .logo b{color:var(--ink); font-weight:800;}
 .authwrap p{color:var(--muted); max-width:34ch; line-height:1.55; font-size:15px;}
 .signin{margin-top:22px; background:var(--red); color:#fff; border:none; font-weight:700; font-size:15px; padding:13px 26px; border-radius:10px;}
 .setupNote{margin-top:26px; max-width:44ch; text-align:left; background:var(--bg2); border:1px solid var(--line); border-radius:12px; padding:16px 18px; font-size:12.5px; color:var(--muted); line-height:1.6;}
-.setupNote code{background:#000; color:var(--gold); padding:1px 5px; border-radius:4px; font-size:11.5px;}
-.setupNote b{color:var(--ink);}
+.setupNote code{background:#000; color:var(--gold); padding:1px 5px; border-radius:4px;} .setupNote b{color:var(--ink);}
 
-/* ---------- app shell ---------- */
-.stage{max-width:440px; margin:0 auto; min-height:100vh; padding-bottom:80px; overflow-x:clip;}
-.appbar{position:sticky; top:0; z-index:20; display:flex; align-items:center; justify-content:space-between; padding:14px 18px 12px; background:linear-gradient(180deg,var(--bg) 62%,transparent);}
-.appbar .logo{font-family:"Archivo"; font-weight:900; font-size:20px; letter-spacing:-.02em; color:var(--red);}
+/* ---------- shell layout ---------- */
+.stage{position:fixed; inset:0; display:flex; flex-direction:column; overflow:hidden;}
+.main{flex:1 1 auto; min-height:0; min-width:0; display:flex; flex-direction:column;}
+.appbar{flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 16px 10px; background:linear-gradient(180deg,var(--bg) 65%,transparent); z-index:5;}
+.appbar .logo{font-family:"Archivo"; font-weight:900; font-size:19px; letter-spacing:-.02em; color:var(--red);}
 .appbar .logo b{color:var(--ink); font-weight:800;}
 .appbar .tools{display:flex; gap:8px;}
 .icobtn{background:transparent; border:1px solid var(--line); color:var(--muted); width:34px; height:34px; border-radius:9px; display:inline-flex; align-items:center; justify-content:center;}
 .icobtn svg{width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.9;}
 .icobtn:active{background:var(--card);}
+.scroll{flex:1 1 auto; min-height:0; overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; -webkit-overflow-scrolling:touch;}
 
-.view{display:none; padding:2px 0 20px; animation:fade .22s ease;}
+.view{display:none; padding:2px 0 28px; animation:fade .2s ease;}
 .view.on{display:block;}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.pad{padding:0 18px;}
-.empty{color:var(--muted); font-size:13px; line-height:1.55; padding:26px 22px; text-align:center;}
-.empty b{color:var(--ink);}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.empty{color:var(--muted); font-size:13px; line-height:1.55; padding:26px 22px; text-align:center;} .empty b{color:var(--ink);}
 
-.hero{margin:6px 18px 18px; height:186px; border-radius:14px; position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:16px; background:var(--card);}
+/* nav — bottom bar (portrait) */
+.nav{flex:0 0 auto; display:flex; background:rgba(12,12,16,.96); border-top:1px solid var(--line); backdrop-filter:blur(12px); padding-bottom:env(safe-area-inset-bottom);}
+.nav .brand{display:none;}
+.nav .navtools{display:none;}
+.nav .tab{flex:1; background:none; border:none; color:var(--faint); padding:10px 0 12px; display:flex; flex-direction:column; align-items:center; gap:4px; font-size:10px; font-weight:600;}
+.nav .tab svg{width:21px; height:21px; stroke:currentColor; fill:none; stroke-width:1.8;}
+.nav .tab.on{color:var(--ink);} .nav .tab.on svg{stroke:var(--red);}
+
+/* hero */
+.hero{margin:6px 16px 18px; height:190px; border-radius:14px; position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:16px; background:var(--card); background-size:cover; background-position:center;}
 .hero::after{content:""; position:absolute; inset:0; background:linear-gradient(105deg,rgba(0,0,0,.5),transparent 55%),linear-gradient(transparent 30%,rgba(0,0,0,.9));}
 .hero .z{position:relative; z-index:2;}
 .hero .tag{font-size:9px; letter-spacing:.2em; color:var(--red); font-weight:800; text-transform:uppercase;}
-.hero h1{font-family:"Archivo"; font-weight:800; font-size:25px; margin:5px 0 8px; line-height:.98; max-width:82%;}
+.hero h1{font-family:"Archivo"; font-weight:800; font-size:26px; margin:5px 0 8px; line-height:.98; max-width:82%;}
 .hero .btns{display:flex; gap:8px;}
-.hero .btns button{font-size:12px; font-weight:700; padding:8px 15px; border-radius:8px; border:none;}
-.hero .play{background:#fff; color:#000;} .hero .info{background:rgba(255,255,255,.2); color:#fff;}
+.hero .btns button{font-size:12px; font-weight:700; padding:8px 15px; border-radius:8px; border:none; background:#fff; color:#000;}
 
-.sec-h{display:flex; justify-content:space-between; align-items:baseline; padding:0 18px; margin:20px 0 11px;}
-.sec-h h2{font-family:"Archivo"; font-weight:800; font-size:15px; margin:0; letter-spacing:-.01em;}
+.sec-h{display:flex; justify-content:space-between; align-items:baseline; padding:0 16px; margin:20px 0 11px;}
+.sec-h h2{font-family:"Archivo"; font-weight:800; font-size:16px; margin:0; letter-spacing:-.01em;}
 .sec-h .see{font-size:11px; color:var(--muted); font-weight:600;}
-.rail{display:flex; gap:10px; overflow-x:auto; padding:0 18px 6px; scrollbar-width:none;}
-.rail::-webkit-scrollbar{display:none;}
-.grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 18px;}
+.rail{display:flex; gap:11px; overflow-x:auto; padding:0 16px 6px; scrollbar-width:none;} .rail::-webkit-scrollbar{display:none;}
+.grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:0 16px;}
 
-.poster{border-radius:8px; overflow:hidden; position:relative; aspect-ratio:2/3; display:flex; align-items:flex-end; flex:0 0 auto; background-size:cover; background-position:center; background-color:#1c1c24;}
-.rail .poster{width:104px;}
-.poster::after{content:""; position:absolute; inset:0; background:linear-gradient(transparent 48%,rgba(0,0,0,.9));}
-.poster .lab{position:relative; z-index:2; padding:8px; font-size:10.5px; font-weight:700; line-height:1.12;}
+/* poster (bigger) */
+.poster{border-radius:9px; overflow:hidden; position:relative; aspect-ratio:2/3; display:flex; align-items:flex-end; flex:0 0 auto; background-size:cover; background-position:center; background-color:#1c1c24; cursor:pointer;}
+.rail .poster{width:128px;}
+.poster::after{content:""; position:absolute; inset:0; background:linear-gradient(transparent 50%,rgba(0,0,0,.9));}
+.poster .lab{position:relative; z-index:2; padding:8px; font-size:11px; font-weight:700; line-height:1.12;}
 .poster .yr{display:block; font-weight:500; color:rgba(255,255,255,.6); font-size:9px; margin-top:2px;}
-.poster .rank{position:absolute; top:6px; right:6px; z-index:2; font-family:"Archivo"; font-weight:900; font-size:11px; color:var(--gold); background:rgba(0,0,0,.6); padding:2px 6px; border-radius:5px;}
-.poster .match{position:absolute; top:6px; left:6px; z-index:2; font-size:8px; font-weight:800; color:var(--green); background:rgba(0,0,0,.55); padding:2px 5px; border-radius:4px;}
+.poster .rank{position:absolute; top:6px; right:6px; z-index:2; font-family:"Archivo"; font-weight:900; font-size:12px; color:var(--gold); background:rgba(0,0,0,.6); padding:2px 7px; border-radius:6px;}
 
-.soon{display:flex; gap:13px; align-items:center; padding:11px 18px; border-bottom:1px solid var(--line);}
-.soon .date{width:52px; text-align:center; flex:0 0 auto;}
-.soon .date .m{font-size:10px; font-weight:800; color:var(--red); text-transform:uppercase;}
-.soon .date .d{font-family:"Archivo"; font-weight:900; font-size:22px; line-height:1;}
-.soon .pill{width:40px; height:58px; border-radius:6px; flex:0 0 auto; background-size:cover; background-position:center; background:#1c1c24;}
-.soon .meta{flex:1;} .soon .meta b{font-size:14px; font-weight:700; display:block;} .soon .meta small{font-size:11px; color:var(--muted);}
+/* coming soon — bigger prominent tiles */
+.soongrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; padding:6px 16px 0;}
+.soontile{cursor:pointer;}
+.soontile .sp{aspect-ratio:2/3; border-radius:11px; background-size:cover; background-position:center; background-color:#1c1c24; position:relative; overflow:hidden;}
+.soontile .sp::after{content:""; position:absolute; inset:0; background:linear-gradient(transparent 60%,rgba(0,0,0,.85));}
+.soontile .dbadge{position:absolute; top:8px; left:8px; z-index:2; font-size:10px; font-weight:800; letter-spacing:.03em; color:#fff; background:var(--red); padding:3px 8px; border-radius:6px;}
+.soontile .st{position:absolute; bottom:0; left:0; right:0; z-index:2; padding:9px; font-size:12px; font-weight:700; line-height:1.15;}
+.soontile .sg{display:block; font-size:9px; color:rgba(255,255,255,.6); font-weight:500; margin-top:2px;}
 
-/* ---------- rank ---------- */
-.rankwrap{padding:0 18px;}
-.rankbar{display:flex; justify-content:space-between; align-items:center; margin:2px 0 10px; font-size:11px; color:var(--muted);}
+/* for you — infinite gallery, bigger tiles */
+.fygrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:13px; padding:6px 16px 0;}
+.fyload{text-align:center; color:var(--faint); font-size:12px; padding:22px;}
+#fy-sentinel{height:1px;}
+
+/* ---------- rank (side by side) ---------- */
+.rankwrap{padding:0 16px; max-width:640px; margin:0 auto;}
+.rankbar{display:flex; justify-content:space-between; align-items:center; margin:4px 0 10px; font-size:11px; color:var(--muted);}
 .rankbar b{color:var(--ink); font-family:"Archivo"; font-weight:800;}
-.prog{height:5px; border-radius:3px; background:var(--card); overflow:hidden; margin-bottom:14px;}
-.prog i{display:block; height:100%; background:linear-gradient(90deg,var(--red),var(--gold)); width:0;}
-.bd{height:186px; border-radius:12px; position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:13px; margin-bottom:10px; border:2px solid transparent; background-size:cover; background-position:center; background-color:#1c1c24; transition:border-color .15s, transform .1s;}
-.bd::after{content:""; position:absolute; inset:0; background:linear-gradient(transparent 30%,rgba(0,0,0,.92));}
-.bd.pick{cursor:pointer;} .bd.pick:active{transform:scale(.985);} .bd.pick:hover{border-color:rgba(255,255,255,.4);}
-.bd .z{position:relative; z-index:3; width:100%;}
-.bd .match{font-size:9px; color:var(--green); font-weight:800; letter-spacing:.04em;}
-.bd .match.new{color:var(--blue);}
-.bd h3{font-family:"Archivo"; font-weight:800; font-size:20px; margin:3px 0 2px; line-height:.98;}
-.bd .sub{font-size:10.5px; color:#c8c8d0;}
-.bd .crown{position:absolute; top:11px; right:11px; z-index:3; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:#fff; background:var(--red); padding:4px 8px; border-radius:6px; opacity:0; transition:opacity .15s;}
+.prog{height:5px; border-radius:3px; background:var(--card); overflow:hidden; margin-bottom:16px;} .prog i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--red),var(--gold));}
+.duel{display:flex; gap:12px; position:relative; align-items:flex-start;}
+.rside{flex:1 1 0; min-width:0;}
+.bd{width:100%; aspect-ratio:2/3; border-radius:12px; background-size:cover; background-position:center; background-color:#1c1c24; position:relative; overflow:hidden; border:2px solid transparent; transition:border-color .15s, transform .1s;}
+.bd.pick{cursor:pointer;} .bd.pick:active{transform:scale(.98);} .bd.pick:hover{border-color:rgba(255,255,255,.55);}
+.bd .newtag{position:absolute; top:8px; left:8px; z-index:2; font-size:9px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:#04121f; background:var(--blue); padding:3px 7px; border-radius:6px;}
+.bd .crown{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.35); color:#fff; font-weight:800; font-size:13px; opacity:0; transition:.15s; z-index:3;}
 .bd.pick:hover .crown{opacity:1;}
-.qa{display:flex; gap:6px; margin-top:9px;}
-.qa button{font-size:10px; font-weight:700; padding:6px 9px; border-radius:7px; border:1px solid rgba(255,255,255,.22); background:rgba(0,0,0,.4); color:#fff;}
-.qa button.active{background:var(--green); color:#04140a; border-color:transparent;}
-.qa button.hide{color:#ff9a9a; border-color:rgba(255,120,120,.35);}
-.qa button:active{transform:scale(.94);}
-.vstok{position:absolute; left:50%; top:calc(50% - 5px); transform:translate(-50%,-50%); z-index:6; width:38px; height:38px; border-radius:50%; background:var(--red); color:#fff; font-family:"Archivo"; font-weight:900; font-size:12px; display:flex; align-items:center; justify-content:center; border:3px solid var(--bg); pointer-events:none;}
-.hint{text-align:center; font-size:11px; color:var(--muted); margin:8px 0 2px; min-height:16px;}
-.hint.warn{color:var(--gold);}
-.skip{display:block; margin:12px auto 0; background:transparent; border:1px solid var(--line); color:var(--muted); font-size:11px; font-weight:600; padding:8px 16px; border-radius:999px;}
+.rcap{margin:9px 0 7px;} .rcap b{font-size:13px; font-weight:700; display:block; line-height:1.15;} .rcap small{font-size:10px; color:var(--muted);}
+.qa2{display:grid; grid-template-columns:1fr 1fr; gap:5px;}
+.qa2 button{font-size:10px; font-weight:700; padding:7px 4px; border-radius:7px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.08); color:#fff; display:flex; align-items:center; justify-content:center; gap:3px;}
+.qa2 button.hide{color:#ff9a9a; border-color:rgba(255,120,120,.3);}
+.qa2 button.skip{color:var(--blue); border-color:rgba(92,200,255,.3);}
+.qa2 button:active{transform:scale(.95);}
+.qa1{display:flex;} .qa1 button{flex:1; font-size:10px; font-weight:700; padding:7px 0; border-radius:7px; border:1px solid rgba(255,120,120,.3); background:rgba(255,255,255,.06); color:#ff9a9a;}
+.vstok{position:absolute; left:50%; top:32%; transform:translate(-50%,-50%); z-index:6; width:36px; height:36px; border-radius:50%; background:var(--red); color:#fff; font-family:"Archivo"; font-weight:900; font-size:12px; display:flex; align-items:center; justify-content:center; border:3px solid var(--bg); pointer-events:none;}
+.hint{text-align:center; font-size:11.5px; color:var(--muted); margin:14px 0 2px; min-height:16px;} .hint.warn{color:var(--gold);}
+.skipbtn{display:block; margin:12px auto 0; background:transparent; border:1px solid var(--line); color:var(--muted); font-size:11px; font-weight:600; padding:8px 16px; border-radius:999px;}
 .lb{margin:22px 0 0; background:var(--bg2); border:1px solid var(--line); border-radius:12px; padding:14px 15px;}
-.lb h4{font-family:"Archivo"; font-weight:800; font-size:12px; margin:0 0 11px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); display:flex; justify-content:space-between;}
-.lb h4 span{color:var(--faint); font-weight:600; letter-spacing:0; text-transform:none;}
-.lrow{display:flex; align-items:center; gap:11px; padding:7px 0; border-bottom:1px solid var(--line);}
-.lrow:last-child{border-bottom:none;}
-.lrow .p{font-family:"Archivo"; font-weight:900; font-size:14px; width:20px; color:var(--gold); text-align:center;}
-.lrow .p.o{color:var(--faint);}
-.lrow .t{flex:1; font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.lrow .t small{color:var(--faint); font-weight:400; margin-left:5px;}
-.lrow .e{font-family:"Archivo"; font-variant-numeric:tabular-nums; font-weight:800; font-size:13px;}
-.lrow .e small{color:var(--faint); font-size:9px; font-weight:600; display:block; text-align:right;}
+.lb h4{font-family:"Archivo"; font-weight:800; font-size:12px; margin:0 0 11px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); display:flex; justify-content:space-between;} .lb h4 span{color:var(--faint); font-weight:600; letter-spacing:0; text-transform:none;}
+.lrow{display:flex; align-items:center; gap:11px; padding:7px 0; border-bottom:1px solid var(--line);} .lrow:last-child{border-bottom:none;}
+.lrow .p{font-family:"Archivo"; font-weight:900; font-size:14px; width:20px; color:var(--gold); text-align:center;} .lrow .p.o{color:var(--faint);}
+.lrow .t{flex:1; font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;} .lrow .t small{color:var(--faint); font-weight:400; margin-left:5px;}
+.lrow .e{font-family:"Archivo"; font-variant-numeric:tabular-nums; font-weight:800; font-size:13px; color:var(--ink);} .lrow .e small{color:var(--faint); font-size:9px; font-weight:600; display:block; text-align:right;}
 .done{text-align:center; padding:28px 16px; color:var(--muted); font-size:13px; line-height:1.5;}
 
-/* ---------- search modal ---------- */
-.modal{position:fixed; inset:0; z-index:50; background:rgba(0,0,0,.6); display:flex; align-items:flex-start; justify-content:center; padding:60px 16px;}
-.sheet{width:100%; max-width:420px; background:var(--bg2); border:1px solid var(--line); border-radius:16px; overflow:hidden; max-height:80vh; display:flex; flex-direction:column;}
-.sheet .top{display:flex; gap:8px; padding:14px; border-bottom:1px solid var(--line);}
-.sheet input{flex:1; background:var(--card); border:1px solid var(--line); color:var(--ink); border-radius:9px; padding:10px 12px; font-size:14px;}
-.sheet input:focus{outline:none; border-color:var(--muted);}
-.sheet .x{background:none; border:none; color:var(--muted); font-size:20px;}
-.sresults{overflow-y:auto; padding:6px;}
-.sr{display:flex; gap:11px; align-items:center; padding:9px 8px; border-radius:10px;}
-.sr:hover{background:var(--card);}
-.sr .p{width:38px; height:57px; border-radius:5px; background-size:cover; background-position:center; background:#1c1c24; flex:0 0 auto;}
-.sr .m{flex:1;} .sr .m b{font-size:13.5px; display:block;} .sr .m small{font-size:11px; color:var(--muted);}
-.sr .adds{display:flex; gap:5px;}
-.sr .adds button{font-size:10px; font-weight:700; border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:6px; padding:5px 7px;}
-.sr .adds button.w{border-color:var(--green); color:var(--green);}
-
-.toast{position:fixed; left:50%; bottom:92px; transform:translateX(-50%) translateY(20px); z-index:60; background:#fff; color:#000; font-size:12.5px; font-weight:700; padding:10px 18px; border-radius:999px; box-shadow:0 10px 30px rgba(0,0,0,.4); opacity:0; pointer-events:none; transition:.25s; white-space:nowrap;}
-.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
-
-.nav{position:fixed; left:50%; transform:translateX(-50%); bottom:0; width:100%; max-width:440px; z-index:30; display:grid; grid-template-columns:repeat(4,1fr); background:rgba(12,12,16,.94); border-top:1px solid var(--line); backdrop-filter:blur(12px);}
-.nav button{background:none; border:none; color:var(--faint); padding:10px 0 13px; display:flex; flex-direction:column; align-items:center; gap:4px; font-size:10px; font-weight:600;}
-.nav button svg{width:21px; height:21px; stroke:currentColor; fill:none; stroke-width:1.8;}
-.nav button.on{color:var(--ink);} .nav button.on svg{stroke:var(--red);}
-
-/* ---------- detail card (Action-Forward) ---------- */
-.poster{cursor:pointer;}
-.dmodal{position:fixed; inset:0; z-index:70; background:rgba(0,0,0,.72); display:none; align-items:flex-start; justify-content:center; overflow-y:auto;}
+/* ---------- detail card ---------- */
+.dmodal{position:fixed; inset:0; z-index:70; background:rgba(0,0,0,.72); display:none; align-items:flex-start; justify-content:center; overflow-y:auto; overscroll-behavior:contain;}
 .dmodal.show{display:flex;}
-.dcard{width:100%; max-width:440px; min-height:100%; background:#0b0b0f; position:relative; color:#fff; padding-bottom:34px;}
+.dcard{width:100%; max-width:560px; min-height:100%; background:#0b0b0f; position:relative; color:#fff; padding-bottom:40px;}
 .dloading{padding:64px 20px; text-align:center; color:var(--muted); font-size:14px;}
-.dback{height:200px; position:relative; background-size:cover; background-position:center; background-color:#17171e; display:flex; align-items:flex-end;}
+.dback{height:220px; position:relative; background-size:cover; background-position:center; background-color:#17171e; display:flex; align-items:flex-end;}
 .dback::after{content:""; position:absolute; inset:0; background:linear-gradient(transparent 30%,#0b0b0f);}
-.dttl{position:relative; z-index:2; font-family:"Archivo"; font-weight:800; font-size:25px; line-height:1; margin:0; padding:16px;}
-.dbody{padding:12px 16px 0;}
-.dmeta{font-size:11.5px; color:#aeb2bd; font-weight:500; margin-bottom:13px;}
-.dmeta b{color:#fff;} .dmeta .rating{color:var(--gold); font-weight:800;}
+.dttl{position:relative; z-index:2; font-family:"Archivo"; font-weight:800; font-size:27px; line-height:1; margin:0; padding:16px;}
+.dbody{padding:12px 16px 0; max-width:560px; margin:0 auto;}
+.dmeta{font-size:11.5px; color:#aeb2bd; font-weight:500; margin-bottom:13px;} .dmeta b{color:#fff;} .dmeta .rating{color:var(--gold); font-weight:800;}
 .rankpill{display:inline-flex; align-items:center; gap:4px; background:rgba(231,178,76,.16); color:var(--gold); font-weight:800; font-size:11px; padding:3px 8px; border-radius:6px;}
 .dgrid{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;}
 .dgrid button{padding:13px 0; border-radius:10px; border:1px solid #2a2d37; background:#16171d; color:#fff; font-weight:700; font-size:12.5px; display:flex; align-items:center; justify-content:center; gap:6px;}
@@ -166,79 +149,123 @@ button{font-family:inherit; cursor:pointer;}
 .dlbl{font-size:9px; text-transform:uppercase; letter-spacing:.14em; color:var(--faint); margin:0 0 9px;}
 .dprovs{display:flex; flex-wrap:wrap; gap:7px;}
 .dprovs .prov{display:inline-flex; align-items:center; gap:6px; background:#16171d; border:1px solid #262a34; border-radius:8px; padding:6px 9px; font-size:11px; font-weight:700; color:#e8e8ee;}
-.dprovs .prov img{width:18px; height:18px; border-radius:4px;}
-.dprovs .prov em{font-style:normal; color:var(--faint); font-size:9px; font-weight:600; margin-left:1px;}
+.dprovs .prov img{width:18px; height:18px; border-radius:4px;} .dprovs .prov em{font-style:normal; color:var(--faint); font-size:9px; font-weight:600; margin-left:1px;}
 .dprovs .noprov{font-size:11px; color:var(--faint);}
 .dov{font-size:12.5px; color:#c4c6cf; line-height:1.6; margin:0;}
-.dsim{display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;}
-.dsim::-webkit-scrollbar{display:none;}
-.dsim .s{width:78px; flex:0 0 auto; cursor:pointer;}
-.dsim .sp{aspect-ratio:2/3; border-radius:6px; margin-bottom:4px; background-size:cover; background-position:center; background-color:#1c1c24;}
-.dsim small{font-size:9px; color:#aeb2bd; line-height:1.15; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.dcast{display:flex; gap:12px; overflow-x:auto; scrollbar-width:none;} .dcast::-webkit-scrollbar{display:none;}
+.dcast .c{width:62px; flex:0 0 auto; text-align:center;}
+.dcast .av{width:58px; height:58px; border-radius:50%; margin:0 auto 6px; background-size:cover; background-position:center; background-color:#22232c; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; color:#5a5c66; border:1px solid #2a2c36;}
+.dcast .nm{font-size:9.5px; color:#e8e8ee; font-weight:600; line-height:1.15; display:block;}
+.dcast .rl{font-size:8.5px; color:var(--faint); line-height:1.1; display:block; margin-top:1px;}
+.dsim{display:flex; gap:10px; overflow-x:auto; scrollbar-width:none;} .dsim::-webkit-scrollbar{display:none;}
+.dsim .s{width:92px; flex:0 0 auto; cursor:pointer;}
+.dsim .sp{aspect-ratio:2/3; border-radius:7px; margin-bottom:5px; background-size:cover; background-position:center; background-color:#1c1c24;}
+.dsim small{font-size:9.5px; color:#aeb2bd; line-height:1.15; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .dsim .noprov{font-size:11px; color:var(--faint);}
+.close{position:absolute; top:12px; right:12px; z-index:30; width:30px; height:30px; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; border:none; font-size:16px; display:flex; align-items:center; justify-content:center;}
+
+/* ---------- search modal ---------- */
+.modal{position:fixed; inset:0; z-index:80; background:rgba(0,0,0,.6); display:flex; align-items:flex-start; justify-content:center; padding:56px 16px;}
+.sheet{width:100%; max-width:460px; background:var(--bg2); border:1px solid var(--line); border-radius:16px; overflow:hidden; max-height:82vh; display:flex; flex-direction:column;}
+.sheet .top{display:flex; gap:8px; padding:14px; border-bottom:1px solid var(--line);}
+.sheet input{flex:1; background:var(--card); border:1px solid var(--line); color:var(--ink); border-radius:9px; padding:10px 12px; font-size:16px;}
+.sheet input:focus{outline:none; border-color:var(--muted);}
+.sheet .x{background:none; border:none; color:var(--muted); font-size:20px;}
+.sresults{overflow-y:auto; padding:6px;}
+.sr{display:flex; gap:11px; align-items:center; padding:9px 8px; border-radius:10px;} .sr:hover{background:var(--card);}
+.sr .p{width:40px; height:60px; border-radius:5px; background-size:cover; background-position:center; background:#1c1c24; flex:0 0 auto;}
+.sr .m{flex:1;} .sr .m b{font-size:14px; display:block;} .sr .m small{font-size:11px; color:var(--muted);}
+.sr .adds{display:flex; gap:5px;}
+.sr .adds button{font-size:10px; font-weight:700; border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:6px; padding:6px 8px;} .sr .adds button.w{border-color:var(--green); color:var(--green);}
+
+.toast{position:fixed; left:50%; bottom:92px; transform:translateX(-50%) translateY(20px); z-index:90; background:#fff; color:#000; font-size:12.5px; font-weight:700; padding:10px 18px; border-radius:999px; box-shadow:0 10px 30px rgba(0,0,0,.4); opacity:0; pointer-events:none; transition:.25s; white-space:nowrap;}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+/* ============ LANDSCAPE / DESKTOP: left nav, fill screen ============ */
+@media (orientation:landscape) and (min-height:400px), (min-width:900px){
+  .stage{flex-direction:row;}
+  .appbar{display:none;}
+  .nav{flex-direction:column; width:158px; border-top:none; border-right:1px solid var(--line); padding:16px 10px; gap:4px;}
+  .nav .brand{display:block; font-family:"Archivo"; font-weight:900; font-size:20px; color:var(--red); padding:6px 12px 14px;}
+  .nav .brand b{color:var(--ink); font-weight:800;}
+  .nav .tab{flex:0 0 auto; flex-direction:row; justify-content:flex-start; gap:12px; width:100%; padding:11px 14px; border-radius:10px; font-size:13.5px; font-weight:700;}
+  .nav .tab.on{background:var(--card); color:var(--ink);}
+  .nav .navtools{display:flex; gap:8px; margin-top:auto; padding:8px 6px;}
+  .main{flex:1 1 auto;}
+  .scroll{padding-top:6px;}
+  .toast{left:auto; right:24px; transform:translateY(20px);} .toast.show{transform:translateY(0);}
+  .hero{margin-top:14px;}
+}
 </style>
 </head>
 <body>
 
-<!-- ============ AUTH ============ -->
+<!-- AUTH -->
 <div id="auth" class="authwrap">
   <div class="logo">REEL<b>DECK</b></div>
   <p>Your watchlist, upcoming releases, taste-based recs, and a head-to-head ranker — synced to your own OneDrive.</p>
   <button class="signin" onclick="login()">Sign in with Microsoft</button>
   <div id="setupNote" class="setupNote hidden">
-    <b>⚙️ First-time setup</b><br>
-    1. Deploy the TMDB Worker and set <code>CONFIG.WORKER</code> to its URL.<br>
-    2. In your Entra app, add this page's URL as a <b>redirect URI</b> (SPA), or set <code>CONFIG.CLIENT_ID</code> to a new app.<br>
-    3. Reload and sign in. Data lands at <code>0 - Data/AI/Life OS/Movies/app/library.json</code>.
+    <b>⚙️ First-time setup</b><br>1. Deploy the TMDB Worker and set <code>CONFIG.WORKER</code>.<br>
+    2. Add this page's URL as an SPA redirect URI in your Entra app.<br>
+    3. Reload &amp; sign in. Data → <code>0 - Data/AI/Life OS/Movies/app/library.json</code>.
   </div>
 </div>
 
-<!-- ============ APP ============ -->
+<!-- APP -->
 <div id="app" class="stage hidden">
-  <div class="appbar">
-    <div class="logo">REEL<b>DECK</b></div>
-    <div class="tools">
+  <main class="main">
+    <header class="appbar">
+      <div class="logo">REEL<b>DECK</b></div>
+      <div class="tools">
+        <button class="icobtn" onclick="openSearch()" aria-label="Add movie"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+        <button class="icobtn" onclick="signOut()" aria-label="Sign out"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg></button>
+      </div>
+    </header>
+    <div class="scroll" id="scroll">
+      <section class="view on" id="v-watch">
+        <div id="hero" class="hero"></div>
+        <div class="sec-h"><h2>Your Watchlist</h2><span class="see" id="wl-count"></span></div>
+        <div class="rail" id="wl-rail"></div>
+        <div class="sec-h"><h2>Watched · by rank</h2><span class="see" id="watched-count"></span></div>
+        <div class="grid" id="watched-grid"></div>
+      </section>
+
+      <section class="view" id="v-soon">
+        <div class="sec-h" style="margin-top:8px"><h2>Coming Soon</h2><span class="see">upcoming releases</span></div>
+        <div class="soongrid" id="soon-grid"></div>
+      </section>
+
+      <section class="view" id="v-foryou">
+        <div class="sec-h" style="margin-top:8px"><h2>For You</h2><span class="see">from your taste</span></div>
+        <div class="fygrid" id="fy-grid"></div>
+        <div id="fy-sentinel"></div>
+        <div class="fyload" id="fy-load"></div>
+      </section>
+
+      <section class="view" id="v-rank">
+        <div class="rankwrap">
+          <div class="rankbar"><span>Match <b id="matchno">1</b></span><span><b id="ranked-pct">0%</b> of your library ranked</span></div>
+          <div class="prog"><i id="progbar"></i></div>
+          <div id="duelzone"></div>
+          <div class="hint" id="hint"></div>
+          <button class="skipbtn" onclick="skipPair()">↻ Too close — skip this pair</button>
+          <div class="lb"><h4>Your Ranking <span id="lb-sub"></span></h4><div id="lb-rows"></div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="nav">
+    <div class="brand">REEL<b>DECK</b></div>
+    <button class="tab on" data-v="watch" onclick="go('watch')"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Watchlist</button>
+    <button class="tab" data-v="soon" onclick="go('soon')"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>Soon</button>
+    <button class="tab" data-v="foryou" onclick="go('foryou')"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.8L20 9.5l-4.5 4 1.4 6L12 16.8 7.1 19.5l1.4-6L4 9.5l5.8-.7z"/></svg>For You</button>
+    <button class="tab" data-v="rank" onclick="go('rank')"><svg viewBox="0 0 24 24"><path d="M6 20V10M12 20V4M18 20v-7"/></svg>Rank</button>
+    <div class="navtools">
       <button class="icobtn" onclick="openSearch()" aria-label="Add movie"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
       <button class="icobtn" onclick="signOut()" aria-label="Sign out"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg></button>
     </div>
-  </div>
-
-  <section class="view on" id="v-watch">
-    <div id="hero" class="hero"></div>
-    <div class="sec-h"><h2>Your Watchlist</h2><span class="see" id="wl-count"></span></div>
-    <div class="rail" id="wl-rail"></div>
-    <div class="sec-h"><h2>Watched · by rank</h2><span class="see" id="watched-count"></span></div>
-    <div class="grid" id="watched-grid"></div>
-  </section>
-
-  <section class="view" id="v-soon">
-    <div class="sec-h" style="margin-top:8px"><h2>Coming Soon</h2><span class="see">from TMDB</span></div>
-    <div id="soon-list"></div>
-  </section>
-
-  <section class="view" id="v-foryou">
-    <div class="sec-h" style="margin-top:8px"><h2>For You</h2><span class="see">from your taste</span></div>
-    <div class="rail" id="fy-rail-1"></div>
-    <div class="sec-h"><h2>More to discover</h2></div>
-    <div class="rail" id="fy-rail-2"></div>
-  </section>
-
-  <section class="view" id="v-rank">
-    <div class="rankwrap">
-      <div class="rankbar"><span>Match <b id="matchno">1</b></span><span><b id="ranked-pct">0%</b> of your library ranked</span></div>
-      <div class="prog"><i id="progbar"></i></div>
-      <div id="duelzone"></div>
-      <div class="hint" id="hint"></div>
-      <button class="skip" onclick="skipPair()">↻ Too close — skip this pair</button>
-      <div class="lb"><h4>Your Ranking <span id="lb-sub"></span></h4><div id="lb-rows"></div></div>
-    </div>
-  </section>
-
-  <nav class="nav">
-    <button class="on" data-v="watch" onclick="go('watch')"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Watchlist</button>
-    <button data-v="soon" onclick="go('soon')"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>Soon</button>
-    <button data-v="foryou" onclick="go('foryou')"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.8L20 9.5l-4.5 4 1.4 6L12 16.8 7.1 19.5l1.4-6L4 9.5l5.8-.7z"/></svg>For You</button>
-    <button data-v="rank" onclick="go('rank')"><svg viewBox="0 0 24 24"><path d="M6 20V10M12 20V4M18 20v-7"/></svg>Rank</button>
   </nav>
 </div>
 
@@ -247,118 +274,80 @@ button{font-family:inherit; cursor:pointer;}
 <script>
 /* ================= CONFIG ================= */
 const CONFIG = {
-  // Dedicated Reel Deck Entra app (single-tenant, SPA platform).
   CLIENT_ID: "991ae1db-ae76-4a9e-a07c-beccaba8da07",
   TENANT:    "0ae860f2-b1e0-4222-b0e1-37314eddf4df",
   SCOPES:    "Files.ReadWrite offline_access",
-  WORKER:    "https://reel-deck-tmdb.gronniger.workers.dev"   // your deployed Worker
+  WORKER:    "https://reel-deck-tmdb.gronniger.workers.dev"
 };
 const REDIRECT_URI = location.origin + location.pathname;
-const LIB_PATH  = "/me/drive/root:/0 - Data/AI/Life OS/Movies/app/library.json";
-const POSTER = (p,size="w500") => p ? `https://image.tmdb.org/t/p/${size}${p}` : "";
+const LIB_PATH = "/me/drive/root:/0 - Data/AI/Life OS/Movies/app/library.json";
+const POSTER = (p,size="w342") => p ? `https://image.tmdb.org/t/p/${size}${p}` : "";
 const GENRES = {28:"Action",12:"Adventure",16:"Animation",35:"Comedy",80:"Crime",99:"Documentary",18:"Drama",10751:"Family",14:"Fantasy",36:"History",27:"Horror",10402:"Music",9648:"Mystery",10749:"Romance",878:"Sci-Fi",10770:"TV",53:"Thriller",10752:"War",37:"Western"};
+const MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
 
-let accessToken = null;
-let LIB = blankLib();
-let DISCOVER = [];     // live taste-matched candidates (not stored)
-let SOON = [];         // upcoming (not stored)
-let currentPair = null;
-let saveTimer;
+let accessToken=null, LIB=blankLib(), DISCOVER=[], SOON=[], currentPair=null, saveTimer, hintEl;
+function blankLib(){return {version:1,updated:null,movies:[],seen:[],hidden:[],log:[]};}
 
-function blankLib(){return {version:1, updated:null, movies:[], seen:[], hidden:[], log:[]};}
-
-/* ================= AUTH (PKCE) ================= */
-function b64u(buf){return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
-async function genPKCE(){
-  const verifier=b64u(crypto.getRandomValues(new Uint8Array(32)));
-  const digest=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
-  return {verifier, challenge:b64u(digest)};
-}
+/* ================= AUTH ================= */
+function b64u(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+async function genPKCE(){const v=b64u(crypto.getRandomValues(new Uint8Array(32)));const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));return {verifier:v,challenge:b64u(d)};}
 async function login(){
-  if(CONFIG.WORKER.includes("YOURNAME")||CONFIG.CLIENT_ID.startsWith("PASTE")){document.getElementById("setupNote").classList.remove("hidden");}
-  const {verifier,challenge}=await genPKCE();
-  const state=b64u(crypto.getRandomValues(new Uint8Array(16)));
+  const {verifier,challenge}=await genPKCE(); const state=b64u(crypto.getRandomValues(new Uint8Array(16)));
   localStorage.setItem('rd_pkv',verifier); localStorage.setItem('rd_pks',state);
-  const p=new URLSearchParams({client_id:CONFIG.CLIENT_ID,response_type:'code',redirect_uri:REDIRECT_URI,
-    scope:CONFIG.SCOPES,code_challenge:challenge,code_challenge_method:'S256',state});
+  const p=new URLSearchParams({client_id:CONFIG.CLIENT_ID,response_type:'code',redirect_uri:REDIRECT_URI,scope:CONFIG.SCOPES,code_challenge:challenge,code_challenge_method:'S256',state});
   location.href=`https://login.microsoftonline.com/${CONFIG.TENANT}/oauth2/v2.0/authorize?${p}`;
 }
 async function handleRedirect(){
-  const q=new URLSearchParams(location.search);
-  if(!q.get('code'))return false;
+  const q=new URLSearchParams(location.search); if(!q.get('code'))return false;
   if(q.get('state')!==localStorage.getItem('rd_pks'))return false;
-  const body=new URLSearchParams({client_id:CONFIG.CLIENT_ID,grant_type:'authorization_code',
-    code:q.get('code'),redirect_uri:REDIRECT_URI,code_verifier:localStorage.getItem('rd_pkv')});
-  const r=await fetch(`https://login.microsoftonline.com/${CONFIG.TENANT}/oauth2/v2.0/token`,
-    {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
+  const body=new URLSearchParams({client_id:CONFIG.CLIENT_ID,grant_type:'authorization_code',code:q.get('code'),redirect_uri:REDIRECT_URI,code_verifier:localStorage.getItem('rd_pkv')});
+  const r=await fetch(`https://login.microsoftonline.com/${CONFIG.TENANT}/oauth2/v2.0/token`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
   const j=await r.json();
-  if(j.access_token){accessToken=j.access_token;localStorage.setItem('rd_tok',j.access_token);
-    if(j.refresh_token)localStorage.setItem('rd_ref',j.refresh_token);
-    history.replaceState({},'',REDIRECT_URI);return true;}
+  if(j.access_token){accessToken=j.access_token;localStorage.setItem('rd_tok',j.access_token);if(j.refresh_token)localStorage.setItem('rd_ref',j.refresh_token);history.replaceState({},'',REDIRECT_URI);return true;}
   return false;
 }
 async function refreshToken(){
   const rt=localStorage.getItem('rd_ref');if(!rt)return false;
   const body=new URLSearchParams({client_id:CONFIG.CLIENT_ID,grant_type:'refresh_token',refresh_token:rt,scope:CONFIG.SCOPES});
-  const r=await fetch(`https://login.microsoftonline.com/${CONFIG.TENANT}/oauth2/v2.0/token`,
-    {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
+  const r=await fetch(`https://login.microsoftonline.com/${CONFIG.TENANT}/oauth2/v2.0/token`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
   const j=await r.json();
-  if(j.access_token){accessToken=j.access_token;localStorage.setItem('rd_tok',j.access_token);
-    if(j.refresh_token)localStorage.setItem('rd_ref',j.refresh_token);return true;}
+  if(j.access_token){accessToken=j.access_token;localStorage.setItem('rd_tok',j.access_token);if(j.refresh_token)localStorage.setItem('rd_ref',j.refresh_token);return true;}
   return false;
 }
 function signOut(){['rd_tok','rd_ref','rd_pkv','rd_pks'].forEach(k=>localStorage.removeItem(k));location.reload();}
 function showAuth(){document.getElementById("app").classList.add("hidden");document.getElementById("auth").classList.remove("hidden");}
 function showApp(){document.getElementById("auth").classList.add("hidden");document.getElementById("app").classList.remove("hidden");}
 
-/* ================= GRAPH ================= */
+/* ================= GRAPH + TMDB ================= */
 async function gF(url,opts={}){
-  const tok=accessToken||localStorage.getItem('rd_tok');
-  if(!tok){showAuth();return null;}
-  accessToken=tok;
-  const res=await fetch('https://graph.microsoft.com/v1.0'+url,
-    {...opts,headers:{Authorization:'Bearer '+accessToken,...(opts.headers||{})}});
-  if(res.status===401){if(await refreshToken())return gF(url,opts);signOut();return null;}
-  return res;
+  const tok=accessToken||localStorage.getItem('rd_tok'); if(!tok){showAuth();return null;} accessToken=tok;
+  const res=await fetch('https://graph.microsoft.com/v1.0'+url,{...opts,headers:{Authorization:'Bearer '+accessToken,...(opts.headers||{})}});
+  if(res.status===401){if(await refreshToken())return gF(url,opts);signOut();return null;} return res;
 }
-
-/* ================= TMDB (via Worker) ================= */
-async function tmdb(path, params={}){
-  try{
-    const u=new URL(CONFIG.WORKER);
-    u.searchParams.set('path', path);
-    for(const k in params) if(params[k]!=null) u.searchParams.set(k, params[k]);
-    const r=await fetch(u.toString()); if(!r.ok) return null;
-    return await r.json();
-  }catch(e){ return null; }
+async function tmdb(path,params={}){
+  try{const u=new URL(CONFIG.WORKER);u.searchParams.set('path',path);for(const k in params)if(params[k]!=null)u.searchParams.set(k,params[k]);
+    const r=await fetch(u.toString());if(!r.ok)return null;return await r.json();}catch(e){return null;}
 }
 
 /* ================= LIBRARY ================= */
 async function loadLibrary(){
   const r=await gF(LIB_PATH+':/content');
-  if(r&&r.ok){try{LIB=await r.json();}catch(e){LIB=blankLib();}}
-  else if(r&&r.status===404){LIB=blankLib();await saveLibrary();}
+  if(r&&r.ok){try{LIB=await r.json();}catch(e){LIB=blankLib();}} else if(r&&r.status===404){LIB=blankLib();await saveLibrary();}
   normalize();
 }
-function normalize(){
-  LIB.movies=LIB.movies||[]; LIB.seen=LIB.seen||[]; LIB.hidden=LIB.hidden||[]; LIB.log=LIB.log||[];
-  LIB.movies.forEach(m=>{if(m.elo==null)m.elo=1500;if(m.apps==null)m.apps=0;if(m.w==null)m.w=0;if(m.l==null)m.l=0;if(!m.status)m.status='watched';});
-}
-async function saveLibrary(){LIB.updated=new Date().toISOString();
-  await gF(LIB_PATH+':/content',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(LIB,null,2)});}
+function normalize(){LIB.movies=LIB.movies||[];LIB.seen=LIB.seen||[];LIB.hidden=LIB.hidden||[];LIB.log=LIB.log||[];
+  LIB.movies.forEach(m=>{if(m.elo==null)m.elo=1500;if(m.apps==null)m.apps=0;if(m.w==null)m.w=0;if(m.l==null)m.l=0;if(!m.status)m.status='watched';});}
+async function saveLibrary(){LIB.updated=new Date().toISOString();await gF(LIB_PATH+':/content',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(LIB,null,2)});}
 function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveLibrary,600);}
-
 function inLib(id){return LIB.movies.find(m=>m.tmdbId===id);}
 function isHidden(id){return LIB.hidden.includes(id);}
-function addMovie(src, status){
+function addMovie(src,status){
   let m=inLib(src.tmdbId);
-  if(m){m.status=status; if(status==='watched'&&!m.watchedDate)m.watchedDate=new Date().toISOString();}
-  else{m={tmdbId:src.tmdbId,title:src.title,year:src.year,poster:src.poster,genres:src.genres||[],
-    status,elo:1500,apps:0,w:0,l:0,addedDate:new Date().toISOString(),
-    watchedDate:status==='watched'?new Date().toISOString():null};
-    LIB.movies.push(m);}
-  queueSave(); return m;
+  if(m){m.status=status;if(status==='watched'&&!m.watchedDate)m.watchedDate=new Date().toISOString();}
+  else{m={tmdbId:src.tmdbId,title:src.title,year:src.year,poster:src.poster,genres:src.genres||[],status,elo:1500,apps:0,w:0,l:0,addedDate:new Date().toISOString(),watchedDate:status==='watched'?new Date().toISOString():null};LIB.movies.push(m);}
+  queueSave();return m;
 }
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
 /* ================= RANKING ================= */
 function watchedPool(){return LIB.movies.filter(m=>m.status==='watched'&&!isHidden(m.tmdbId));}
@@ -366,291 +355,166 @@ const pk=(a,b)=>[a,b].sort((x,y)=>x-y).join('|');
 const seenPair=(a,b)=>LIB.seen.includes(pk(a,b));
 function partners(m,pool){return pool.filter(o=>o.tmdbId!==m.tmdbId&&!seenPair(m.tmdbId,o.tmdbId));}
 function K(m){return m.apps<10?40:24;}
-
+function wrap(m){return Object.assign({seen:true},m);}
 function nextRankingPair(){
-  const pool=watchedPool();
-  const cands=pool.filter(m=>partners(m,pool).length>0);
-  if(!cands.length)return null;
-  const minApps=Math.min(...cands.map(c=>c.apps));
-  const fp=cands.filter(c=>c.apps===minApps);
-  const focus=fp[Math.random()*fp.length|0];
-  let ps=partners(focus,pool);
-  const minP=Math.min(...ps.map(p=>p.apps));
-  ps=ps.filter(p=>p.apps<=minP+1).sort((a,b)=>Math.abs(a.elo-focus.elo)-Math.abs(b.elo-focus.elo));
+  const pool=watchedPool();const cands=pool.filter(m=>partners(m,pool).length>0);if(!cands.length)return null;
+  const minApps=Math.min(...cands.map(c=>c.apps));const fp=cands.filter(c=>c.apps===minApps);
+  const focus=fp[Math.random()*fp.length|0];let ps=partners(focus,pool);
+  const minP=Math.min(...ps.map(p=>p.apps));ps=ps.filter(p=>p.apps<=minP+1).sort((a,b)=>Math.abs(a.elo-focus.elo)-Math.abs(b.elo-focus.elo));
   return [wrap(focus),wrap(ps[0])];
 }
-function discoveryPair(){
-  const wp=watchedPool(); const disc=DISCOVER.filter(d=>!inLib(d.tmdbId)&&!isHidden(d.tmdbId));
-  if(!wp.length||!disc.length)return null;
-  return [wrap(wp[Math.random()*wp.length|0]), {...disc[Math.random()*disc.length|0], seen:false}];
-}
-function wrap(m){return Object.assign({seen:true}, m);}
-function getPair(){
-  const canDisc=DISCOVER.some(d=>!inLib(d.tmdbId)&&!isHidden(d.tmdbId)) && watchedPool().length>0;
-  if(canDisc && Math.random()<0.28){const d=discoveryPair(); if(d)return d;}
-  return nextRankingPair() || discoveryPair();
-}
+function discPool(){return DISCOVER.filter(d=>!inLib(d.tmdbId)&&!isHidden(d.tmdbId));}
+function discoveryPair(){const wp=watchedPool(),dp=discPool();if(!wp.length||!dp.length)return null;return [wrap(wp[Math.random()*wp.length|0]),{...dp[Math.random()*dp.length|0],seen:false}];}
+function getPair(){const canD=discPool().length>0&&watchedPool().length>0;if(canD&&Math.random()<0.28){const d=discoveryPair();if(d)return d;}return nextRankingPair()||discoveryPair();}
 function resolve(winId,loseId){
-  const W=inLib(winId),L=inLib(loseId); if(!W||!L)return;
-  const ew=1/(1+Math.pow(10,(L.elo-W.elo)/400));
-  W.elo+=K(W)*(1-ew); L.elo+=K(L)*(0-(1-ew));
-  W.apps++;L.apps++;W.w++;L.l++;
-  LIB.seen.push(pk(winId,loseId));
-  LIB.log.unshift({date:new Date().toISOString().slice(0,10),win:W.title,lose:L.title});
-  queueSave();
+  const W=inLib(winId),L=inLib(loseId);if(!W||!L)return;
+  const ew=1/(1+Math.pow(10,(L.elo-W.elo)/400));W.elo+=K(W)*(1-ew);L.elo+=K(L)*(0-(1-ew));
+  W.apps++;L.apps++;W.w++;L.l++;LIB.seen.push(pk(winId,loseId));LIB.log.unshift({date:new Date().toISOString().slice(0,10),win:W.title,lose:L.title});queueSave();
 }
-
-/* rank UI */
-let hintEl;
 function renderDuel(){
-  const zone=document.getElementById('duelzone');
-  const wp=watchedPool();
-  if(wp.length<2 && !DISCOVER.length){
-    zone.innerHTML=`<div class="done">Add a few movies you've <b>watched</b> (tap the search icon) and they'll start facing off here.</div>`;
-    document.querySelector('.skip').style.display='none'; setHint(''); updateProgress(); renderLeaderboard(); return;
-  }
+  const zone=document.getElementById('duelzone');const wp=watchedPool();
+  if(wp.length<2&&!discPool().length){zone.innerHTML=`<div class="done">Add a few movies you've <b>watched</b> (tap 🔍) and they'll start facing off here.</div>`;document.querySelector('.skipbtn').style.display='none';setHint('');updateProgress();renderLeaderboard();return;}
   if(!currentPair)currentPair=getPair();
-  if(!currentPair){
-    zone.innerHTML=`<div class="done"><b style="color:var(--gold);font-family:Archivo;font-size:16px">Round-robin complete!</b><br>Every watched pair has met. Your ranking below is final.</div>`;
-    document.querySelector('.skip').style.display='none'; setHint(''); updateProgress(); renderLeaderboard(); return;
-  }
-  document.querySelector('.skip').style.display='';
+  if(!currentPair){zone.innerHTML=`<div class="done"><b style="color:var(--gold);font-family:Archivo;font-size:16px">Round-robin complete!</b><br>Every watched pair has met. Your ranking below is final.</div>`;document.querySelector('.skipbtn').style.display='none';setHint('');updateProgress();renderLeaderboard();return;}
+  document.querySelector('.skipbtn').style.display='';
   const [a,b]=currentPair;
-  zone.innerHTML=`<div style="position:relative">${card(a,'a')}<div class="vstok">VS</div>${card(b,'b')}</div>`;
-  const bothSeen=a.seen&&b.seen;
-  setHint(bothSeen?"Tap the one you like better.":"One's new to you — ✓ Watched to rank it, or ＋/⊘ to swap.",!bothSeen);
+  zone.innerHTML=`<div class="duel"><div class="rside">${card(a,'a')}</div><div class="vstok">VS</div><div class="rside">${card(b,'b')}</div></div>`;
+  const both=a.seen&&b.seen;
+  setHint(both?"Tap the poster you like better.":"One's new to you — ✓ Seen it to rank, or ↷ Skip / ＋ List / ⊘ Hide.",!both);
   document.getElementById('matchno').textContent=(LIB.seen.length+1);
-  updateProgress(); renderLeaderboard();
+  updateProgress();renderLeaderboard();
 }
 function card(m,side){
-  const canPick=currentPair[0].seen&&currentPair[1].seen;
-  const bg=m.poster?`background-image:linear-gradient(transparent 30%,rgba(0,0,0,.92)),url('${POSTER(m.poster)}')`:'';
-  const mt=m.seen?`<span class="match">seen · Elo ${Math.round(m.elo)}</span>`:`<span class="match new">new to you</span>`;
-  const g=(m.genres&&m.genres[0])||'';
-  return `<div class="bd ${canPick?'pick':''}" style="${bg}" ${canPick?`onclick="pick('${side}')"`:''}>
-    <span class="crown">Crown ♛</span>
-    <div class="z">${mt}
-      <h3>${esc(m.title)}</h3>
-      <div class="sub">${m.year||''} · ${g}</div>
-      <div class="qa">
-        <button class="${m.seen?'active':''}" onclick="event.stopPropagation();act('${side}','watch')">✓ ${m.seen?'Watched':'Seen it'}</button>
-        <button onclick="event.stopPropagation();act('${side}','add')">＋ Watchlist</button>
-        <button class="hide" onclick="event.stopPropagation();act('${side}','hide')">⊘ Hide</button>
-      </div>
-    </div></div>`;
+  const both=currentPair[0].seen&&currentPair[1].seen;
+  const canPick=both;
+  const bg=m.poster?`background-image:url('${POSTER(m.poster,'w342')}')`:'';
+  const newtag=m.seen?'':'<span class="newtag">New</span>';
+  const cap=m.seen?`<b>${esc(m.title)}</b><small>${m.year||''} · Elo ${Math.round(m.elo||1500)}</small>`:`<b>${esc(m.title)}</b><small>${m.year||''} · not seen</small>`;
+  const actions=m.seen
+    ? `<div class="qa1"><button onclick="event.stopPropagation();act('${side}','hide')">⊘ Hide</button></div>`
+    : `<div class="qa2">
+         <button onclick="event.stopPropagation();act('${side}','watch')">✓ Seen</button>
+         <button onclick="event.stopPropagation();act('${side}','add')">＋ List</button>
+         <button class="skip" onclick="event.stopPropagation();skipCard('${side}')">↷ Skip</button>
+         <button class="hide" onclick="event.stopPropagation();act('${side}','hide')">⊘ Hide</button>
+       </div>`;
+  return `<div class="bd ${canPick?'pick':''}" style="${bg}" ${canPick?`onclick="pick('${side}')"`:''}>${newtag}<div class="crown">Crown ♛</div></div>
+    <div class="rcap">${cap}</div>${actions}`;
 }
 function pick(side){
-  const [a,b]=currentPair;
-  if(!(a.seen&&b.seen)){setHint("Mark the new one ✓ Watched first, or swap it out.",true);return;}
-  const win=side==='a'?a:b, lose=side==='a'?b:a;
+  const [a,b]=currentPair;if(!(a.seen&&b.seen)){setHint("Mark the new one ✓ Seen first, or ↷ Skip it.",true);return;}
+  const win=side==='a'?a:b,lose=side==='a'?b:a;
   const gain=Math.round(K(inLib(win.tmdbId))*(1-1/(1+Math.pow(10,(lose.elo-win.elo)/400))));
-  resolve(win.tmdbId,lose.tmdbId);
-  toast(`${win.title} wins · +${gain} Elo`);
-  currentPair=null; renderDuel(); renderWatch();
+  resolve(win.tmdbId,lose.tmdbId);toast(`${win.title} wins · +${gain} Elo`);currentPair=null;renderDuel();renderWatch();
 }
 function act(side,what){
   const it=currentPair[side==='a'?0:1];
-  if(what==='watch'){ addMovie(it,'watched'); it.seen=true; toast(`Marked “${it.title}” watched`); renderDuel(); return; }
-  if(what==='add'){ addMovie(it,'watchlist'); toast(`Added “${it.title}” to Watchlist`); swap(side); return; }
-  if(what==='hide'){ if(!isHidden(it.tmdbId))LIB.hidden.push(it.tmdbId); queueSave(); toast("Hidden — won't show again"); swap(side); return; }
+  if(what==='watch'){addMovie(it,'watched');it.seen=true;toast(`Marked “${it.title}” watched`);renderDuel();return;}
+  if(what==='add'){addMovie(it,'watchlist');toast(`Added “${it.title}” to Watchlist`);swap(side,it.tmdbId);return;}
+  if(what==='hide'){if(!isHidden(it.tmdbId))LIB.hidden.push(it.tmdbId);queueSave();toast("Hidden — won't show again");swap(side,it.tmdbId);return;}
 }
-function swap(side){
-  const keep=currentPair[side==='a'?1:0];
-  let repl=null;
-  const disc=DISCOVER.filter(d=>!inLib(d.tmdbId)&&!isHidden(d.tmdbId)&&d.tmdbId!==keep.tmdbId);
-  if(Math.random()<0.4 && disc.length) repl={...disc[Math.random()*disc.length|0], seen:false};
-  if(!repl){
-    const pool=watchedPool().filter(x=>x.tmdbId!==keep.tmdbId&&(keep.seen?!seenPair(keep.tmdbId,x.tmdbId):true));
-    if(pool.length) repl=wrap(pool[Math.random()*pool.length|0]);
-  }
-  if(!repl && disc.length) repl={...disc[0], seen:false};
-  if(!repl){currentPair=null; renderDuel(); return;}
-  currentPair = side==='a' ? [repl,keep] : [keep,repl];
-  renderDuel();
+function skipCard(side){const it=currentPair[side==='a'?0:1];toast(`Skipped “${it.title}”`);swap(side,it.tmdbId);}
+function swap(side,excludeId){
+  const keep=currentPair[side==='a'?1:0];let repl=null;
+  const dp=discPool().filter(x=>x.tmdbId!==keep.tmdbId&&x.tmdbId!==excludeId);
+  if(Math.random()<0.5&&dp.length)repl={...dp[Math.random()*dp.length|0],seen:false};
+  if(!repl){const pool=watchedPool().filter(x=>x.tmdbId!==keep.tmdbId&&x.tmdbId!==excludeId&&(keep.seen?!seenPair(keep.tmdbId,x.tmdbId):true));if(pool.length)repl=wrap(pool[Math.random()*pool.length|0]);}
+  if(!repl&&dp.length)repl={...dp[0],seen:false};
+  if(!repl){currentPair=null;renderDuel();return;}
+  currentPair=side==='a'?[repl,keep]:[keep,repl];renderDuel();
 }
-function skipPair(){currentPair=null; renderDuel(); toast("Skipped — pair kept for later");}
-function updateProgress(){
-  const n=watchedPool().length; const total=n*(n-1)/2; const done=LIB.seen.length;
-  const pct=total?Math.round(done/total*100):0;
-  document.getElementById('ranked-pct').textContent=pct+'%';
-  document.getElementById('progbar').style.width=pct+'%';
-  document.getElementById('lb-sub').textContent=`${done} of ${total} pairs · ${n} films`;
-}
+function skipPair(){currentPair=null;renderDuel();toast("Skipped — pair kept for later");}
+function updateProgress(){const n=watchedPool().length;const total=n*(n-1)/2;const done=LIB.seen.length;const pct=total?Math.round(done/total*100):0;document.getElementById('ranked-pct').textContent=pct+'%';document.getElementById('progbar').style.width=pct+'%';document.getElementById('lb-sub').textContent=`${done} of ${total} pairs · ${n} films`;}
 function renderLeaderboard(){
-  const ranked=watchedPool().filter(m=>m.apps>0).sort((a,b)=>b.elo-a.elo).slice(0,6);
-  const rows=document.getElementById('lb-rows');
+  const ranked=watchedPool().filter(m=>m.apps>0).sort((a,b)=>b.elo-a.elo).slice(0,6);const rows=document.getElementById('lb-rows');
   if(!ranked.length){rows.innerHTML=`<div style="color:var(--faint);font-size:12px;padding:6px 0">Rank a few pairs and your top films appear here.</div>`;return;}
-  rows.innerHTML=ranked.map((m,i)=>`<div class="lrow"><div class="p ${i>2?'o':''}">${i+1}</div>
-    <div class="t">${esc(m.title)}<small>${m.year||''}</small></div>
-    <div class="e" style="color:var(--ink)">${Math.round(m.elo)}<small>${m.w}-${m.l}</small></div></div>`).join('');
+  rows.innerHTML=ranked.map((m,i)=>`<div class="lrow"><div class="p ${i>2?'o':''}">${i+1}</div><div class="t">${esc(m.title)}<small>${m.year||''}</small></div><div class="e">${Math.round(m.elo)}<small>${m.w}-${m.l}</small></div></div>`).join('');
 }
 
-/* ================= OTHER VIEWS ================= */
-function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function posterEl(m,opts={}){
-  const bg=m.poster?`background-image:url('${POSTER(m.poster)}')`:'';
-  const rank=opts.rank?`<span class="rank">#${opts.rank}</span>`:'';
-  return `<div class="poster" style="${bg}" onclick="openDetail(${m.tmdbId})">${rank}<div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;
-}
+/* ================= VIEWS ================= */
+function posterEl(m,opts={}){const bg=m.poster?`background-image:url('${POSTER(m.poster)}')`:'';const rank=opts.rank?`<span class="rank">#${opts.rank}</span>`:'';return `<div class="poster" style="${bg}" onclick="openDetail(${m.tmdbId})">${rank}<div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;}
 function renderWatch(){
-  const watched=watchedPool().slice().sort((a,b)=>b.elo-a.elo);
-  const hero=document.getElementById('hero');
-  if(watched.length){
-    const top=watched[0];
-    hero.style.backgroundImage=top.poster?`url('${POSTER(top.poster,"w780")}')`:'';
-    hero.innerHTML=`<div class="z"><div class="tag">#1 in your ranking</div><h1>${esc(top.title)}</h1>
-      <div class="btns"><button class="play" onclick="go('rank')">Rank more</button></div></div>`;
-  }else{
-    hero.style.backgroundImage=''; hero.innerHTML=`<div class="z"><div class="tag">Reel Deck</div><h1>Start your library</h1>
-      <div class="btns"><button class="play" onclick="openSearch()">＋ Add movies</button></div></div>`;
-  }
+  const watched=watchedPool().slice().sort((a,b)=>b.elo-a.elo);const hero=document.getElementById('hero');
+  if(watched.length){const top=watched[0];hero.style.backgroundImage=top.poster?`url('${POSTER(top.poster,"w780")}')`:'';hero.innerHTML=`<div class="z"><div class="tag">#1 in your ranking</div><h1>${esc(top.title)}</h1><div class="btns"><button onclick="go('rank')">Rank more</button></div></div>`;}
+  else{hero.style.backgroundImage='';hero.innerHTML=`<div class="z"><div class="tag">Reel Deck</div><h1>Start your library</h1><div class="btns"><button onclick="openSearch()">＋ Add movies</button></div></div>`;}
   const wl=LIB.movies.filter(m=>m.status==='watchlist'&&!isHidden(m.tmdbId));
   document.getElementById('wl-count').textContent=`${wl.length} to watch`;
-  document.getElementById('wl-rail').innerHTML=wl.length?wl.map(m=>posterEl(m)).join(''):`<div class="empty">Nothing here yet — ＋ movies from For You or the search icon.</div>`;
+  document.getElementById('wl-rail').innerHTML=wl.length?wl.map(m=>posterEl(m)).join(''):`<div class="empty">Nothing yet — ＋ movies from For You or 🔍.</div>`;
   document.getElementById('watched-count').textContent=`${watched.length} films`;
-  document.getElementById('watched-grid').innerHTML=watched.slice(0,12).map((m,i)=>posterEl(m,{rank:i+1})).join('')||`<div class="empty">Mark movies watched to build your ranking.</div>`;
+  document.getElementById('watched-grid').innerHTML=watched.slice(0,18).map((m,i)=>posterEl(m,{rank:i+1})).join('')||`<div class="empty">Mark movies watched to build your ranking.</div>`;
 }
 async function renderSoon(){
-  const list=document.getElementById('soon-list');
-  if(!SOON.length){const r=await tmdb('/movie/upcoming',{region:'US'}); SOON=(r&&r.results)?r.results:[];}
-  if(!SOON.length){list.innerHTML=`<div class="empty">Couldn't load upcoming — check the Worker URL.</div>`;return;}
-  const MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-  list.innerHTML=SOON.slice(0,20).map(x=>{
-    const d=x.release_date?new Date(x.release_date):null;
-    const g=(x.genre_ids||[]).map(id=>GENRES[id]).filter(Boolean).slice(0,2).join(" · ");
-    return `<div class="soon" onclick="openDetail(${x.id})" style="cursor:pointer"><div class="date"><div class="m">${d?MON[d.getMonth()]:'—'}</div><div class="d">${d?d.getDate():''}</div></div>
-      <div class="pill" style="background-image:url('${POSTER(x.poster_path,"w185")}')"></div>
-      <div class="meta"><b>${esc(x.title)}</b><small>${g||'Upcoming'}</small></div></div>`;
-  }).join('');
-}
-async function renderForYou(){
-  if(!DISCOVER.length) await buildDiscover();
-  const r1=document.getElementById('fy-rail-1'), r2=document.getElementById('fy-rail-2');
-  if(!DISCOVER.length){r1.innerHTML=`<div class="empty">Add a few watched movies and recs will appear.</div>`;r2.innerHTML='';return;}
-  r1.innerHTML=DISCOVER.slice(0,8).map(m=>posterElAdd(m)).join('');
-  r2.innerHTML=DISCOVER.slice(8,16).map(m=>posterElAdd(m)).join('');
-}
-function posterElAdd(m){
-  const bg=m.poster?`background-image:url('${POSTER(m.poster)}')`:'';
-  return `<div class="poster" style="${bg}" onclick="openDetail(${m.tmdbId})"><div class="lab">${esc(m.title)}<span class="yr">${m.year||''}</span></div></div>`;
-}
-function quickAdd(id){const m=DISCOVER.find(d=>d.tmdbId===id); if(m){addMovie(m,'watchlist'); toast(`Added “${m.title}”`); renderWatch();}}
-
-async function buildDiscover(){
-  const watched=watchedPool();
-  const owned=new Set(LIB.movies.map(m=>m.tmdbId).concat(LIB.hidden));
-  let pool=[];
-  const seeds=watched.slice().sort((a,b)=>b.elo-a.elo).slice(0,6).map(m=>m.tmdbId);
-  for(const id of seeds){const r=await tmdb(`/movie/${id}/recommendations`); if(r&&r.results)pool=pool.concat(r.results);}
-  if(pool.length<8){
-    const g=tasteGenres().join(',');
-    const r=await tmdb('/discover/movie',{with_genres:g,sort_by:'vote_average.desc','vote_count.gte':500});
-    if(r&&r.results)pool=pool.concat(r.results);
+  const grid=document.getElementById('soon-grid');
+  if(!SOON.length){
+    grid.innerHTML=`<div class="fyload">Loading upcoming…</div>`;
+    const today=new Date().toISOString().slice(0,10);
+    let res=[];
+    for(const pg of [1,2,3]){const r=await tmdb('/movie/upcoming',{region:'US',page:pg});if(r&&r.results)res=res.concat(r.results);}
+    const seen={};
+    res=res.filter(x=>x.poster_path&&x.release_date&&x.release_date>today&&!seen[x.id]&&(seen[x.id]=1));
+    res.sort((a,b)=>(b.popularity||0)-(a.popularity||0));
+    SOON=res.slice(0,30);
   }
-  if(pool.length<8){const r=await tmdb('/movie/popular'); if(r&&r.results)pool=pool.concat(r.results);}
-  const uniq={};
-  pool.forEach(x=>{if(x&&x.poster_path&&!owned.has(x.id)&&!uniq[x.id])uniq[x.id]=normDisc(x);});
-  DISCOVER=Object.values(uniq).slice(0,40);
-}
-function normDisc(x){return {tmdbId:x.id,title:x.title,year:(x.release_date||'').slice(0,4),poster:x.poster_path,genres:(x.genre_ids||[]).map(id=>GENRES[id]).filter(Boolean)};}
-function tasteGenres(){
-  const c={}; watchedPool().forEach(m=>(m.genres||[]).forEach(g=>c[g]=(c[g]||0)+1));
-  const inv={}; for(const id in GENRES)inv[GENRES[id]]=id;
-  return Object.keys(c).sort((a,b)=>c[b]-c[a]).slice(0,3).map(n=>inv[n]).filter(Boolean);
-}
-
-/* ================= SEARCH / ADD ================= */
-function openSearch(){
-  const m=document.createElement('div'); m.className='modal'; m.id='searchModal';
-  m.innerHTML=`<div class="sheet"><div class="top">
-      <input id="sq" placeholder="Search a movie to add…" autocomplete="off">
-      <button class="x" onclick="closeSearch()">×</button></div>
-    <div class="sresults" id="sres"><div class="empty">Type to search TMDB.</div></div></div>`;
-  m.addEventListener('click',e=>{if(e.target===m)closeSearch();});
-  document.body.appendChild(m);
-  const inp=document.getElementById('sq'); inp.focus();
-  let t; inp.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>doSearch(inp.value),300);});
-}
-function closeSearch(){const m=document.getElementById('searchModal'); if(m)m.remove();}
-async function doSearch(q){
-  const box=document.getElementById('sres'); if(!q.trim()){box.innerHTML=`<div class="empty">Type to search TMDB.</div>`;return;}
-  box.innerHTML=`<div class="empty">Searching…</div>`;
-  const r=await tmdb('/search/movie',{query:q,include_adult:'false'});
-  const res=(r&&r.results)?r.results.filter(x=>x.poster_path).slice(0,20):[];
-  if(!res.length){box.innerHTML=`<div class="empty">No matches.</div>`;return;}
-  box.innerHTML=res.map(x=>{const m=normDisc(x);
-    return `<div class="sr"><div class="p" style="background-image:url('${POSTER(m.poster,'w92')}')"></div>
-      <div class="m"><b>${esc(m.title)}</b><small>${m.year||''} · ${(m.genres||[]).slice(0,2).join(' · ')}</small></div>
-      <div class="adds"><button onclick='addFromSearch(${JSON.stringify(m)},"watchlist")'>＋ List</button>
-        <button class="w" onclick='addFromSearch(${JSON.stringify(m)},"watched")'>✓ Seen</button></div></div>`;
+  if(!SOON.length){grid.innerHTML=`<div class="empty">Couldn't load upcoming — check the Worker URL.</div>`;return;}
+  grid.innerHTML=SOON.map(x=>{const d=new Date(x.release_date);const g=(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean).slice(0,2).join(' · ');
+    return `<div class="soontile" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path,'w342')}')"><span class="dbadge">${MON[d.getMonth()]} ${d.getDate()}</span></div><div class="st">${esc(x.title)}<span class="sg">${g||'Upcoming'}</span></div></div>`;
   }).join('');
 }
-function addFromSearch(m,status){addMovie(m,status); toast(`${status==='watched'?'✓ Watched':'＋ Watchlist'}: ${m.title}`); renderWatch(); if(status==='watched'){DISCOVER=[];}}
-
-/* ================= NAV ================= */
-function go(v){
-  document.querySelectorAll('.view').forEach(el=>el.classList.remove('on'));
-  document.getElementById('v-'+v).classList.add('on');
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
-  if(v==='watch')renderWatch();
-  if(v==='soon')renderSoon();
-  if(v==='foryou')renderForYou();
-  if(v==='rank')renderDuel();
-  window.scrollTo(0,0);
+/* For You — infinite gallery */
+let FY={discPage:0,recPool:null,loading:false,done:false,seen:new Set(),init:false};
+async function fyReset(){FY={discPage:0,recPool:null,loading:false,done:false,seen:new Set(),init:true};document.getElementById('fy-grid').innerHTML='';document.getElementById('fy-load').textContent='';await fyMore();await fyMore();}
+async function fyMore(){
+  if(FY.loading||FY.done)return;FY.loading=true;document.getElementById('fy-load').textContent='Loading…';
+  const owned=new Set(LIB.movies.map(m=>m.tmdbId).concat(LIB.hidden));
+  if(FY.recPool===null){FY.recPool=[];const seeds=watchedPool().slice().sort((a,b)=>b.elo-a.elo).slice(0,6).map(m=>m.tmdbId);for(const id of seeds){const r=await tmdb('/movie/'+id+'/recommendations');if(r&&r.results)FY.recPool=FY.recPool.concat(r.results);}}
+  let batch=[];
+  while(FY.recPool.length&&batch.length<10)batch.push(FY.recPool.shift());
+  if(batch.length<14){FY.discPage++;const g=tasteGenres().join(',');const r=await tmdb('/discover/movie',{with_genres:g||undefined,sort_by:'popularity.desc','vote_count.gte':150,page:FY.discPage});if(r&&r.results)batch=batch.concat(r.results);if(r&&FY.discPage>=(r.total_pages||500))FY.done=true;}
+  const add=[];batch.forEach(x=>{if(x&&x.poster_path&&!owned.has(x.id)&&!FY.seen.has(x.id)){FY.seen.add(x.id);const m=normDisc(x);add.push(m);if(!DISCOVER.find(d=>d.tmdbId===m.tmdbId))DISCOVER.push(m);}});
+  document.getElementById('fy-grid').insertAdjacentHTML('beforeend',add.map(m=>posterEl(m)).join(''));
+  FY.loading=false;document.getElementById('fy-load').textContent=FY.done?'That’s everything in your lane.':'';
+  if(!document.getElementById('fy-grid').children.length&&FY.done)document.getElementById('fy-grid').innerHTML=`<div class="empty">Add a few watched movies and recs will appear.</div>`;
 }
-let toastT; function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1600);}
-function setHint(txt,warn){hintEl.textContent=txt;hintEl.className='hint'+(warn?' warn':'');}
+function normDisc(x){return {tmdbId:x.id,title:x.title,year:(x.release_date||'').slice(0,4),poster:x.poster_path,genres:(x.genre_ids||[]).map(i=>GENRES[i]).filter(Boolean)};}
+function tasteGenres(){const c={};watchedPool().forEach(m=>(m.genres||[]).forEach(g=>c[g]=(c[g]||0)+1));const inv={};for(const id in GENRES)inv[GENRES[id]]=id;return Object.keys(c).sort((a,b)=>c[b]-c[a]).slice(0,3).map(n=>inv[n]).filter(Boolean);}
+async function buildDiscover(){ // seed ranker discovery pool in background
+  const owned=new Set(LIB.movies.map(m=>m.tmdbId).concat(LIB.hidden));let pool=[];
+  const seeds=watchedPool().slice().sort((a,b)=>b.elo-a.elo).slice(0,5).map(m=>m.tmdbId);
+  for(const id of seeds){const r=await tmdb('/movie/'+id+'/recommendations');if(r&&r.results)pool=pool.concat(r.results);}
+  if(pool.length<10){const g=tasteGenres().join(',');const r=await tmdb('/discover/movie',{with_genres:g||undefined,sort_by:'popularity.desc','vote_count.gte':200});if(r&&r.results)pool=pool.concat(r.results);}
+  if(pool.length<10){const r=await tmdb('/movie/popular');if(r&&r.results)pool=pool.concat(r.results);}
+  const uniq={};pool.forEach(x=>{if(x&&x.poster_path&&!owned.has(x.id)&&!uniq[x.id])uniq[x.id]=normDisc(x);});
+  const arr=Object.values(uniq);arr.forEach(m=>{if(!DISCOVER.find(d=>d.tmdbId===m.tmdbId))DISCOVER.push(m);});
+}
 
 /* ================= DETAIL CARD ================= */
 let DETAIL=null;
 async function openDetail(id){
   let m=document.getElementById('detailModal');
-  if(!m){m=document.createElement('div'); m.id='detailModal'; m.className='dmodal';
-    m.addEventListener('click',e=>{if(e.target===m)closeDetail();}); document.body.appendChild(m);}
-  m.innerHTML=`<div class="dcard"><button class="close" onclick="closeDetail()">×</button><div class="dloading">Loading…</div></div>`;
-  m.classList.add('show'); m.scrollTop=0;
-  const d=await tmdb('/movie/'+id,{append_to_response:'videos,watch/providers,recommendations'});
-  if(!d||!d.id){m.querySelector('.dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="dloading">Couldn't load details.</div>`; return;}
-  if(!(d.recommendations&&d.recommendations.results&&d.recommendations.results.length)){
-    const rc=await tmdb('/movie/'+id+'/recommendations'); if(rc&&rc.results)d.recommendations={results:rc.results};
-  }
-  DETAIL=d; renderDetail();
+  if(!m){m=document.createElement('div');m.id='detailModal';m.className='dmodal';m.addEventListener('click',e=>{if(e.target===m)closeDetail();});document.body.appendChild(m);}
+  m.innerHTML=`<div class="dcard"><button class="close" onclick="closeDetail()">×</button><div class="dloading">Loading…</div></div>`;m.classList.add('show');m.scrollTop=0;
+  const d=await tmdb('/movie/'+id,{append_to_response:'videos,credits,watch/providers,recommendations'});
+  if(!d||!d.id){m.querySelector('.dcard').innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="dloading">Couldn't load details.</div>`;return;}
+  if(!(d.recommendations&&d.recommendations.results&&d.recommendations.results.length)){const rc=await tmdb('/movie/'+id+'/recommendations');if(rc&&rc.results)d.recommendations={results:rc.results};}
+  DETAIL=d;renderDetail();
 }
-function closeDetail(){const m=document.getElementById('detailModal'); if(m)m.classList.remove('show');}
-function trailerUrl(d){
-  const v=((d.videos&&d.videos.results)||[]).filter(x=>x.site==='YouTube');
-  const t=v.find(x=>x.type==='Trailer')||v.find(x=>x.type==='Teaser')||v[0];
-  return t?`https://www.youtube.com/watch?v=${t.key}`:null;
-}
-function providersOf(d){
-  const wp=d['watch/providers']&&d['watch/providers'].results&&d['watch/providers'].results.US;
-  if(!wp)return [];
-  const seen={},out=[];
-  [['flatrate','Stream'],['free','Free'],['ads','Free'],['rent','Rent'],['buy','Buy']].forEach(([k,label])=>{
-    (wp[k]||[]).forEach(p=>{ if(!seen[p.provider_id]){seen[p.provider_id]=1; out.push({name:p.provider_name,logo:p.logo_path,kind:label});} });
-  });
-  return out.slice(0,4);
-}
+function closeDetail(){const m=document.getElementById('detailModal');if(m)m.classList.remove('show');}
+function trailerUrl(d){const v=((d.videos&&d.videos.results)||[]).filter(x=>x.site==='YouTube');const t=v.find(x=>x.type==='Trailer')||v.find(x=>x.type==='Teaser')||v[0];return t?`https://www.youtube.com/watch?v=${t.key}`:null;}
+function providersOf(d){const wp=d['watch/providers']&&d['watch/providers'].results&&d['watch/providers'].results.US;if(!wp)return [];const seen={},out=[];[['flatrate','Stream'],['free','Free'],['ads','Free'],['rent','Rent'],['buy','Buy']].forEach(([k,l])=>{(wp[k]||[]).forEach(p=>{if(!seen[p.provider_id]){seen[p.provider_id]=1;out.push({name:p.provider_name,logo:p.logo_path,kind:l});}});});return out.slice(0,5);}
+function castOf(d){return ((d.credits&&d.credits.cast)||[]).slice(0,8);}
 function renderDetail(){
-  const d=DETAIL, id=d.id, inl=inLib(id);
-  const watched=inl&&inl.status==='watched', onList=inl&&inl.status==='watchlist', hidden=isHidden(id);
-  let rankTxt='';
-  if(watched){const wp=watchedPool().filter(x=>x.apps>0).sort((a,b)=>b.elo-a.elo); const i=wp.findIndex(x=>x.tmdbId===id); if(i>=0)rankTxt=` · <span class="rankpill">♛#${i+1}</span>`;}
-  const year=(d.release_date||'').slice(0,4);
-  const runtime=d.runtime?`${Math.floor(d.runtime/60)}h ${d.runtime%60}m`:'';
-  const rating=d.vote_average?`<span class="rating">★${d.vote_average.toFixed(1)}</span>`:'';
-  const genre=(d.genres||[]).slice(0,2).map(g=>g.name).join(' · ');
-  const back=d.backdrop_path?`background-image:url('https://image.tmdb.org/t/p/w780${d.backdrop_path}')`
-            :(d.poster_path?`background-image:url('${POSTER(d.poster_path)}')`:'');
-  const tr=trailerUrl(d), provs=providersOf(d);
-  const recs=((d.recommendations&&d.recommendations.results)||[]).filter(x=>x.poster_path).slice(0,10);
+  const d=DETAIL,id=d.id,inl=inLib(id);
+  const watched=inl&&inl.status==='watched',onList=inl&&inl.status==='watchlist',hidden=isHidden(id);
+  let rankTxt='';if(watched){const wp=watchedPool().filter(x=>x.apps>0).sort((a,b)=>b.elo-a.elo);const i=wp.findIndex(x=>x.tmdbId===id);if(i>=0)rankTxt=` · <span class="rankpill">♛#${i+1}</span>`;}
+  const year=(d.release_date||'').slice(0,4);const runtime=d.runtime?`${Math.floor(d.runtime/60)}h ${d.runtime%60}m`:'';
+  const rating=d.vote_average?`<span class="rating">★${d.vote_average.toFixed(1)}</span>`:'';const genre=(d.genres||[]).slice(0,2).map(g=>g.name).join(' · ');
+  const back=d.backdrop_path?`background-image:url('https://image.tmdb.org/t/p/w780${d.backdrop_path}')`:(d.poster_path?`background-image:url('${POSTER(d.poster_path)}')`:'');
+  const tr=trailerUrl(d),provs=providersOf(d),cast=castOf(d);
+  const recs=((d.recommendations&&d.recommendations.results)||[]).filter(x=>x.poster_path).slice(0,12);
   const meta=[year?`<b>${year}</b>`:'',runtime,rating,genre].filter(Boolean).join(' · ')+rankTxt;
-  const provHtml=provs.length
-    ? provs.map(p=>`<span class="prov">${p.logo?`<img src="https://image.tmdb.org/t/p/w45${p.logo}" alt="">`:''}${esc(p.name)}<em>${p.kind}</em></span>`).join('')
-    : `<span class="noprov">Not on your streaming services right now.</span>`;
-  const recHtml=recs.length
-    ? recs.map(x=>`<div class="s" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path)}')"></div><small>${esc(x.title)}</small></div>`).join('')
-    : `<div class="noprov">No recommendations yet.</div>`;
+  const provHtml=provs.length?provs.map(p=>`<span class="prov">${p.logo?`<img src="https://image.tmdb.org/t/p/w45${p.logo}" alt="">`:''}${esc(p.name)}<em>${p.kind}</em></span>`).join(''):`<span class="noprov">Not on your streaming services right now.</span>`;
+  const castHtml=cast.length?cast.map(c=>{const av=c.profile_path?`background-image:url('https://image.tmdb.org/t/p/w185${c.profile_path}')`:'';const ini=(c.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('');return `<div class="c"><div class="av" style="${av}">${c.profile_path?'':esc(ini)}</div><span class="nm">${esc(c.name)}</span><span class="rl">${esc(c.character||'')}</span></div>`;}).join(''):`<span class="noprov">Cast unavailable.</span>`;
+  const recHtml=recs.length?recs.map(x=>`<div class="s" onclick="openDetail(${x.id})"><div class="sp" style="background-image:url('${POSTER(x.poster_path)}')"></div><small>${esc(x.title)}</small></div>`).join(''):`<div class="noprov">No recommendations yet.</div>`;
   document.querySelector('#detailModal .dcard').innerHTML=`
     <button class="close" onclick="closeDetail()">×</button>
     <div class="dback" style="${back}"><h2 class="dttl">${esc(d.title)}</h2></div>
@@ -664,33 +528,63 @@ function renderDetail(){
       </div>
       ${tr?`<a class="dtrailer" href="${tr}" target="_blank" rel="noopener">▶ Watch trailer</a>`:`<div class="dtrailer off">Trailer unavailable</div>`}
       <div class="dsec"><p class="dlbl">Where to watch</p><div class="dprovs">${provHtml}</div></div>
+      <div class="dsec"><p class="dlbl">Top cast</p><div class="dcast">${castHtml}</div></div>
       <div class="dsec"><p class="dlbl">Overview</p><p class="dov">${esc(d.overview||'No description available.')}</p></div>
       <div class="dsec"><p class="dlbl">Because you liked this</p><div class="dsim">${recHtml}</div></div>
     </div>`;
 }
 function detailAct(id,what){
-  const d=DETAIL;
-  const src=d?{tmdbId:d.id,title:d.title,year:(d.release_date||'').slice(0,4),poster:d.poster_path,genres:(d.genres||[]).map(g=>g.name)}:null;
-  if(what==='watch'){ const c=inLib(id); if(c&&c.status==='watched'){toast('Already watched');} else {addMovie(src,'watched'); toast('✓ Watched');} }
-  else if(what==='add'){ addMovie(src,'watchlist'); toast('＋ Watchlist'); }
-  else if(what==='hide'){ if(!isHidden(id))LIB.hidden.push(id); queueSave(); toast("Hidden — won't show again"); }
-  renderWatch(); renderDetail();
+  const d=DETAIL;const src=d?{tmdbId:d.id,title:d.title,year:(d.release_date||'').slice(0,4),poster:d.poster_path,genres:(d.genres||[]).map(g=>g.name)}:null;
+  if(what==='watch'){const c=inLib(id);if(c&&c.status==='watched'){toast('Already watched');}else{addMovie(src,'watched');toast('✓ Watched');}}
+  else if(what==='add'){addMovie(src,'watchlist');toast('＋ Watchlist');}
+  else if(what==='hide'){if(!isHidden(id))LIB.hidden.push(id);queueSave();toast("Hidden — won't show again");}
+  renderWatch();renderDetail();
 }
-function detailRank(id){ closeDetail(); go('rank'); }
+function detailRank(id){closeDetail();go('rank');}
+
+/* ================= SEARCH ================= */
+function openSearch(){
+  const m=document.createElement('div');m.className='modal';m.id='searchModal';
+  m.innerHTML=`<div class="sheet"><div class="top"><input id="sq" placeholder="Search a movie to add…" autocomplete="off"><button class="x" onclick="closeSearch()">×</button></div><div class="sresults" id="sres"><div class="empty">Type to search TMDB.</div></div></div>`;
+  m.addEventListener('click',e=>{if(e.target===m)closeSearch();});document.body.appendChild(m);
+  const inp=document.getElementById('sq');inp.focus();let t;inp.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(()=>doSearch(inp.value),300);});
+}
+function closeSearch(){const m=document.getElementById('searchModal');if(m)m.remove();}
+async function doSearch(q){
+  const box=document.getElementById('sres');if(!q.trim()){box.innerHTML=`<div class="empty">Type to search TMDB.</div>`;return;}
+  box.innerHTML=`<div class="empty">Searching…</div>`;const r=await tmdb('/search/movie',{query:q,include_adult:'false'});
+  const res=(r&&r.results)?r.results.filter(x=>x.poster_path).slice(0,20):[];
+  if(!res.length){box.innerHTML=`<div class="empty">No matches.</div>`;return;}
+  box.innerHTML=res.map(x=>{const m=normDisc(x);return `<div class="sr"><div class="p" style="background-image:url('${POSTER(m.poster,'w92')}')" onclick="closeSearch();openDetail(${m.tmdbId})"></div><div class="m" onclick="closeSearch();openDetail(${m.tmdbId})"><b>${esc(m.title)}</b><small>${m.year||''} · ${(m.genres||[]).slice(0,2).join(' · ')}</small></div><div class="adds"><button onclick='addFromSearch(${JSON.stringify(m)},"watchlist")'>＋ List</button><button class="w" onclick='addFromSearch(${JSON.stringify(m)},"watched")'>✓ Seen</button></div></div>`;}).join('');
+}
+function addFromSearch(m,status){addMovie(m,status);toast(`${status==='watched'?'✓ Watched':'＋ Watchlist'}: ${m.title}`);renderWatch();if(status==='watched')FY.init=false;}
+
+/* ================= NAV ================= */
+function go(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('on'));
+  document.getElementById('v-'+v).classList.add('on');
+  document.querySelectorAll('.nav .tab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v==='watch')renderWatch();
+  if(v==='soon')renderSoon();
+  if(v==='foryou'){if(!FY.init)fyReset();}
+  if(v==='rank')renderDuel();
+  const sc=document.getElementById('scroll');if(sc)sc.scrollTop=0;
+}
+let toastT;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1600);}
+function setHint(txt,warn){hintEl.textContent=txt;hintEl.className='hint'+(warn?' warn':'');}
 
 /* ================= BOOT ================= */
 (async function init(){
   hintEl=document.getElementById('hint');
   const cameBack=await handleRedirect();
   if(accessToken||localStorage.getItem('rd_tok')||cameBack){
-    showApp();
-    await loadLibrary();
-    renderWatch();
-    buildDiscover();   // warm recs in background
-  }else{
-    showAuth();
-    if(CONFIG.WORKER.includes("YOURNAME"))document.getElementById("setupNote").classList.remove("hidden");
-  }
+    showApp();await loadLibrary();renderWatch();buildDiscover();
+    // infinite scroll for For You
+    const sentinel=document.getElementById('fy-sentinel'),root=document.getElementById('scroll');
+    if(sentinel&&'IntersectionObserver'in window){
+      new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting&&document.getElementById('v-foryou').classList.contains('on')&&FY.init)fyMore();});},{root,rootMargin:'400px'}).observe(sentinel);
+    }
+  }else{showAuth();if(CONFIG.WORKER.includes("YOURNAME"))document.getElementById("setupNote").classList.remove("hidden");}
 })();
 </script>
 </body>
